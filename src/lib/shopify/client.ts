@@ -1,29 +1,28 @@
 import { toast } from "sonner";
 
-function getViteEnvVar(name: string): string {
-  const value = import.meta.env[name as keyof ImportMetaEnv] as string | undefined;
-  if (!value) {
+export const SHOPIFY_API_VERSION = import.meta.env.VITE_SHOPIFY_API_VERSION || "2025-07";
+export const SHOPIFY_STORE_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN;
+export const SHOPIFY_STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN;
+
+function getStorefrontUrl(): string {
+  if (!SHOPIFY_STORE_DOMAIN || !SHOPIFY_STOREFRONT_TOKEN) {
     throw new Error(
-      `Missing required env variable ${name}. Set ${name} in your .env file and your Netlify build environment, then rebuild the app.`,
+      `Missing Shopify environment variables. Set VITE_SHOPIFY_STORE_DOMAIN and VITE_SHOPIFY_STOREFRONT_TOKEN in your .env file and your Netlify environment settings, then rebuild.`,
     );
   }
-  return value;
+  return `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 }
-
-export const SHOPIFY_API_VERSION = import.meta.env.VITE_SHOPIFY_API_VERSION || "2025-07";
-export const SHOPIFY_STORE_DOMAIN = getViteEnvVar("VITE_SHOPIFY_STORE_DOMAIN");
-export const SHOPIFY_STOREFRONT_TOKEN = getViteEnvVar("VITE_SHOPIFY_STOREFRONT_TOKEN");
-export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
 
 export async function storefrontApiRequest<T = any>(
   query: string,
   variables: Record<string, any> = {},
 ): Promise<{ data?: T } | undefined> {
+  const SHOPIFY_STOREFRONT_URL = getStorefrontUrl();
   const response = await fetch(SHOPIFY_STOREFRONT_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN,
+      "X-Shopify-Storefront-Access-Token": SHOPIFY_STOREFRONT_TOKEN!,
     },
     body: JSON.stringify({ query, variables }),
   });
