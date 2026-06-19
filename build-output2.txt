@@ -1,0 +1,171 @@
+﻿
+> build
+> vite build
+
+[36mvite v8.0.16 [32mbuilding client environment for production...[36m[39m
+[2K
+transforming...Ô£ô 2045 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/public/assets/styles-_nqddNAo.css               39.24 kB Ôöé gzip:   7.50 kB
+.output/public/assets/route-Djz2etzg.js                  0.13 kB Ôöé gzip:   0.13 kB
+.output/public/assets/product._handle-aU--fdLM.js        0.44 kB Ôöé gzip:   0.30 kB
+.output/public/assets/confidentialite-DroDXYbm.js        0.47 kB Ôöé gzip:   0.31 kB
+.output/public/assets/product._handle-Bco5sDzL.js        0.48 kB Ôöé gzip:   0.33 kB
+.output/public/assets/politique-retour-Bi4qUq7w.js       0.63 kB Ôöé gzip:   0.33 kB
+.output/public/assets/faq-DNlSCAI-.js                    0.70 kB Ôöé gzip:   0.38 kB
+.output/public/assets/politique-livraison-DJJRdXme.js    0.78 kB Ôöé gzip:   0.34 kB
+.output/public/assets/cgv-Bv-X20d-.js                    1.19 kB Ôöé gzip:   0.43 kB
+.output/public/assets/compte-ZCwQqc6A.js                 1.58 kB Ôöé gzip:   0.77 kB
+.output/public/assets/boutique-D8FuukCs.js               2.02 kB Ôöé gzip:   0.96 kB
+.output/public/assets/auth-DCCWwQNv.js                   3.32 kB Ôöé gzip:   1.31 kB
+.output/public/assets/Layout-DMoSbcmq.js                 5.13 kB Ôöé gzip:   1.69 kB
+.output/public/assets/contact-B5ZyWC23.js                5.62 kB Ôöé gzip:   2.06 kB
+.output/public/assets/routes-C83CVYtU.js                 6.51 kB Ôöé gzip:   2.34 kB
+.output/public/assets/useSuspenseQuery-BcTOcRrq.js       8.88 kB Ôöé gzip:   3.24 kB
+.output/public/assets/useStore-DsC52wh1.js              27.47 kB Ôöé gzip:   9.74 kB
+.output/public/assets/product._handle-BFDmVE_z.js       34.13 kB Ôöé gzip:  12.40 kB
+.output/public/assets/cartStore-Cz5ruyLj.js             58.46 kB Ôöé gzip:  19.07 kB
+.output/public/assets/index-DNY-Z3pe.js                589.99 kB Ôöé gzip: 173.45 kB
+
+[32mÔ£ô built in 858ms[39m
+node.exe : [33m[plugin builtin:vite-reporter] 
+Au caractère Ligne:1 : 1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([33m[plugin builtin:vite-reporte 
+   r] :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: 
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via 
+build.chunkSizeWarningLimit.[39m
+[36mvite v8.0.16 [32mbuilding ssr environment for production...[36m[39m
+[2K
+transforming...Ô£ô 112 modules transformed.
+rendering chunks...
+computing gzip size...
+node_modules/.nitro/vite/services/ssr/assets/styles-_nqddNAo.css                     39.24 kB Ôöé gzip:  7.50 kB
+node_modules/.nitro/vite/services/ssr/assets/empty-plugin-adapters-D9UWiqvJ.js        0.22 kB Ôöé gzip:  0.16 kB
+node_modules/.nitro/vite/services/ssr/assets/route-Di7iQBCH.js                        0.26 kB Ôöé gzip:  0.19 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-DcJvhU2l.js                       0.33 kB Ôöé gzip:  0.24 kB
+node_modules/.nitro/vite/services/ssr/assets/boutique-BCLBSXJ3.js                     0.34 kB Ôöé gzip:  0.24 kB
+node_modules/.nitro/vite/services/ssr/assets/product._handle-CR4uXCkJ.js              0.67 kB Ôöé gzip:  0.40 kB
+node_modules/.nitro/vite/services/ssr/assets/confidentialite-BpdV7Mb4.js              0.69 kB Ôöé gzip:  0.41 kB
+node_modules/.nitro/vite/services/ssr/assets/client-BAfmGLvh.js                       0.76 kB Ôöé gzip:  0.52 kB
+node_modules/.nitro/vite/services/ssr/assets/product._handle-Dgh60klJ.js              0.83 kB Ôöé gzip:  0.46 kB
+node_modules/.nitro/vite/services/ssr/assets/politique-retour-C6iI6tbV.js             0.93 kB Ôöé gzip:  0.44 kB
+node_modules/.nitro/vite/services/ssr/assets/start-FUOSBhlo.js                        1.07 kB Ôöé gzip:  0.56 kB
+node_modules/.nitro/vite/services/ssr/assets/faq-COtK1MYg.js                          1.09 kB Ôöé gzip:  0.51 kB
+node_modules/.nitro/vite/services/ssr/assets/politique-livraison-TZveojh3.js          1.15 kB Ôöé gzip:  0.45 kB
+node_modules/.nitro/vite/services/ssr/assets/createStart-Dt05N14y.js                  1.65 kB Ôöé gzip:  0.57 kB
+node_modules/.nitro/vite/services/ssr/assets/cgv-C9u2MoQy.js                          1.70 kB Ôöé gzip:  0.55 kB
+node_modules/.nitro/vite/services/ssr/assets/button-B2LyfGb_.js                       1.78 kB Ôöé gzip:  0.81 kB
+node_modules/.nitro/vite/services/ssr/assets/api-D59rcLYq.js                          1.98 kB Ôöé gzip:  0.77 kB
+node_modules/.nitro/vite/services/ssr/assets/product._handle-oqxOO6-X.js              2.17 kB Ôöé gzip:  0.98 kB
+node_modules/.nitro/vite/services/ssr/assets/compte-DoAHHZqH.js                       2.32 kB Ôöé gzip:  0.94 kB
+node_modules/.nitro/vite/services/ssr/assets/boutique-u74FnHFE.js                     2.96 kB Ôöé gzip:  1.19 kB
+node_modules/.nitro/vite/services/ssr/index.js                                        3.27 kB Ôöé gzip:  1.41 kB
+node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BnXufU0u.js   3.42 kB Ôöé gzip:  0.77 kB
+node_modules/.nitro/vite/services/ssr/assets/auth-D-wRZMD1.js                         4.87 kB Ôöé gzip:  1.58 kB
+node_modules/.nitro/vite/services/ssr/assets/contact-BiPymdy2.js                      7.19 kB Ôöé gzip:  2.01 kB
+node_modules/.nitro/vite/services/ssr/assets/Layout-5cXgBm26.js                       7.58 kB Ôöé gzip:  1.97 kB
+node_modules/.nitro/vite/services/ssr/assets/routes-WxkiB2KD.js                       7.86 kB Ôöé gzip:  2.28 kB
+node_modules/.nitro/vite/services/ssr/assets/cartStore-CCjBT0Cq.js                   18.79 kB Ôöé gzip:  6.06 kB
+node_modules/.nitro/vite/services/ssr/assets/product._handle-eZPf5CZQ.js             21.90 kB Ôöé gzip:  5.62 kB
+node_modules/.nitro/vite/services/ssr/assets/router-GIL6LgxU.js                      25.68 kB Ôöé gzip:  6.45 kB
+node_modules/.nitro/vite/services/ssr/assets/server-DkkjjPuT.js                      58.70 kB Ôöé gzip: 15.11 kB
+
+[32mÔ£ô built in 341ms[39m
+
+[90m[[90mnitro[90m][39m [35mÔùÉ[39m Building [[35mNitro[39m] [2m(preset: [36mcloudflare-module[39m, compatibility: [36m2026-06-19[39m)[22m
+[90m[[90mnitro[90m][39m [32mÔ£ö[39m Generated public [36m.output/public[39m
+[36mvite v8.0.16 [32mbuilding nitro environment for production...[36m[39m
+
+[43m[30m WARN [39m[49m [36minlineDynamicImports[39m option is ignored 
+because the [36mcodeSplitting[39m option is specified.
+
+[2K
+transforming...Ô£ô 2052 modules transformed.
+rendering chunks...
+computing gzip size...
+.output/server/_ssr/empty-plugin-adapters-D9UWiqvJ.mjs         0.23 kB Ôöé gzip:   0.16 kB
+.output/server/_ssr/routes-DcJvhU2l.mjs                        0.38 kB Ôöé gzip:   0.27 kB
+.output/server/_ssr/boutique-BCLBSXJ3.mjs                      0.39 kB Ôöé gzip:   0.27 kB
+.output/server/_ssr/route-Di7iQBCH.mjs                         0.41 kB Ôöé gzip:   0.27 kB
+.output/server/_libs/radix-ui__primitive.mjs                   0.42 kB Ôöé gzip:   0.23 kB
+.output/server/_chunks/ssr-renderer.mjs                        0.60 kB Ôöé gzip:   0.36 kB
+.output/server/_ssr/client-BAfmGLvh.mjs                        0.80 kB Ôöé gzip:   0.56 kB
+.output/server/_ssr/product._handle-CR4uXCkJ.mjs               0.87 kB Ôöé gzip:   0.46 kB
+.output/server/_ssr/confidentialite-BpdV7Mb4.mjs               0.90 kB Ôöé gzip:   0.47 kB
+.output/server/_libs/radix-ui__react-label.mjs                 0.93 kB Ôöé gzip:   0.47 kB
+.output/server/_ssr/product._handle-Dgh60klJ.mjs               1.06 kB Ôöé gzip:   0.53 kB
+.output/server/_ssr/start-FUOSBhlo.mjs                         1.06 kB Ôöé gzip:   0.57 kB
+.output/server/_runtime.mjs                                    1.14 kB Ôöé gzip:   0.57 kB
+.output/server/_libs/hookable.mjs                              1.16 kB Ôöé gzip:   0.51 kB
+.output/server/_ssr/politique-retour-C6iI6tbV.mjs              1.19 kB Ôöé gzip:   0.51 kB
+.output/server/_ssr/faq-COtK1MYg.mjs                           1.41 kB Ôöé gzip:   0.59 kB
+.output/server/_ssr/politique-livraison-TZveojh3.mjs           1.45 kB Ôöé gzip:   0.52 kB
+.output/server/_ssr/createStart-Dt05N14y.mjs                   1.56 kB Ôöé gzip:   0.57 kB
+.output/server/_ssr/api-D59rcLYq.mjs                           2.02 kB Ôöé gzip:   0.81 kB
+.output/server/_ssr/button-B2LyfGb_.mjs                        2.12 kB Ôöé gzip:   0.93 kB
+.output/server/_ssr/cgv-C9u2MoQy.mjs                           2.15 kB Ôöé gzip:   0.61 kB
+.output/server/_ssr/product._handle-oqxOO6-X.mjs               2.43 kB Ôöé gzip:   1.07 kB
+.output/server/_ssr/compte-DoAHHZqH.mjs                        2.94 kB Ôöé gzip:   1.06 kB
+.output/server/_libs/embla-carousel-react+[...].mjs            3.12 kB Ôöé gzip:   1.03 kB
+.output/server/_libs/class-variance-authority+clsx.mjs         3.17 kB Ôöé gzip:   1.24 kB
+.output/server/_ssr/ssr.mjs                                    3.21 kB Ôöé gzip:   1.42 kB
+.output/server/_tanstack-start-manifest_v-BnXufU0u.mjs         3.47 kB Ôöé gzip:   0.81 kB
+.output/server/_ssr/boutique-u74FnHFE.mjs                      3.50 kB Ôöé gzip:   1.28 kB
+.output/server/_libs/radix-ui__react-progress.mjs              3.64 kB Ôöé gzip:   1.25 kB
+.output/server/_libs/radix-ui__react-context+react.mjs         4.92 kB Ôöé gzip:   1.50 kB
+.output/server/_ssr/auth-D-wRZMD1.mjs                          5.69 kB Ôöé gzip:   1.73 kB
+.output/server/_libs/zustand.mjs                               6.70 kB Ôöé gzip:   2.08 kB
+.output/server/_libs/tanstack__react-query.mjs                 6.75 kB Ôöé gzip:   1.88 kB
+.output/server/_ssr/contact-BiPymdy2.mjs                       8.37 kB Ôöé gzip:   2.10 kB
+.output/server/_ssr/Layout-5cXgBm26.mjs                        9.04 kB Ôöé gzip:   2.10 kB
+.output/server/_ssr/routes-WxkiB2KD.mjs                        9.22 kB Ôöé gzip:   2.38 kB
+.output/server/_libs/h3-v2.mjs                                 9.62 kB Ôöé gzip:   2.98 kB
+.output/server/_libs/supabase__functions-js.mjs               12.06 kB Ôöé gzip:   3.29 kB
+.output/server/_libs/tanstack__history.mjs                    12.09 kB Ôöé gzip:   3.48 kB
+.output/server/index.mjs                                      13.34 kB Ôöé gzip:   3.99 kB
+.output/server/_libs/lucide-react.mjs                         14.20 kB Ôöé gzip:   3.41 kB
+.output/server/_libs/h3+rou3+srvx.mjs                         14.22 kB Ôöé gzip:   4.23 kB
+.output/server/_libs/@radix-ui/react-compose-refs+[...].mjs   16.51 kB Ôöé gzip:   4.58 kB
+.output/server/_ssr/cartStore-CCjBT0Cq.mjs                    18.66 kB Ôöé gzip:   6.06 kB
+.output/server/_ssr/product._handle-eZPf5CZQ.mjs              24.77 kB Ôöé gzip:   5.79 kB
+.output/server/_ssr/router-GIL6LgxU.mjs                       27.44 kB Ôöé gzip:   6.56 kB
+.output/server/_libs/supabase__supabase-js.mjs                34.01 kB Ôöé gzip:   9.91 kB
+.output/server/_libs/embla-carousel.mjs                       43.11 kB Ôöé gzip:  10.75 kB
+.output/server/_libs/supabase__phoenix.mjs                    49.12 kB Ôöé gzip:  12.36 kB
+.output/server/_libs/sonner.mjs                               51.97 kB Ôöé gzip:  11.78 kB
+.output/server/_ssr/server-DkkjjPuT.mjs                       56.93 kB Ôöé gzip:  14.96 kB
+.output/server/_libs/tanstack__query-core.mjs                 62.54 kB Ôöé gzip:  13.44 kB
+.output/server/_libs/supabase__realtime-js+unenv.mjs          72.55 kB Ôöé gzip:  18.23 kB
+.output/server/_libs/@radix-ui/react-dialog+[...].mjs         79.15 kB Ôöé gzip:  19.45 kB
+.output/server/_libs/@tanstack/router-core+[...].mjs          79.32 kB Ôöé gzip:  19.96 kB
+.output/server/_libs/tailwind-merge.mjs                       88.13 kB Ôöé gzip:  15.66 kB
+.output/server/_libs/@supabase/storage-js+[...].mjs          114.55 kB Ôöé gzip:  21.34 kB
+.output/server/_libs/supabase__postgrest-js.mjs              134.33 kB Ôöé gzip:  24.69 kB
+.output/server/_libs/supabase__auth-js.mjs                   298.42 kB Ôöé gzip:  59.03 kB
+.output/server/_libs/@tanstack/react-router+[...].mjs        654.75 kB Ôöé gzip: 137.73 kB
+
+[32mÔ£ô built in 588ms[39m
+
+[90m[[90mnitro[90m][39m [43m[30m WARN [39m[49m [cloudflare] Wrangler 
+config [36mmain[39m is overridden and will be ignored.
+
+
+[90m[[90mnitro[90m][39m [43m[30m WARN [39m[49m [cloudflare] Wrangler 
+config [36massets[39m is overridden and will be ignored.
+
+[36mÔä╣[39m Generated [36m.output/server/wrangler.json[39m
+[36mÔä╣[39m Generated [36m.wrangler/deploy/config.json[39m
+[36mÔä╣[39m Generated [36m.output/public/_headers[39m
+[36mÔä╣[39m Generated [36m.output/nitro.json[39m
+
+[90m[[90mnitro[90m][39m [32mÔ£ö[39m You can preview this build using [36mnpx vite preview[39m
+[90m[[90mnitro[90m][39m [32mÔ£ö[39m You can deploy this build using [36mnpx nitro deploy --prebuilt[39m

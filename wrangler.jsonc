@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ecovia-site",
+  "compatibility_date": "2026-06-18",
+  "compatibility_flags": ["nodejs_compat"],
+  // Build Nitro (preset Cloudflare) → .output/
+  "main": ".output/server/index.mjs",
+  "assets": {
+    "directory": ".output/public",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

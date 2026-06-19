@@ -1,0 +1,210 @@
+import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
+import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { SiteLayout } from "@/components/site/Layout";
+import { ProductGallery } from "@/components/product/ProductGallery";
+import { TrustBadges } from "@/components/product/TrustBadges";
+import { BundleSelector } from "@/components/product/BundleSelector";
+import { ProductReviews } from "@/components/product/ProductReviews";
+import { Button } from "@/components/ui/button";
+import { Loader2, ShoppingBag } from "lucide-react";
+import { fetchProductByHandle, parseBundles, parseReviews } from "@/lib/shopify/api";
+import { useCartStore, formatPrice } from "@/stores/cartStore";
+import { trackViewContent } from "@/lib/tracking";
+import type { BundleOffer } from "@/lib/shopify/types";
+
+const productQO = (handle: string) => queryOptions({
+  queryKey: ["shopify", "product", handle],
+  queryFn: async () => {
+    const p = await fetchProductByHandle(handle);
+    if (!p) throw notFound();
+    return p;
+  },
+  staleTime: 60_000,
+});
+
+export const Route = createFileRoute("/product/$handle")({
+  head: ({ params }) => ({
+    meta: [
+      { title: `${params.handle} — Ecovia` },
+      { name: "description", content: "Découvrez nos plantes d'intérieur sélectionnées avec soin." },
+    ],
+  }),
+  loader: ({ context, params }) => {
+    context.queryClient.ensureQueryData(productQO(params.handle));
+  },
+  notFoundComponent: () => (
+    <SiteLayout>
+      <div className="max-w-md mx-auto py-24 text-center">
+        <h1 className="font-display text-2xl text-forest">Produit introuvable</h1>
+        <p className="text-sm text-muted-foreground mt-2">Ce produit n'existe pas ou a été retiré.</p>
+      </div>
+    </SiteLayout>
+  ),
+  errorComponent: ({ reset }) => {
+    const router = useRouter();
+    return (
+      <SiteLayout>
+        <div className="max-w-md mx-auto py-24 text-center">
+          <h1 className="font-display text-2xl text-forest">Erreur de chargement</h1>
+          <Button className="mt-4" onClick={() => { router.invalidate(); reset(); }}>Réessayer</Button>
+        </div>
+      </SiteLayout>
+    );
+  },
+  component: ProductPage,
+});
+
+function ProductPage() {
+  const { handle } = Route.useParams();
+  const { data: product } = useSuspenseQuery(productQO(handle));
+  const bundles = useMemo(() => parseBundles(product), [product]);
+  const reviews = useMemo(() => parseReviews(product), [product]);
+
+  const variants = product.variants.edges.map((e) => e.node);
+  const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id);
+  const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0];
+
+  const [selectedBundle, setSelectedBundle] = useState<BundleOffer | null>(bundles[1] ?? bundles[0] ?? null);
+  const [manualQty, setManualQty] = useState(1);
+
+  const addItem = useCartStore((s) => s.addItem);
+  const isLoading = useCartStore((s) => s.isLoading);
+
+  useEffect(() => {
+    if (selectedVariant) {
+      trackViewContent({
+        id: product.id,
+        title: product.title,
+        price: selectedVariant.price,
+      });
+    }
+  }, [product.id, product.title, selectedVariant]);
+
+  if (!selectedVariant) {
+    return <SiteLayout><div className="py-24 text-center text-muted-foreground">Aucune variante disponible.</div></SiteLayout>;
+  }
+
+  const unitPrice = parseFloat(selectedVariant.price.amount);
+  const currency = selectedVariant.price.currencyCode;
+  const quantity = selectedBundle?.quantity ?? manualQty;
+  const totalNormal = unitPrice * quantity;
+  const discountPct = selectedBundle?.discountPercent ?? 0;
+  const totalDiscounted = totalNormal * (1 - discountPct / 100);
+
+  async function handleAdd() {
+    if (!selectedVariant) return;
+    await addItem({
+      productHandle: product.handle,
+      productTitle: product.title,
+      productImage: product.images.edges[0]?.node.url ?? null,
+      variantId: selectedVariant.id,
+      variantTitle: selectedVariant.title,
+      price: selectedVariant.price,
+      quantity,
+      selectedOptions: selectedVariant.selectedOptions,
+    });
+  }
+
+  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
+
+  return (
+    <SiteLayout>
+      <article className="mx-auto max-w-6xl px-6 py-10 grid lg:grid-cols-[1.1fr_1fr] gap-10">
+        <ProductGallery
+          media={product.media?.edges.map((e) => e.node)}
+          images={product.images.edges.map((e) => e.node)}
+          title={product.title}
+        />
+
+        <div className="space-y-5">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-sage">{product.productType || product.vendor || "Ecovia"}</p>
+            <h1 className="font-display text-3xl md:text-4xl text-forest mt-2">{product.title}</h1>
+            <div className="mt-3 flex items-baseline gap-3">
+              <span className="font-display text-3xl text-forest">{formatPrice(totalDiscounted, currency)}</span>
+              {discountPct > 0 && (
+                <span className="text-base text-muted-foreground line-through">{formatPrice(totalNormal, currency)}</span>
+              )}
+            </div>
+          </div>
+
+          {product.description && (
+            <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
+          )}
+
+          {/* Variantes */}
+          {hasOptions && variants.length > 1 && (
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.15em] text-sage">Options</p>
+              <div className="flex flex-wrap gap-2">
+                {variants.map((v) => (
+                  <button
+                    key={v.id}
+                    onClick={() => setSelectedVariantId(v.id)}
+                    disabled={!v.availableForSale}
+                    className={`px-4 py-2 rounded-full text-sm border transition ${
+                      v.id === selectedVariantId
+                        ? "bg-forest text-primary-foreground border-forest"
+                        : "border-border hover:bg-secondary"
+                    } disabled:opacity-40`}
+                  >
+                    {v.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Bundles ou quantité simple */}
+          {bundles.length > 0 ? (
+            <BundleSelector
+              bundles={bundles}
+              unitPrice={unitPrice}
+              currency={currency}
+              selectedIndex={selectedBundle?.index ?? 0}
+              onSelect={setSelectedBundle}
+            />
+          ) : (
+            <div className="flex items-center gap-3">
+              <p className="text-xs uppercase tracking-[0.15em] text-sage">Quantité</p>
+              <div className="flex items-center gap-1">
+                <button onClick={() => setManualQty(Math.max(1, manualQty - 1))} className="size-9 rounded-full border border-border grid place-items-center hover:bg-secondary">−</button>
+                <span className="w-10 text-center">{manualQty}</span>
+                <button onClick={() => setManualQty(manualQty + 1)} className="size-9 rounded-full border border-border grid place-items-center hover:bg-secondary">+</button>
+              </div>
+            </div>
+          )}
+
+          <Button
+            onClick={handleAdd}
+            disabled={isLoading || !selectedVariant.availableForSale}
+            size="lg"
+            className="w-full bg-forest hover:bg-forest/90 text-primary-foreground rounded-full"
+          >
+            {isLoading ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : !selectedVariant.availableForSale ? (
+              "Indisponible"
+            ) : (
+              <><ShoppingBag className="size-4 mr-2" /> Ajouter au panier</>
+            )}
+          </Button>
+
+          <TrustBadges />
+
+          {product.descriptionHtml && product.descriptionHtml !== `<p>${product.description}</p>` && (
+            <div
+              className="prose prose-sm max-w-none mt-6 text-muted-foreground"
+              dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+            />
+          )}
+        </div>
+      </article>
+
+      <div className="mx-auto max-w-6xl px-6 pb-20">
+        <ProductReviews reviews={reviews} />
+      </div>
+    </SiteLayout>
+  );
+}

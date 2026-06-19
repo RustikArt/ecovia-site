@@ -1,0 +1,88 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --font-display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-cream: var(--cream);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+  --color-forest: var(--forest);
+  --color-clay: var(--clay);
+}
+
+:root {
+  --radius: 1rem;
+
+  /* Sage & Crème palette */
+  --cream: oklch(0.965 0.012 85);          /* #f5f0e8 */
+  --sage-soft: oklch(0.91 0.022 130);      /* #dce5d4 */
+  --sage: oklch(0.78 0.045 130);           /* #a8c0a0 */
+  --forest: oklch(0.42 0.045 145);         /* deep green text */
+  --clay: oklch(0.62 0.085 55);            /* warm terracotta accent */
+
+  --background: var(--cream);
+  --foreground: var(--forest);
+  --card: oklch(0.985 0.006 85);
+  --card-foreground: var(--forest);
+  --popover: oklch(0.985 0.006 85);
+  --popover-foreground: var(--forest);
+  --primary: oklch(0.52 0.06 140);
+  --primary-foreground: var(--cream);
+  --secondary: var(--sage-soft);
+  --secondary-foreground: var(--forest);
+  --muted: oklch(0.93 0.012 90);
+  --muted-foreground: oklch(0.5 0.03 140);
+  --accent: var(--sage);
+  --accent-foreground: var(--forest);
+  --destructive: oklch(0.55 0.18 28);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.86 0.018 120);
+  --input: oklch(0.88 0.015 120);
+  --ring: var(--sage);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}

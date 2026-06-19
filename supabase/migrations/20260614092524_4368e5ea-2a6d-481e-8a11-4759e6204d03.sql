@@ -1,0 +1,1 @@
+REVOKE SELECT (stripe_product_id, stripe_price_id) ON public.products FROM anon, authenticated;
