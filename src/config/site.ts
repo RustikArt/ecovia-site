@@ -57,11 +57,12 @@ export const siteConfig = {
     defaultDescription:
       "Découvrez notre sélection de plantes d'intérieur livrées en France par transport éco-responsable. Livraison 100% offerte, sans minimum d'achat.",
     defaultKeywords: [
-      "plantes d'intérieur",
-      "plantes éco-responsables",
-      "livraison plantes France",
+      "plantes artificielles premium",
+      "plantes déco intérieur",
+      "plantes sans entretien",
+      "plantes artificielles France",
       "boutique plantes en ligne",
-      "plantes vertes",
+      "décoration végétale",
     ],
     ogImage: "/images/og-cover.jpg",
     locale: "fr_FR",
@@ -74,6 +75,7 @@ export const siteConfig = {
     links: [
       { label: "CGV", href: "/cgv" },
       { label: "Confidentialité", href: "/confidentialite" },
+      { label: "Mentions légales", href: "/mentions-legales" },
       { label: "Livraison", href: "/politique-livraison" },
       { label: "Retours", href: "/politique-retour" },
       { label: "Contact", href: "/contact" },
@@ -158,9 +160,12 @@ export const siteConfig = {
     },
     mentionsLegales: {
       editeur: "Ecovia",
-      directeurPublication: "", // à compléter
+      directeurPublication: "Non communiqué",
       hebergeur: "Shopify Inc., 151 O'Connor Street, Ottawa, Ontario, Canada",
       contact: "ecovia-off@proton.me",
+      societaire: "Ecovia — Auto-entrepreneur / SASU",
+      siret: "À renseigner selon votre statut",
+      tva: "À renseigner si applicable",
     },
   },
 } as const;

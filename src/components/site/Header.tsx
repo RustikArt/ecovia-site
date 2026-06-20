@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Leaf, ShoppingBag } from "lucide-react";
+import { Leaf, ShoppingBag, Search } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { siteConfig } from "@/config/site";
 
@@ -23,12 +23,15 @@ export function SiteHeader() {
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>Accueil</Link>
           <Link to="/boutique" className={linkCls} activeProps={{ className: activeCls }}>Boutique</Link>
-          <Link to="/collections" className={linkCls} activeProps={{ className: activeCls }}>Nos collections</Link>
+          <Link to="/boutique#collections" className={linkCls}>Nos collections</Link>
           <Link to="/faq" className={linkCls} activeProps={{ className: activeCls }}>FAQ</Link>
           <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>Contact</Link>
         </nav>
 
         <div className="flex items-center gap-2">
+          <Link to="/boutique" className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors" aria-label="Recherche">
+            <Search className="size-4" />
+          </Link>
           <Link to="/compte" className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors" aria-label="Compte">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </Link>

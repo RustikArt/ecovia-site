@@ -24,19 +24,38 @@ export const Route = createFileRoute("/contact")({
 function Contact() {
   const [sending, setSending] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
+
     const form = e.currentTarget;
     const data = new FormData(form);
-    const subject = `Contact Ecovia — ${data.get("name") || "Sans nom"}`;
-    const body = `Nom: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`;
-    window.location.href = `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setTimeout(() => {
-      setSending(false);
-      toast.success("Votre client mail s'est ouvert pour finaliser l'envoi.");
+    const payload = {
+      name: String(data.get("name") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      subject: String(data.get("subject") || siteConfig.contact.defaultSubject).trim(),
+      message: String(data.get("message") || "").trim(),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Échec de l'envoi.");
+      }
+
+      toast.success("Message envoyé. Nous revenons vers vous rapidement.");
       form.reset();
-    }, 500);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Erreur d'envoi.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (

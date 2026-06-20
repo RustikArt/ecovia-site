@@ -42,6 +42,36 @@ export const PRODUCTS_QUERY = `
   }
 `;
 
+export const COLLECTION_BY_HANDLE_QUERY = `
+  query GetCollectionByHandle($handle: String!, $first: Int!) {
+    collectionByHandle(handle: $handle) {
+      title
+      products(first: $first) {
+        edges {
+          node {
+            ${PRODUCT_FRAGMENT}
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const COLLECTIONS_QUERY = `
+  query GetCollections($first: Int!) {
+    collections(first: $first, sortKey: TITLE) {
+      edges {
+        node {
+          id
+          title
+          handle
+          image { url altText }
+        }
+      }
+    }
+  }
+`;
+
 const METAFIELD_IDENTIFIERS = `[
   { namespace: "bundles", key: "discount_title_1" },
   { namespace: "bundles", key: "discount_value_1" },

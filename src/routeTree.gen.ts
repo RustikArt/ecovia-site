@@ -21,6 +21,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
+import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
 
 const PolitiqueRetourRoute = PolitiqueRetourRouteImport.update({
   id: '/politique-retour',
@@ -81,6 +82,11 @@ const AuthenticatedCompteRoute = AuthenticatedCompteRouteImport.update({
   path: '/compte',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
+  id: '/mentions-legales',
+  path: '/mentions-legales',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/politique-livraison': typeof PolitiqueLivraisonRoute
   '/politique-retour': typeof PolitiqueRetourRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/product/$handle': typeof ProductHandleRoute
 }
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/politique-livraison': typeof PolitiqueLivraisonRoute
   '/politique-retour': typeof PolitiqueRetourRoute
+  '/mentions-legales': typeof MentionsLegalesRoute
   '/compte': typeof AuthenticatedCompteRoute
   '/product/$handle': typeof ProductHandleRoute
 }
@@ -148,6 +156,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/politique-livraison'
     | '/politique-retour'
+    | '/mentions-legales'
     | '/compte'
     | '/product/$handle'
   id:
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/politique-livraison'
     | '/politique-retour'
+    | '/mentions-legales'
     | '/_authenticated/compte'
     | '/product/$handle'
   fileRoutesById: FileRoutesById
@@ -177,6 +187,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   PolitiqueLivraisonRoute: typeof PolitiqueLivraisonRoute
   PolitiqueRetourRoute: typeof PolitiqueRetourRoute
+  MentionsLegalesRoute: typeof MentionsLegalesRoute
   ProductHandleRoute: typeof ProductHandleRoute
 }
 
@@ -222,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/cgv'
       fullPath: '/cgv'
       preLoaderRoute: typeof CgvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mentions-legales': {
+      id: '/mentions-legales'
+      path: '/mentions-legales'
+      fullPath: '/mentions-legales'
+      preLoaderRoute: typeof MentionsLegalesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/boutique': {
@@ -291,6 +309,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   PolitiqueLivraisonRoute: PolitiqueLivraisonRoute,
   PolitiqueRetourRoute: PolitiqueRetourRoute,
+  MentionsLegalesRoute: MentionsLegalesRoute,
   ProductHandleRoute: ProductHandleRoute,
 }
 export const routeTree = rootRouteImport

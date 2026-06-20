@@ -72,3 +72,10 @@ export interface ReviewData {
   count: number;
   list: ReviewItem[];
 }
+
+export interface ShopifyCollection {
+  id: string;
+  title: string;
+  handle: string;
+  image?: ShopifyImage | null;
+}
