@@ -6,30 +6,31 @@
 
 export const siteConfig = {
   brand: {
-    name: "ecovia",
-    tagline: "Un peu de vert, beaucoup de calme.",
+    name: "Ecovia",
+    tagline: "Plantes artificielles premium pour intérieurs sans entretien.",
     description:
-      "Des plantes d'intérieur sélectionnées avec soin, livrées par un commerce éco-responsable.",
-    heroBadge: "Plantes vivantes, sélection française",
+      "Plantes artificielles haut de gamme pensées pour décorer votre intérieur immédiatement, sans entretien.",
+    heroBadge: "Décoration premium, zéro entretien",
     heroSubtitle:
-      "Des plantes d'intérieur choisies pour leur résilience. Livrées chez vous par transport éco-responsable.",
+      "Créez un intérieur végétal et sophistiqué avec des plantes artificielles réalistes, livrées prêtes à poser.",
     // Ajoute ici le chemin vers ton logo (ex: "/images/logo.svg")
-    logoSrc: "/images/logo.svg",
-    logoAlt: "Ecovia — Plantes d'intérieur éco-responsables",
+    logoSrc: "/logo.svg",
+    logoAlt: "Ecovia — Plantes artificielles premium",
     // Couleurs principales de la marque
     primaryColor: "#3d6b4f",   // vert forêt
     accentColor: "#a8c5a0",    // vert sauge doux
     backgroundColor: "#f9f6f1", // blanc cassé naturel
   },
+  featuredCollectionHandle: "coup-de-coeur",
 
   contact: {
     email: "ecovia-off@proton.me",
     hours: "Lun – Dim, 9h – 18h",
     address: "France",
     // Temps de réponse indicatif affiché sur la page contact
-    responseTime: "Nous répondons généralement sous 24h.",
+    responseTime: "Nous répondons généralement sous 24h ouvrées.",
     // Sujet par défaut du formulaire de contact
-    defaultSubject: "Question sur ma commande",
+    defaultSubject: "Demande d'aide",
   },
 
   shipping: {
@@ -82,36 +83,24 @@ export const siteConfig = {
 
   faq: [
     {
-      q: "Comment sont expédiées les plantes ?",
-      a: "Dans des conditions éco-responsables et contribuant à un arrangement éco du transport en masse.",
+      q: "Les plantes sont-elles réalistes ?",
+      a: "Oui. Nos plantes artificielles premium sont conçues pour offrir un rendu ultra réaliste, aussi bien en texture qu'en coloris.",
     },
     {
-      q: "Quels sont les délais de livraison ?",
-      a: "2 à 4 jours ouvrés en France métropolitaine.",
+      q: "Quel est le délai de livraison ?",
+      a: "En France métropolitaine, nos plantes sont livrées sous 2 à 4 jours ouvrés avec suivi colis.",
     },
     {
-      q: "La livraison est-elle vraiment offerte ?",
-      a: "Oui, la livraison est 100% offerte sur l'intégralité de nos commandes, sans minimum d'achat.",
+      q: "Comment suivre ma commande ?",
+      a: "Vous recevez un email avec un numéro de suivi dès l'expédition. Suivez votre colis à tout moment depuis votre espace client.",
     },
     {
-      q: "Et si ma plante arrive abîmée ?",
-      a: "Garantie 14 jours : contactez-nous avec une photo, nous remplaçons ou remboursons.",
+      q: "Puis-je retourner un produit ?",
+      a: "Oui, vous disposez de 14 jours pour signaler un retour ou un échange si le produit ne correspond pas à vos attentes.",
     },
     {
-      q: "Livrez-vous en dehors de la France métropolitaine ?",
-      a: "Pour le moment, nous livrons uniquement en France métropolitaine. Restez connectés pour les évolutions à venir !",
-    },
-    {
-      q: "Comment entretenir ma plante à la réception ?",
-      a: "Un guide d'entretien est glissé dans chaque colis. Vous pouvez aussi nous contacter si vous avez des questions spécifiques.",
-    },
-    {
-      q: "Puis-je modifier ou annuler ma commande ?",
-      a: "Contactez-nous rapidement à ecovia-off@proton.me. Tant que la commande n'est pas expédiée, nous ferons notre possible pour l'ajuster.",
-    },
-    {
-      q: "Vos plantes sont-elles garanties ?",
-      a: "Oui, toutes nos plantes sont garanties vivantes pendant 14 jours après réception.",
+      q: "Les plantes nécessitent-elles un entretien ?",
+      a: "Non. Nos plantes artificielles sont prêtes à poser et ne demandent ni arrosage, ni taille, ni entretien régulier.",
     },
   ],
 
@@ -129,41 +118,43 @@ export const siteConfig = {
     },
     cgv: {
       intro:
-        "Les présentes conditions régissent les ventes effectuées sur la boutique Ecovia. Toute commande passée implique l'acceptation pleine et entière de ces conditions.",
+        "Les présentes conditions régissent les ventes effectuées sur la boutique Ecovia. Toute commande implique l'acceptation de ces conditions.",
       prix:
-        "Les prix sont indiqués en euros toutes taxes comprises. La livraison est 100% offerte, sans minimum d'achat.",
+        "Les prix sont indiqués en euros TTC. La livraison est offerte en France métropolitaine, sans minimum d'achat.",
       paiement:
-        "Le paiement est sécurisé via Shopify Checkout (CB, Apple Pay, Google Pay, Shop Pay).",
-      proprieteIntellectuelle:
-        "L'ensemble des contenus présents sur ce site (textes, images, logo) sont la propriété exclusive d'Ecovia et ne peuvent être reproduits sans autorisation.",
-      juridiction:
-        "En cas de litige, les tribunaux français sont seuls compétents. Le droit applicable est le droit français.",
+        "Le paiement est sécurisé via Shopify Checkout. Nous ne stockons aucune donnée de carte bancaire.",
+      livraison:
+        "Ecovia expédie les commandes sous 48h ouvrées. La livraison est effectuée en 2 à 4 jours ouvrés en France métropolitaine.",
+      retours:
+        "Vous pouvez exercer votre droit de rétractation dans les 14 jours après réception. Contactez notre service client pour organiser le retour.",
+      droitApplicable:
+        "Le droit français s'applique à toutes les ventes conclues sur ce site. Tout litige relève des tribunaux compétents français.",
     },
     confidentialite: [
-      "Nous collectons uniquement les données nécessaires au traitement de vos commandes : email, nom, adresse de livraison, téléphone (optionnel). Ces données sont stockées de façon sécurisée et ne sont jamais revendues.",
-      "Le paiement est traité par Shopify ; nous n'avons pas accès à vos données bancaires.",
-      "Vous pouvez à tout moment demander l'accès, la rectification ou la suppression de vos données via la page contact.",
-      "Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, de portabilité et d'effacement de vos données personnelles.",
-      "Des cookies techniques sont utilisés pour le bon fonctionnement du site. Aucun cookie publicitaire tiers n'est déposé sans votre consentement.",
+      "Nous collectons uniquement les données nécessaires au traitement des commandes : nom, email, adresse et téléphone (optionnel).",
+      "Les données de paiement sont traitées par Shopify et ne sont pas stockées sur ce site.",
+      "Vous pouvez exercer vos droits d'accès, de rectification, de portabilité et de suppression de vos données à tout moment.",
+      "Nous utilisons des cookies techniques pour le fonctionnement du site. Les cookies publicitaires ne sont déposés qu'avec votre accord.",
+      "Vos données sont conservées selon les exigences légales et sécurisées conformément au RGPD.",
     ],
     livraison: {
       intro:
-        "Livraison 100% offerte en France métropolitaine via Colissimo, en 2 à 4 jours ouvrés, sans minimum d'achat.",
+        "Livraison offerte en France métropolitaine en 2 à 4 jours ouvrés depuis la confirmation de commande.",
       preparation:
-        "Vos commandes sont préparées sous 48h ouvrées. Chaque plante est emballée à la main dans des matériaux recyclés sans plastique.",
-      suivi: "Vous recevez par email un numéro de suivi dès l'expédition.",
+        "Votre commande est préparée sous 48h ouvrées. Chaque produit est emballé avec soin dans des matériaux recyclés.",
+      suivi: "Vous recevez un email de confirmation contenant un numéro de suivi dès l'expédition.",
       retard:
-        "En cas de retard exceptionnel (météo, grève, etc.), nous vous en informons par email dans les meilleurs délais.",
+        "En cas de retard exceptionnel (météo, grève, etc.), nous vous informons rapidement par email.",
     },
     retours: {
       garantie:
-        "Toutes nos plantes sont garanties vivantes 14 jours. En cas de problème, contactez-nous avec une photo pour un remplacement ou un remboursement.",
+        "Nos produits bénéficient d'une garantie 14 jours. Si un article est endommagé ou insatisfaisant, nous procédons à un échange ou un remboursement.",
       retractation:
-        "Conformément au Code de la consommation, vous disposez de 14 jours pour exercer votre droit de rétractation sur les pots et accessoires non périssables.",
+        "Vous disposez d'un droit de rétractation de 14 jours à compter de la réception de vos articles.",
       procedure:
-        "Pour initier un retour, contactez-nous à ecovia-off@proton.me avec votre numéro de commande et une description du problème.",
+        "Pour un retour, contactez-nous à ecovia-off@proton.me avec votre numéro de commande et une photo du produit.",
       remboursement:
-        "Les remboursements sont effectués sous 5 à 10 jours ouvrés sur le moyen de paiement utilisé lors de la commande.",
+        "Le remboursement est effectué sous 5 à 10 jours ouvrés sur le moyen de paiement utilisé lors de la commande.",
     },
     mentionsLegales: {
       editeur: "Ecovia",

@@ -5,30 +5,37 @@ import { siteConfig } from "@/config/site";
 export function SiteFooter() {
   return (
     <footer className="mt-24 border-t border-border/60 bg-secondary/40">
-      <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-3">
+      <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-[1.8fr_1fr_1fr_1fr]">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="size-8 rounded-full bg-sage/30 grid place-items-center">
-              <Leaf className="size-4 text-forest" />
-            </span>
-            <span className="font-display text-xl">{siteConfig.brand.name}</span>
+          <div className="flex items-center gap-3">
+            <img src={siteConfig.brand.logoSrc} alt={siteConfig.brand.logoAlt} className="h-10 w-auto" />
           </div>
           <p className="mt-3 text-sm text-muted-foreground max-w-sm">
             {siteConfig.brand.description}
           </p>
+          <p className="mt-3 text-sm text-forest font-medium">{siteConfig.footer.tagline}</p>
         </div>
         <div>
-          <h4 className="text-sm font-medium mb-3">Boutique</h4>
+          <h4 className="text-sm font-medium mb-3">Navigation</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li><Link to="/" className="hover:text-forest">Accueil</Link></li>
             <li><Link to="/boutique" className="hover:text-forest">Boutique</Link></li>
-            <li><Link to="/compte" className="hover:text-forest">Mon compte</Link></li>
+            <li><Link to="/collections" className="hover:text-forest">Nos collections</Link></li>
+            <li><Link to="/faq" className="hover:text-forest">FAQ</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-sm font-medium mb-3">Compte</h4>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li><Link to="/auth" className="hover:text-forest">Connexion</Link></li>
+            <li><Link to="/compte" className="hover:text-forest">Panier</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="text-sm font-medium mb-3">Aide</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><a href={`mailto:${siteConfig.contact.email}`} className="hover:text-forest">{siteConfig.contact.email}</a></li>
+            <li><Link to="/faq" className="hover:text-forest">FAQ</Link></li>
+            <li><Link to="/contact" className="hover:text-forest">Contact</Link></li>
             {siteConfig.footer.links.map((link) => (
               <li key={link.href}>
                 <Link to={link.href} className="hover:text-forest">{link.label}</Link>

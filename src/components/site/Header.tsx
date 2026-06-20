@@ -12,16 +12,18 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur bg-background/80 border-b border-border/60">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="size-8 rounded-full bg-sage/30 grid place-items-center">
-            <Leaf className="size-4 text-forest" />
-          </span>
-          <span className="font-display text-xl tracking-tight">{siteConfig.brand.name}</span>
+        <Link to="/" className="flex items-center gap-3">
+          <img src={siteConfig.brand.logoSrc} alt={siteConfig.brand.logoAlt} className="h-10 w-auto" />
+          <div className="hidden sm:block">
+            <span className="block font-display text-lg tracking-tight">{siteConfig.brand.name}</span>
+            <span className="block text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Décoration intérieure</span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>Accueil</Link>
           <Link to="/boutique" className={linkCls} activeProps={{ className: activeCls }}>Boutique</Link>
+          <Link to="/collections" className={linkCls} activeProps={{ className: activeCls }}>Nos collections</Link>
           <Link to="/faq" className={linkCls} activeProps={{ className: activeCls }}>FAQ</Link>
           <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>Contact</Link>
         </nav>

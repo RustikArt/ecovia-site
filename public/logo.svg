@@ -1,0 +1,6 @@
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="240" height="64" rx="24" fill="#F9F6F1"/>
+  <path d="M42 17C42 17 40 22 36 25C32 28 27 30 24 33C21 36 20 41 20 41C20 41 28 40 33 38C38 36 42 31 42 31C42 31 44 24 42 17Z" fill="#3D6B4F"/>
+  <path d="M50 14C56 11 64 10 72 14C80 18 84 26 82 34C80 42 72 48 64 52C56 56 46 54 40 48C34 42 32 30 36 22C40 14 44 17 50 14Z" fill="#A8C5A0" opacity="0.8"/>
+  <text x="104" y="42" font-family="Outfit, sans-serif" font-size="28" font-weight="700" fill="#1F3123">ecovia</text>
+</svg>
