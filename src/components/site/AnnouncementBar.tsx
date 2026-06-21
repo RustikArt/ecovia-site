@@ -9,19 +9,23 @@ export function AnnouncementBar() {
 
   return (
     <div role="status" aria-live="polite" className="sticky top-0 z-50 bg-forest text-primary-foreground">
-      <div className="relative mx-auto max-w-6xl px-6 h-10 flex items-center justify-center text-xs sm:text-sm">
-        <div className="absolute left-6 flex items-center gap-2">
+      <div className="relative mx-auto max-w-6xl px-6 h-10 text-xs sm:text-sm">
+        <div className="absolute inset-y-0 left-6 flex items-center">
           <Truck className="size-4 shrink-0" aria-hidden />
         </div>
-        <span className="font-medium">{siteConfig.shipping.bannerText}</span>
-        <button
-          type="button"
-          onClick={() => setIsOpen(false)}
-          aria-label="Fermer la bannière"
-          className="absolute right-3 rounded-full p-2 text-primary-foreground transition-colors hover:bg-white/15"
-        >
-          <X className="size-4" />
-        </button>
+        <div className="absolute inset-y-0 right-3 flex items-center">
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            aria-label="Fermer la bannière"
+            className="rounded-full p-2 text-primary-foreground transition-colors hover:bg-white/15"
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+        <div className="flex h-full items-center justify-center">
+          <span className="font-medium text-center">{siteConfig.shipping.bannerText}</span>
+        </div>
       </div>
     </div>
   );
