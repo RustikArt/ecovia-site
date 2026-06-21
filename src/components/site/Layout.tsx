@@ -8,7 +8,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col">
       <AnnouncementBar />
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 pt-[104px]">{children}</main>
       <SiteFooter />
     </div>
   );
