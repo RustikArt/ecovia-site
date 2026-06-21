@@ -71,7 +71,7 @@ export const siteConfig = {
 
   footer: {
     copyright: "Ecovia — Tous droits réservés",
-    tagline: "Fait avec soin, livré avec respect.",
+    tagline: "Fabriquées avec soin, livrées avec respect.",
     links: [
       { label: "CGV", href: "/cgv" },
       { label: "Confidentialité", href: "/confidentialite" },
