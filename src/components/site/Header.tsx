@@ -13,7 +13,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 backdrop-blur bg-background/80 border-b border-border/60">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
-          <img src={siteConfig.brand.logoSrc} alt={siteConfig.brand.logoAlt} className="h-10 w-auto" />
+          <img src={siteConfig.brand.logoSrc} alt={siteConfig.brand.logoAlt} className="h-12 w-auto" />
           <div className="hidden sm:block">
             <span className="block font-display text-lg tracking-tight">{siteConfig.brand.name}</span>
             <span className="block text-[11px] uppercase tracking-[0.28em] text-muted-foreground">Décoration intérieure</span>
