@@ -54,7 +54,7 @@ function Index() {
             </div>
           </div>
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_40px_120px_rgba(61,107,79,0.12)]">
-            <img src="/hero-lifestyle.svg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
+            <img src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
