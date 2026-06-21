@@ -14,7 +14,7 @@ export const siteConfig = {
     heroSubtitle:
       "Créez un intérieur végétal et sophistiqué avec des plantes artificielles réalistes, livrées prêtes à poser.",
     // Ajoute ici le chemin vers ton logo (ex: "/images/logo.svg")
-    logoSrc: "/logo.svg",
+    logoSrc: new URL("../assets/ChatGPT_Image_21_juin_2026__11_30_32-removebg-preview.png", import.meta.url).href,
     logoAlt: "Ecovia — Plantes artificielles premium",
     // Couleurs principales de la marque
     primaryColor: "#3d6b4f",   // vert forêt
