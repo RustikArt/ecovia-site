@@ -117,129 +117,159 @@ function ProductPage() {
   return (
     <SiteLayout>
       <article className="mx-auto max-w-6xl px-6 py-10">
-        <div className="grid gap-10 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
-          <div className="w-full max-w-[300px] mx-auto lg:mx-0">
-            <ProductGallery
-              media={product.media?.edges.map((e) => e.node)}
-              images={product.images.edges.map((e) => e.node)}
-              title={product.title}
-            />
-          </div>
-
-          <div className="space-y-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-sage">{product.productType || product.vendor || "Ecovia"}</p>
-            <h1 className="font-display text-3xl md:text-4xl text-forest mt-3">{product.title}</h1>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
-              <div className="flex items-baseline gap-3">
-                <span className="font-display text-4xl text-forest">{formatPrice(totalDiscounted, currency)}</span>
-                {discountPct > 0 && (
-                  <span className="text-base text-muted-foreground line-through">{formatPrice(totalNormal, currency)}</span>
-                )}
-              </div>
-              <span className="rounded-full bg-sage/20 px-3 py-1 text-xs uppercase tracking-[0.25em] text-forest">Livraison 2-4j</span>
+        <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
+          <aside className="space-y-6">
+            <div className="rounded-3xl border border-border/60 bg-white/90 p-4 shadow-sm">
+              <h2 className="text-sm font-semibold text-forest mb-4">Product Image</h2>
+              <ProductGallery
+                media={product.media?.edges.map((e) => e.node)}
+                images={product.images.edges.map((e) => e.node)}
+                title={product.title}
+              />
             </div>
-          </div>
 
-          {product.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
-          )}
-
-          <div className="grid gap-4 rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.15em] text-sage">Disponibilité</p>
-              <p className="text-sm font-medium text-forest">{selectedVariant.availableForSale ? "En stock" : "Rupture de stock"}</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.15em] text-sage">Livraison estimée</p>
-              <p className="text-sm text-muted-foreground">{siteConfig.shipping.estimatedDelay} après préparation.</p>
-            </div>
-          </div>
-
-          {hasOptions && variants.length > 1 && (
-            <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.15em] text-sage">Choisissez votre variante</p>
-              <div className="flex flex-wrap gap-2">
-                {variants.map((v) => (
-                  <button
-                    key={v.id}
-                    onClick={() => setSelectedVariantId(v.id)}
-                    disabled={!v.availableForSale}
-                    className={`px-4 py-2 rounded-full text-sm border transition ${
-                      v.id === selectedVariantId
-                        ? "bg-forest text-primary-foreground border-forest"
-                        : "border-border hover:bg-secondary"
-                    } disabled:opacity-40`}
-                  >
-                    {v.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {bundles.length > 0 ? (
-            <BundleSelector
-              bundles={bundles}
-              unitPrice={unitPrice}
-              currency={currency}
-              selectedIndex={selectedBundle?.index ?? 0}
-              onSelect={setSelectedBundle}
-            />
-          ) : (
-            <div className="grid gap-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-              <div>
-                <p className="text-xs uppercase tracking-[0.15em] text-sage">Quantité</p>
-                <div className="mt-2 flex items-center gap-2">
-                  <button onClick={() => setManualQty(Math.max(1, manualQty - 1))} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">−</button>
-                  <span className="w-14 text-center font-medium text-forest">{manualQty}</span>
-                  <button onClick={() => setManualQty(manualQty + 1)} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">+</button>
+            <div className="rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xs uppercase tracking-[0.24em] text-sage">Détails</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {product.productType || product.vendor || "Produit Ecovia"}
+              </p>
+              <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
+                  <p className="font-medium text-forest">Livraison</p>
+                  <p>{siteConfig.shipping.estimatedDelay} après préparation</p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
+                  <p className="font-medium text-forest">Stock</p>
+                  <p>{selectedVariant.availableForSale ? "En stock" : "Rupture de stock"}</p>
                 </div>
               </div>
             </div>
-          )}
+          </aside>
 
-          <Button
-            onClick={handleAdd}
-            disabled={isLoading || !selectedVariant.availableForSale}
-            size="lg"
-            className="w-full bg-forest hover:bg-forest/90 text-primary-foreground rounded-full"
-          >
-            {isLoading ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : !selectedVariant.availableForSale ? (
-              "Indisponible"
-            ) : (
-              <><ShoppingBag className="size-4 mr-2" /> Ajouter au panier</>
-            )}
-          </Button>
-
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              { icon: ShieldCheck, title: "Paiement sécurisé" },
-              { icon: Truck, title: "Livraison suivie" },
-              { icon: RefreshCw, title: "Retours simplifiés" },
-            ].map(({ icon: Icon, title }) => (
-              <div key={title} className="flex items-center gap-3 rounded-3xl border border-border/60 bg-secondary/40 p-4">
-                <Icon className="size-5 text-forest" />
-                <p className="text-sm font-medium text-forest">{title}</p>
+          <div className="space-y-8">
+            <section className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.2em] text-sage">{product.productType || product.vendor || "Ecovia"}</p>
+              <h1 className="font-display text-3xl md:text-4xl text-forest mt-3">{product.title}</h1>
+              <div className="mt-5 flex flex-wrap items-center gap-4">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-4xl text-forest">{formatPrice(totalDiscounted, currency)}</span>
+                  {discountPct > 0 && (
+                    <span className="text-base text-muted-foreground line-through">{formatPrice(totalNormal, currency)}</span>
+                  )}
+                </div>
+                <span className="rounded-full bg-sage/20 px-3 py-1 text-xs uppercase tracking-[0.25em] text-forest">Livraison 2-4j</span>
               </div>
-            ))}
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-sage">Vendu par</p>
+                  <p className="mt-2 text-sm font-medium text-forest">{product.vendor}</p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-sage">Catégorie</p>
+                  <p className="mt-2 text-sm font-medium text-forest">{product.productType || "Décoration intérieure"}</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-forest">Product information</h2>
+                <div className="mt-4 space-y-4 text-sm text-muted-foreground">
+                  {product.descriptionHtml && product.descriptionHtml !== `<p>${product.description}</p>` ? (
+                    <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} />
+                  ) : (
+                    <p>{product.description}</p>
+                  )}
+                </div>
+              </div>
+              <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
+                <h2 className="text-sm font-semibold text-forest">Packing list</h2>
+                <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
+                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Plante artificielle premium</li>
+                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Pot décoratif inclus</li>
+                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Guide de pose et entretien</li>
+                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Emballage recyclé</li>
+                </ul>
+              </div>
+            </section>
+
+            {hasOptions && variants.length > 1 && (
+              <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.15em] text-sage">Choisissez votre variante</p>
+                <div className="flex flex-wrap gap-2">
+                  {variants.map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={() => setSelectedVariantId(v.id)}
+                      disabled={!v.availableForSale}
+                      className={`px-4 py-2 rounded-full text-sm border transition ${
+                        v.id === selectedVariantId
+                          ? "bg-forest text-primary-foreground border-forest"
+                          : "border-border hover:bg-secondary"
+                      } disabled:opacity-40`}
+                    >
+                      {v.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {bundles.length > 0 ? (
+              <BundleSelector
+                bundles={bundles}
+                unitPrice={unitPrice}
+                currency={currency}
+                selectedIndex={selectedBundle?.index ?? 0}
+                onSelect={setSelectedBundle}
+              />
+            ) : (
+              <div className="grid gap-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.15em] text-sage">Quantité</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button onClick={() => setManualQty(Math.max(1, manualQty - 1))} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">−</button>
+                    <span className="w-14 text-center font-medium text-forest">{manualQty}</span>
+                    <button onClick={() => setManualQty(manualQty + 1)} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">+</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Button
+              onClick={handleAdd}
+              disabled={isLoading || !selectedVariant.availableForSale}
+              size="lg"
+              className="w-full bg-forest hover:bg-forest/90 text-primary-foreground rounded-full"
+            >
+              {isLoading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : !selectedVariant.availableForSale ? (
+                "Indisponible"
+              ) : (
+                <><ShoppingBag className="size-4 mr-2" /> Ajouter au panier</>
+              )}
+            </Button>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                { icon: ShieldCheck, title: "Paiement sécurisé" },
+                { icon: Truck, title: "Livraison suivie" },
+                { icon: RefreshCw, title: "Retours simplifiés" },
+              ].map(({ icon: Icon, title }) => (
+                <div key={title} className="flex items-center gap-3 rounded-3xl border border-border/60 bg-secondary/40 p-4">
+                  <Icon className="size-5 text-forest" />
+                  <p className="text-sm font-medium text-forest">{title}</p>
+                </div>
+              ))}
+            </div>
           </div>
-
-          {product.descriptionHtml && product.descriptionHtml !== `<p>${product.description}</p>` && (
-            <div
-              className="prose prose-sm max-w-none mt-6 text-muted-foreground"
-              dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
-            />
-          )}
         </div>
-      </div>
-      </article>
 
-      <div className="mx-auto max-w-6xl px-6 pb-20">
-        <ProductReviews reviews={reviews} />
-      </div>
+        <div className="mx-auto max-w-6xl px-6 pb-20">
+          <ProductReviews reviews={reviews} />
+        </div>
+      </article>
     </SiteLayout>
   );
 }
