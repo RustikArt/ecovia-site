@@ -143,23 +143,6 @@ function ProductPage() {
                 title={product.title}
               />
             </div>
-
-            <div className="rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-              <h3 className="text-xs uppercase tracking-[0.24em] text-sage">Détails</h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                {product.productType || product.vendor || "Produit Ecovia"}
-              </p>
-              <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-                  <p className="font-medium text-forest">Livraison</p>
-                  <p>{siteConfig.shipping.estimatedDelay} après préparation</p>
-                </div>
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-                  <p className="font-medium text-forest">Stock</p>
-                  <p>{selectedVariant.availableForSale ? "En stock" : "Rupture de stock"}</p>
-                </div>
-              </div>
-            </div>
           </aside>
 
           <div className="space-y-8">
@@ -186,6 +169,94 @@ function ProductPage() {
                 </div>
               </div>
             </section>
+
+            {hasOptions && variants.length > 1 && (
+              <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.15em] text-sage">Choisissez votre variante</p>
+                <div className="flex flex-wrap gap-2">
+                  {variants.map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={() => setSelectedVariantId(v.id)}
+                      disabled={!v.availableForSale}
+                      className={`px-4 py-2 rounded-full text-sm border transition ${
+                        v.id === selectedVariantId
+                          ? "bg-forest text-primary-foreground border-forest"
+                          : "border-border hover:bg-secondary"
+                      } disabled:opacity-40`}
+                    >
+                      {v.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {bundles.length > 0 ? (
+              <BundleSelector
+                bundles={bundles}
+                unitPrice={unitPrice}
+                currency={currency}
+                selectedIndex={selectedBundle?.index ?? 0}
+                onSelect={setSelectedBundle}
+              />
+            ) : (
+              <div className="grid gap-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.15em] text-sage">Quantité</p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <button onClick={() => setManualQty(Math.max(1, manualQty - 1))} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">−</button>
+                    <span className="w-14 text-center font-medium text-forest">{manualQty}</span>
+                    <button onClick={() => setManualQty(manualQty + 1)} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">+</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <Button
+              onClick={handleAdd}
+              disabled={isLoading || !selectedVariant.availableForSale}
+              size="lg"
+              className="w-full bg-forest hover:bg-forest/90 text-primary-foreground rounded-full"
+            >
+              {isLoading ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : !selectedVariant.availableForSale ? (
+                "Indisponible"
+              ) : (
+                <><ShoppingBag className="size-4 mr-2" /> Ajouter au panier</>
+              )}
+            </Button>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                { icon: ShieldCheck, title: "Paiement sécurisé" },
+                { icon: Truck, title: "Livraison suivie" },
+                { icon: RefreshCw, title: "Retours simplifiés" },
+              ].map(({ icon: Icon, title }) => (
+                <div key={title} className="flex items-center gap-3 rounded-3xl border border-border/60 bg-secondary/40 p-4">
+                  <Icon className="size-5 text-forest" />
+                  <p className="text-sm font-medium text-forest">{title}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
+              <h3 className="text-xs uppercase tracking-[0.24em] text-sage">Détails</h3>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {product.productType || product.vendor || "Produit Ecovia"}
+              </p>
+              <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
+                  <p className="font-medium text-forest">Livraison</p>
+                  <p>{siteConfig.shipping.estimatedDelay} après préparation</p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
+                  <p className="font-medium text-forest">Stock</p>
+                  <p>{selectedVariant.availableForSale ? "En stock" : "Rupture de stock"}</p>
+                </div>
+              </div>
+            </div>
 
             <section className="grid gap-4 lg:grid-cols-2">
               <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
