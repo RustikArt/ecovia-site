@@ -116,14 +116,17 @@ function ProductPage() {
 
   return (
     <SiteLayout>
-      <article className="mx-auto max-w-6xl px-6 py-10 grid gap-10 lg:grid-cols-[1.1fr_1fr] items-start">
-        <ProductGallery
-          media={product.media?.edges.map((e) => e.node)}
-          images={product.images.edges.map((e) => e.node)}
-          title={product.title}
-        />
+      <article className="mx-auto max-w-6xl px-6 py-10">
+        <div className="grid gap-10 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
+          <div className="w-full max-w-[300px] mx-auto lg:mx-0">
+            <ProductGallery
+              media={product.media?.edges.map((e) => e.node)}
+              images={product.images.edges.map((e) => e.node)}
+              title={product.title}
+            />
+          </div>
 
-        <div className="space-y-6">
+          <div className="space-y-6">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-sage">{product.productType || product.vendor || "Ecovia"}</p>
             <h1 className="font-display text-3xl md:text-4xl text-forest mt-3">{product.title}</h1>
