@@ -297,7 +297,7 @@ function ProductPage() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-6xl px-6 pb-20">
+        <div className="mx-auto max-w-6xl px-6 pb-8">
           <ProductReviews reviews={reviews} />
         </div>
       </article>
