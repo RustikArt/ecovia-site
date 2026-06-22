@@ -6,11 +6,14 @@ import { siteConfig } from "@/config/site";
 const linkCls = "text-sm text-forest/80 hover:text-forest transition-colors";
 const activeCls = "text-forest font-medium";
 
-export function SiteHeader() {
+export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
   const count = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
   const setOpen = useCartStore((s) => s.setOpen);
   return (
-    <header className="sticky top-10 z-40 backdrop-blur bg-background/80 border-b border-border/60">
+    <header
+      className="fixed left-0 right-0 z-40 backdrop-blur bg-background/80 border-b border-border/60 transition-[top] duration-300 ease-in-out"
+      style={{ top: bannerVisible ? 40 : 0 }}
+    >
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <img src={siteConfig.brand.logoSrc} alt={siteConfig.brand.logoAlt} className="h-14 w-auto" />
