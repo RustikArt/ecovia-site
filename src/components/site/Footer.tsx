@@ -21,7 +21,6 @@ export function SiteFooter() {
             <li><Link to="/" className="hover:text-forest">Accueil</Link></li>
             <li><Link to="/boutique" className="hover:text-forest">Boutique</Link></li>
             <li><Link to="/collections" className="hover:text-forest">Nos collections</Link></li>
-            <li><Link to="/faq" className="hover:text-forest">FAQ</Link></li>
           </ul>
         </div>
         <div>
@@ -34,8 +33,6 @@ export function SiteFooter() {
         <div>
           <h4 className="text-sm font-medium mb-3">Aide</h4>
           <ul className="space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/faq" className="hover:text-forest">FAQ</Link></li>
-            <li><Link to="/contact" className="hover:text-forest">Contact</Link></li>
             {siteConfig.footer.links.map((link) => (
               <li key={link.href}>
                 <Link to={link.href} className="hover:text-forest">{link.label}</Link>
