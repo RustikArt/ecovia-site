@@ -175,6 +175,19 @@ function ProductPage() {
               <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
                 <h2 className="text-sm font-semibold text-forest">Product information</h2>
                 <div className="mt-4 space-y-4 text-sm text-muted-foreground">
+                  <div className="overflow-x-auto pb-2">
+                    <div className="flex gap-3 snap-x snap-mandatory">
+                      {product.images.edges.map((image, idx) => (
+                        <div key={image.node.url ?? idx} className="snap-center flex-shrink-0 rounded-3xl overflow-hidden border border-border/60 bg-secondary/40">
+                          <img
+                            src={image.node.url}
+                            alt={image.node.altText ?? `${product.title} ${idx + 1}`}
+                            className="h-28 w-28 object-cover"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                   {product.descriptionHtml && product.descriptionHtml !== `<p>${product.description}</p>` ? (
                     <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: product.descriptionHtml }} />
                   ) : (
