@@ -1,5 +1,21 @@
 import { sendContactEmail, ContactPayload } from "@/lib/contact.server";
 
+export async function GET() {
+  return new Response(JSON.stringify({ ok: true, endpoint: "contact" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      Allow: "GET, POST, OPTIONS",
+    },
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
