@@ -3,8 +3,10 @@ import { useEffect } from "react";
 const META_ID = import.meta.env.VITE_META_PIXEL_ID as string | undefined;
 const TIKTOK_ID = import.meta.env.VITE_TIKTOK_PIXEL_ID as string | undefined;
 
-export function Pixels() {
+export function Pixels({ enabled }: { enabled: boolean }) {
   useEffect(() => {
+    if (!enabled) return;
+
     if (META_ID && !(window as any).fbq) {
       (function (f: any, b, e, v, n?: any, t?: any, s?: any) {
         if (f.fbq) return;
@@ -34,6 +36,6 @@ export function Pixels() {
         ttq.load(TIKTOK_ID); ttq.page();
       })(window, document, "ttq");
     }
-  }, []);
+  }, [enabled]);
   return null;
 }

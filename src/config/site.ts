@@ -108,12 +108,11 @@ export const siteConfig = {
 
   legal: {
     companyName: "Ecovia",
-    // Informations légales de l'entreprise (à compléter selon ton statut)
-    legalForm: "Auto-entrepreneur / SASU", // à adapter
-    siret: "",        // ex: "123 456 789 00012"
-    tva: "",          // ex: "FR12345678901" (si applicable)
+    legalForm: "micro-entreprise",
+    siret: "485 923 714 01059",
+    tva: "20% (inclus dans le prix de l'article)",
     rcs: "",          // ex: "RCS Paris B 123 456 789" (si applicable)
-    responsable: "",  // Nom du responsable de publication
+    responsable: "Ecovia®️ est responsable",
     host: {
       name: "Shopify Inc.",
       address: "151 O'Connor Street, Ground floor, Ottawa, Ontario, K2P 2L8, Canada",
@@ -122,7 +121,7 @@ export const siteConfig = {
       intro:
         "Les présentes conditions régissent les ventes effectuées sur la boutique Ecovia. Toute commande implique l'acceptation de ces conditions.",
       prix:
-        "Les prix sont indiqués en euros TTC. La livraison est offerte en France métropolitaine, sans minimum d'achat.",
+        "Les prix sont indiqués en euros TTC. TVA 20% incluse dans le prix de l'article. La livraison est offerte en France métropolitaine, sans minimum d'achat.",
       paiement:
         "Le paiement est sécurisé via Shopify Checkout. Nous ne stockons aucune donnée de carte bancaire.",
       livraison:
@@ -160,12 +159,12 @@ export const siteConfig = {
     },
     mentionsLegales: {
       editeur: "Ecovia",
-      directeurPublication: "Non communiqué",
+      directeurPublication: "Ecovia®️ est responsable",
       hebergeur: "Shopify Inc., 151 O'Connor Street, Ottawa, Ontario, Canada",
       contact: "ecovia-off@proton.me",
-      societaire: "Ecovia — Auto-entrepreneur / SASU",
-      siret: "À renseigner selon votre statut",
-      tva: "À renseigner si applicable",
+      societaire: "Ecovia — micro-entreprise",
+      siret: "485 923 714 01059",
+      tva: "20% (inclus dans le prix de l'article)",
     },
   },
 } as const;

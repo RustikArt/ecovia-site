@@ -1,0 +1,47 @@
+PLAN RESTANT AVANT LANCEMENT OFFICIEL - ECOVIA
+Date: 2026-06-23
+
+Ce qui a ete corrige automatiquement dans le code:
+- Consentement cookies implemente (pixels Meta/TikTok bloques tant que pas d accord).
+- Banniere cookies ajoutee.
+- Lien footer casse corrige ("Nos collections" -> /boutique).
+- Image hero externe remplacee par un asset local (/hero-lifestyle.svg).
+- Anti-spam renforce sur formulaire contact (honeypot + delai mini + captcha active).
+- API avis durcie (rate-limit IP + honeypot + validation handle).
+- Headers de securite serveur ajoutes (X-Frame-Options, nosniff, HSTS, etc.).
+- Hook React invalide corrige sur page produit (errorComponent).
+- Copie retour corrigee (plus de mention incoherente "plante vivante").
+
+
+RESTE A FAIRE (priorite haute)
+1) Rotation des secrets [X]
+- Regenerer immediatement la cle SUPABASE_SERVICE_ROLE_KEY.
+- Regenerer les tokens exposes si tu as partage des captures/fichiers .env.
+- Mettre toutes les nouvelles valeurs en variables de plateforme (Cloudflare/Vercel), jamais en dur.
+
+2) Mise en conformite legale FR/EU (obligatoire) [X]
+- Remplir les champs legaux reels:
+  - forme juridique exacte = micro-entreprise
+  - SIRET = 485 923 714 01059
+  - TVA (si applicable) = 20% (inclus dans le prix de l'article)
+  - directeur de publication / responsable = Ecovia®️ est responsable
+- Verifier la coherence de toutes les pages legales (CGV, confidentialite, retours, livraison).
+- Ajouter si necessaire: mediateur conso, droit de retractation detaille, contact legal complet.
+
+5) Qualite et process de release [O]
+- Corriger le lint global (le projet a encore beaucoup d erreurs/warnings historique).
+- Mettre une CI minimale:
+  - npm ci
+  - npm run build
+  - npm run lint
+- Bloquer le merge/deploiement si build ou lint critique echoue.
+
+6) SEO et assets [O]
+- Ajouter public/robots.txt.
+- Ajouter sitemap.xml (ou generation automatique).
+- Verifier OG image reelle disponible sur ton domaine final.
+
+7) Conversion et preuve sociale [X]
+- Remplacer les avis statiques homepage par exemples pre-enregistres.
+- Pool de 15 avis qualitatifs mis en place.
+- Tirage aleatoire de 3 avis a chaque refresh de la page d'accueil.

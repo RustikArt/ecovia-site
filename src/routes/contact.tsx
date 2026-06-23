@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Mail, MapPin, Clock, Send } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sending, setSending] = useState(false);
+  const startedAtRef = useRef(Date.now());
   const formSubmitUrl = "https://formsubmit.co/ajax/390c3a42564b0e28a615296136e9aad0";
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,8 +32,17 @@ function Contact() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
+
+    const honeypot = String(data.get("website") || "").trim();
+    const elapsedMs = Date.now() - startedAtRef.current;
+    if (honeypot || elapsedMs < 2500) {
+      toast.error("Envoi bloqué. Veuillez reessayer.");
+      setSending(false);
+      return;
+    }
+
     data.set("_subject", siteConfig.contact.defaultSubject);
-    data.set("_captcha", "false");
+    data.set("_captcha", "true");
     data.set("_template", "table");
 
     try {
@@ -105,6 +115,14 @@ function Contact() {
           </aside>
 
           <form onSubmit={onSubmit} className="rounded-3xl border border-border/60 bg-card p-6 md:p-8 space-y-5">
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Nom</Label>

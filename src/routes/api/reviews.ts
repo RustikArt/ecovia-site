@@ -1,6 +1,31 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
+const REVIEW_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const REVIEW_LIMIT_MAX = 6;
+const reviewRateByIp = new Map<string, number[]>();
+
+function getRequestIp(request: Request): string {
+  const cfIp = request.headers.get("cf-connecting-ip");
+  if (cfIp) return cfIp;
+  const xForwardedFor = request.headers.get("x-forwarded-for");
+  if (xForwardedFor) return xForwardedFor.split(",")[0]?.trim() || "unknown";
+  return "unknown";
+}
+
+function checkAndTrackRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const existing = reviewRateByIp.get(ip) ?? [];
+  const kept = existing.filter((t) => now - t < REVIEW_LIMIT_WINDOW_MS);
+  if (kept.length >= REVIEW_LIMIT_MAX) {
+    reviewRateByIp.set(ip, kept);
+    return false;
+  }
+  kept.push(now);
+  reviewRateByIp.set(ip, kept);
+  return true;
+}
+
 function getSupabase() {
   const url =
     process.env.SUPABASE_URL ||
@@ -15,14 +40,24 @@ function getSupabase() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    const ip = getRequestIp(request);
+
+    if (!checkAndTrackRateLimit(ip)) {
+      return json({ error: "Trop de tentatives. Reessayez plus tard." }, 429);
+    }
 
     const handle = String(body.product_handle || "").trim();
     const authorName = String(body.author_name || "").trim();
     const rating = Number(body.rating);
     const comment = String(body.comment || "").trim();
+    const honeypot = String(body.website || "").trim();
+
+    if (honeypot) {
+      return json({ error: "Requete invalide." }, 400);
+    }
 
     // Validation
-    if (!handle) {
+    if (!handle || !/^[a-z0-9][a-z0-9-]{1,120}$/.test(handle)) {
       return json({ error: "Produit manquant." }, 400);
     }
     if (!authorName || authorName.length < 2 || authorName.length > 80) {

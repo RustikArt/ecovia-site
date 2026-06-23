@@ -1,10 +1,43 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles, Droplets, ThumbsUp, Clock, ShieldCheck, Truck, RefreshCw, Headphones, Star, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { fetchCollectionProducts } from "@/lib/shopify/api";
 import { siteConfig } from "@/config/site";
+
+type HomepageReview = {
+  name: string;
+  text: string;
+};
+
+const HOMEPAGE_REVIEW_POOL: HomepageReview[] = [
+  { name: "Camille D.", text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zero entretien a gerer !" },
+  { name: "Antoine R.", text: "Livraison rapide et soignee. La qualite est largement au niveau du prix." },
+  { name: "Sophie B.", text: "Une vraie touche deco. J'ai recommande Ecovia a toute ma famille." },
+  { name: "Nora P.", text: "Je voulais un salon plus chaleureux sans contrainte. Mission accomplie des le premier colis." },
+  { name: "Mehdi L.", text: "Top pour mon bureau, effet naturel immediat. Produit conforme aux photos." },
+  { name: "Laura M.", text: "Emballage propre, livraison dans les delais, et surtout superbe finition." },
+  { name: "Thomas G.", text: "J'etais sceptique sur l'aspect artificiel, mais de loin comme de pres c'est tres reussi." },
+  { name: "Ines V.", text: "Super experience client, reponse rapide et plante tres elegante dans mon entree." },
+  { name: "Rayan C.", text: "Rapport qualite-prix solide. Le panier et le paiement Shopify sont fluides." },
+  { name: "Julie A.", text: "J'ai pris deux modeles differents et le rendu est harmonieux. Tres contente." },
+  { name: "Baptiste N.", text: "Parfait pour louer un appart meuble sans entretien. Effet decoratif garanti." },
+  { name: "Lea T.", text: "Belle surprise a l'ouverture, materiaux de qualite et couleur tres naturelle." },
+  { name: "Kenza F.", text: "Service client serieux, produit bien protege et installation en 2 minutes." },
+  { name: "Hugo S.", text: "Commande simple, livraison suivie, rendu premium. Rien a redire." },
+  { name: "Elise W.", text: "J'ai transforme mon coin lecture avec une seule plante. Le style est immediat." },
+];
+
+function pickRandomReviews(pool: HomepageReview[], count: number): HomepageReview[] {
+  const cloned = [...pool];
+  for (let i = cloned.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+  }
+  return cloned.slice(0, Math.min(count, cloned.length));
+}
 
 const collectionQO = queryOptions({
   queryKey: ["shopify", "collection", siteConfig.featuredCollectionHandle],
@@ -18,7 +51,7 @@ export const Route = createFileRoute("/")({
       { title: "Ecovia — Plantes d'intérieur éco-responsables" },
       { name: "description", content: "Sélection de plantes artificielles premium livrées en France métropolitaine, sans entretien et sans minimum d'achat." },
       { property: "og:title", content: "Ecovia — Plantes d'intérieur éco-responsables" },
-      { property: "og:description", content: "Plantes vivantes, emballage 100% recyclé." },
+      { property: "og:description", content: "Plantes artificielles premium, emballage recycle." },
     ],
   }),
   loader: ({ context }) => { context.queryClient.ensureQueryData(collectionQO); },
@@ -28,6 +61,13 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { data } = useSuspenseQuery(collectionQO);
   const products = data.products;
+  const [reviewsToShow, setReviewsToShow] = useState<HomepageReview[]>(
+    HOMEPAGE_REVIEW_POOL.slice(0, 3),
+  );
+
+  useEffect(() => {
+    setReviewsToShow(pickRandomReviews(HOMEPAGE_REVIEW_POOL, 3));
+  }, []);
 
   return (
     <SiteLayout>
@@ -54,7 +94,7 @@ function Index() {
             </div>
           </div>
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_40px_120px_rgba(61,107,79,0.12)]">
-            <img src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
+            <img src="/hero-lifestyle.svg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
@@ -162,11 +202,7 @@ function Index() {
             </div>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { name: "Camille D.", text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zéro entretien à gérer !" },
-              { name: "Antoine R.", text: "Livraison rapide et soignée. La qualité est largement au niveau du prix." },
-              { name: "Sophie B.", text: "Une vraie touche déco. J’ai recommandé Ecovia à toute ma famille." },
-            ].map((r) => (
+            {reviewsToShow.map((r) => (
               <article key={r.name} className="rounded-3xl bg-white border border-border/60 p-6 shadow-sm">
                 <div className="flex items-center gap-0.5 mb-3">
                   {[0, 1, 2, 3, 4].map((i) => (

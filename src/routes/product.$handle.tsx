@@ -47,19 +47,23 @@ export const Route = createFileRoute("/product/$handle")({
       </div>
     </SiteLayout>
   ),
-  errorComponent: ({ reset }) => {
-    const router = useRouter();
-    return (
-      <SiteLayout>
-        <div className="max-w-md mx-auto py-24 text-center">
-          <h1 className="font-display text-2xl text-forest">Erreur de chargement</h1>
-          <Button className="mt-4" onClick={() => { router.invalidate(); reset(); }}>Réessayer</Button>
-        </div>
-      </SiteLayout>
-    );
-  },
+  errorComponent: ProductErrorComponent,
   component: ProductPage,
 });
+
+function ProductErrorComponent({ reset }: { reset: () => void }) {
+  const router = useRouter();
+  return (
+    <SiteLayout>
+      <div className="max-w-md mx-auto py-24 text-center">
+        <h1 className="font-display text-2xl text-forest">Erreur de chargement</h1>
+        <Button className="mt-4" onClick={() => { router.invalidate(); reset(); }}>
+          Reessayer
+        </Button>
+      </div>
+    </SiteLayout>
+  );
+}
 
 function ProductPage() {
   const { handle } = Route.useParams();
