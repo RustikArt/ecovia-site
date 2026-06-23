@@ -10,6 +10,41 @@ import {
 } from "@/lib/shopify/queries";
 import { trackAddToCart } from "@/lib/tracking";
 
+const CART_STORAGE_KEY = "ecovia-shopify-cart";
+const CART_BACKUP_STORAGE_KEY = "ecovia-shopify-cart-backup";
+
+type CartSnapshot = {
+  items: CartItem[];
+  cartId: string | null;
+  checkoutUrl: string | null;
+};
+
+function readBackupCart(): CartSnapshot | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(CART_BACKUP_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CartSnapshot;
+    if (!Array.isArray(parsed.items)) return null;
+    return {
+      items: parsed.items,
+      cartId: typeof parsed.cartId === "string" ? parsed.cartId : null,
+      checkoutUrl: typeof parsed.checkoutUrl === "string" ? parsed.checkoutUrl : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeBackupCart(snapshot: CartSnapshot) {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(CART_BACKUP_STORAGE_KEY, JSON.stringify(snapshot));
+  } catch {
+    // ignore quota/storage errors
+  }
+}
+
 export interface CartItem {
   lineId: string | null;
   productHandle: string;
@@ -101,9 +136,9 @@ async function removeLineFromShopifyCart(cartId: string, lineId: string) {
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
-      items: [],
-      cartId: null,
-      checkoutUrl: null,
+      items: readBackupCart()?.items ?? [],
+      cartId: readBackupCart()?.cartId ?? null,
+      checkoutUrl: readBackupCart()?.checkoutUrl ?? null,
       isLoading: false,
       isSyncing: false,
       isOpen: false,
@@ -208,7 +243,7 @@ export const useCartStore = create<CartStore>()(
       },
     }),
     {
-      name: "ecovia-shopify-cart",
+      name: CART_STORAGE_KEY,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         items: state.items,
@@ -218,6 +253,16 @@ export const useCartStore = create<CartStore>()(
     },
   ),
 );
+
+if (typeof window !== "undefined") {
+  useCartStore.subscribe((state) => {
+    writeBackupCart({
+      items: state.items,
+      cartId: state.cartId,
+      checkoutUrl: state.checkoutUrl,
+    });
+  });
+}
 
 export function formatPrice(amount: string | number, currency = "EUR"): string {
   const n = typeof amount === "string" ? parseFloat(amount) : amount;

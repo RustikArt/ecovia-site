@@ -2,7 +2,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteLayout } from "@/components/site/Layout";
 import { supabase } from "@/integrations/supabase/client";
-import { DEFAULT_SUPABASE_URL } from "@/integrations/supabase/constants";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -24,22 +23,8 @@ function AuthPage() {
   const [fullName, setFullName] = useState("");
   const [sending, setSending] = useState(false);
 
-  function isLocalSupabaseTarget() {
-    const url = import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL;
-    try {
-      const host = new URL(url).hostname;
-      return host === "localhost" || host === "127.0.0.1";
-    } catch {
-      return /localhost|127\.0\.0\.1/i.test(url);
-    }
-  }
-
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (isLocalSupabaseTarget()) {
-      toast.error("Configuration Supabase locale détectée. Les comptes ne sont pas créés en production.");
-      return;
-    }
     setSending(true);
     try {
       if (mode === "signup") {

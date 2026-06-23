@@ -26,7 +26,6 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className={linkCls} activeProps={{ className: activeCls }} activeOptions={{ exact: true }}>Accueil</Link>
           <Link to="/boutique" className={linkCls} activeProps={{ className: activeCls }}>Boutique</Link>
-          <Link to="/boutique#collections" className={linkCls}>Nos collections</Link>
           <Link to="/faq" className={linkCls} activeProps={{ className: activeCls }}>FAQ</Link>
           <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>Contact</Link>
         </nav>
