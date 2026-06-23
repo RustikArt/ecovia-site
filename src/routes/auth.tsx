@@ -9,7 +9,10 @@ export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Connexion — Ecovia" },
-      { name: "description", content: "Connectez-vous à votre compte Ecovia ou créez-en un en quelques secondes." },
+      {
+        name: "description",
+        content: "Connectez-vous à votre compte Ecovia ou créez-en un en quelques secondes.",
+      },
     ],
   }),
   component: AuthPage,
@@ -39,9 +42,14 @@ function AuthPage() {
         if (error) throw error;
         if (!data.session) {
           // Some Supabase projects may return no session after signUp even with email confirmation disabled.
-          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
           if (signInError) {
-            toast.error("Compte créé, mais connexion automatique impossible. Vérifiez la configuration Email dans Supabase.");
+            toast.error(
+              "Compte créé, mais connexion automatique impossible. Vérifiez la configuration Email dans Supabase.",
+            );
             return;
           }
         }
@@ -61,7 +69,9 @@ function AuthPage() {
         toast.error("Un compte existe déjà avec cet email.");
         setMode("signin");
       } else if (msg.includes("Email not confirmed")) {
-        toast.error("Confirmation email encore active sur ce projet Supabase. Désactivez Confirm email dans Auth > Signups.");
+        toast.error(
+          "Confirmation email encore active sur ce projet Supabase. Désactivez Confirm email dans Auth > Signups.",
+        );
       } else {
         toast.error(msg);
       }
@@ -131,7 +141,9 @@ function AuthPage() {
           </button>
         </p>
         <p className="mt-8 text-xs text-center text-muted-foreground">
-          <Link to="/" className="hover:underline">← Retour à la boutique</Link>
+          <Link to="/" className="hover:underline">
+            ← Retour à la boutique
+          </Link>
         </p>
       </section>
     </SiteLayout>

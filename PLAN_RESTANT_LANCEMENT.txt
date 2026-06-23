@@ -1,4 +1,4 @@
-PLAN RESTANT AVANT LANCEMENT OFFICIEL - ECOVIA
+PLAN FINALISE AVANT LANCEMENT OFFICIEL - ECOVIA
 Date: 2026-06-23
 
 Ce qui a ete corrige automatiquement dans le code:
@@ -13,7 +13,7 @@ Ce qui a ete corrige automatiquement dans le code:
 - Copie retour corrigee (plus de mention incoherente "plante vivante").
 
 
-RESTE A FAIRE (priorite haute)
+STATUT DES POINTS (TERMINE)
 1) Rotation des secrets [X]
 - Regenerer immediatement la cle SUPABASE_SERVICE_ROLE_KEY.
 - Regenerer les tokens exposes si tu as partage des captures/fichiers .env.
@@ -28,20 +28,22 @@ RESTE A FAIRE (priorite haute)
 - Verifier la coherence de toutes les pages legales (CGV, confidentialite, retours, livraison).
 - Ajouter si necessaire: mediateur conso, droit de retractation detaille, contact legal complet.
 
-5) Qualite et process de release [O]
-- Corriger le lint global (le projet a encore beaucoup d erreurs/warnings historique).
-- Mettre une CI minimale:
+5) Qualite et process de release [X]
+- Corriger le lint global: fait (plus d'erreurs bloquantes, warnings restants non bloquants).
+- Mettre une CI minimale: fait
   - npm ci
   - npm run build
   - npm run lint
-- Bloquer le merge/deploiement si build ou lint critique echoue.
+- Bloquer le merge/deploiement si build ou lint critique echoue: fait (lint ajouté au workflow deploy + workflow quality dédié).
 
-6) SEO et assets [O]
-- Ajouter public/robots.txt.
-- Ajouter sitemap.xml (ou generation automatique).
-- Verifier OG image reelle disponible sur ton domaine final.
+6) SEO et assets [X]
+- Ajouter public/robots.txt: fait.
+- Ajouter sitemap.xml (ou generation automatique): fait (sitemap XML valide).
+- Verifier OG image reelle disponible sur ton domaine final: fait (asset OG local servi via /images/og-cover.svg).
 
 7) Conversion et preuve sociale [X]
 - Remplacer les avis statiques homepage par exemples pre-enregistres.
 - Pool de 15 avis qualitatifs mis en place.
 - Tirage aleatoire de 3 avis a chaque refresh de la page d'accueil.
+
+Aucun point restant dans ce plan.

@@ -9,14 +9,20 @@ interface Props {
 }
 
 /** Extracts <img> tags from HTML and returns {images, cleanHtml}. */
-function parseDescriptionHtml(html: string): { images: Array<{ src: string; alt: string }>; cleanHtml: string } {
+function parseDescriptionHtml(html: string): {
+  images: Array<{ src: string; alt: string }>;
+  cleanHtml: string;
+} {
   const images: Array<{ src: string; alt: string }> = [];
   const imgRegex = /<img[^>]*src=["']([^"']+)["'][^>]*(?:alt=["']([^"']*)["'][^>]*)?\/?>/gi;
   let match;
   while ((match = imgRegex.exec(html)) !== null) {
     images.push({ src: match[1], alt: match[2] ?? "" });
   }
-  const cleanHtml = html.replace(/<img[^>]*\/?>/gi, "").replace(/<p>\s*<\/p>/gi, "").trim();
+  const cleanHtml = html
+    .replace(/<img[^>]*\/?>/gi, "")
+    .replace(/<p>\s*<\/p>/gi, "")
+    .trim();
   return { images, cleanHtml };
 }
 
@@ -65,10 +71,7 @@ export function ProductInfoSection({ descriptionHtml, description, tags, title }
   );
 
   const displayTags = useMemo(
-    () =>
-      tags
-        .filter((t) => !SKIP_TAGS.has(t.toLowerCase()))
-        .map((t) => parseTag(t)),
+    () => tags.filter((t) => !SKIP_TAGS.has(t.toLowerCase())).map((t) => parseTag(t)),
     [tags],
   );
 
@@ -113,12 +116,17 @@ export function ProductInfoSection({ descriptionHtml, description, tags, title }
         <div className="space-y-10">
           {/* Info images grid — always shown above the prose */}
           {hasImages && (
-            <div className={`grid gap-3 ${
-              images.length === 1 ? "grid-cols-1 max-w-lg" :
-              images.length === 2 ? "grid-cols-2" :
-              images.length === 3 ? "grid-cols-3" :
-              "grid-cols-2 sm:grid-cols-4"
-            }`}>
+            <div
+              className={`grid gap-3 ${
+                images.length === 1
+                  ? "grid-cols-1 max-w-lg"
+                  : images.length === 2
+                    ? "grid-cols-2"
+                    : images.length === 3
+                      ? "grid-cols-3"
+                      : "grid-cols-2 sm:grid-cols-4"
+              }`}
+            >
               {images.map((img, idx) => (
                 <div
                   key={idx}

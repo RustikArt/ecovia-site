@@ -8,7 +8,10 @@ export const Route = createFileRoute("/mentions-legales")({
       { title: "Mentions légales — Ecovia" },
       { name: "description", content: "Informations légales et éditeur du site Ecovia." },
       { property: "og:title", content: "Mentions légales — Ecovia" },
-      { property: "og:description", content: "Informations légales et mention de l'hébergeur du site Ecovia." },
+      {
+        property: "og:description",
+        content: "Informations légales et mention de l'hébergeur du site Ecovia.",
+      },
     ],
   }),
   component: LegalPage,
@@ -22,7 +25,9 @@ function LegalPage() {
         <section className="space-y-3">
           <h2 className="font-display text-2xl text-forest">Éditeur</h2>
           <p>{siteConfig.legal.mentionsLegales.editeur}</p>
-          <p>Directeur de la publication : {siteConfig.legal.mentionsLegales.directeurPublication}</p>
+          <p>
+            Directeur de la publication : {siteConfig.legal.mentionsLegales.directeurPublication}
+          </p>
         </section>
 
         <section className="space-y-3">
@@ -32,7 +37,16 @@ function LegalPage() {
 
         <section className="space-y-3">
           <h2 className="font-display text-2xl text-forest">Contact</h2>
-          <p>Pour toute question concernant le site, écrivez à <a href={`mailto:${siteConfig.legal.mentionsLegales.contact}`} className="text-forest underline">{siteConfig.legal.mentionsLegales.contact}</a>.</p>
+          <p>
+            Pour toute question concernant le site, écrivez à{" "}
+            <a
+              href={`mailto:${siteConfig.legal.mentionsLegales.contact}`}
+              className="text-forest underline"
+            >
+              {siteConfig.legal.mentionsLegales.contact}
+            </a>
+            .
+          </p>
         </section>
 
         <section className="space-y-3">

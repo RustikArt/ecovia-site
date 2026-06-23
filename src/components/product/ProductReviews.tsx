@@ -11,7 +11,17 @@ interface Props {
   productHandle: string;
 }
 
-function Stars({ value, size = 14, interactive = false, onRate }: { value: number; size?: number; interactive?: boolean; onRate?: (v: number) => void }) {
+function Stars({
+  value,
+  size = 14,
+  interactive = false,
+  onRate,
+}: {
+  value: number;
+  size?: number;
+  interactive?: boolean;
+  onRate?: (v: number) => void;
+}) {
   const [hovered, setHovered] = useState<number | null>(null);
   const display = hovered ?? value;
   const full = Math.floor(display);
@@ -31,7 +41,13 @@ function Stars({ value, size = 14, interactive = false, onRate }: { value: numbe
   );
 }
 
-function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuccess: () => void }) {
+function ReviewForm({
+  productHandle,
+  onSuccess,
+}: {
+  productHandle: string;
+  onSuccess: () => void;
+}) {
   const [name, setName] = useState("");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -40,7 +56,10 @@ function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuc
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (rating === 0) { setErrorMsg("Veuillez sélectionner une note."); return; }
+    if (rating === 0) {
+      setErrorMsg("Veuillez sélectionner une note.");
+      return;
+    }
     setStatus("loading");
     setErrorMsg("");
     try {
@@ -50,7 +69,11 @@ function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuc
         body: JSON.stringify({ product_handle: productHandle, author_name: name, rating, comment }),
       });
       const data = await res.json();
-      if (!res.ok) { setErrorMsg(data.error ?? "Erreur lors de l'envoi."); setStatus("error"); return; }
+      if (!res.ok) {
+        setErrorMsg(data.error ?? "Erreur lors de l'envoi.");
+        setStatus("error");
+        return;
+      }
       setStatus("success");
       setTimeout(onSuccess, 2000);
     } catch {
@@ -74,7 +97,9 @@ function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuc
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-forest" htmlFor="review-name">Votre prénom</label>
+        <label className="text-sm font-medium text-forest" htmlFor="review-name">
+          Votre prénom
+        </label>
         <input
           id="review-name"
           type="text"
@@ -94,7 +119,9 @@ function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuc
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-forest" htmlFor="review-comment">Votre avis</label>
+        <label className="text-sm font-medium text-forest" htmlFor="review-comment">
+          Votre avis
+        </label>
         <textarea
           id="review-comment"
           required
@@ -118,7 +145,9 @@ function ReviewForm({ productHandle, onSuccess }: { productHandle: string; onSuc
       >
         {status === "loading" ? <Loader2 className="size-4 animate-spin" /> : "Envoyer mon avis"}
       </Button>
-      <p className="text-xs text-center text-muted-foreground">Votre avis sera visible après modération.</p>
+      <p className="text-xs text-center text-muted-foreground">
+        Votre avis sera visible après modération.
+      </p>
     </form>
   );
 }
@@ -140,22 +169,26 @@ export function ProductReviews({ reviews: shopifyReviews, productHandle }: Props
         name: r.author_name,
         rating: r.rating,
         comment: r.comment,
-        date: new Date(r.created_at).toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" }),
+        date: new Date(r.created_at).toLocaleDateString("fr-FR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
       }));
     },
     staleTime: 60_000,
   });
 
   // Merge: Supabase approved reviews first, then Shopify metafield reviews (legacy)
-  const allReviews = [
-    ...supabaseReviews,
-    ...shopifyReviews.list,
-  ];
+  const allReviews = [...supabaseReviews, ...shopifyReviews.list];
   const count = allReviews.length;
   const computedRating = count > 0 ? allReviews.reduce((s, r) => s + r.rating, 0) / count : null;
   const dist = [5, 4, 3, 2, 1].map((star) => ({
     star,
-    pct: count > 0 ? (allReviews.filter((r) => Math.round(r.rating) === star).length / count) * 100 : 0,
+    pct:
+      count > 0
+        ? (allReviews.filter((r) => Math.round(r.rating) === star).length / count) * 100
+        : 0,
   }));
 
   return (
@@ -178,7 +211,10 @@ export function ProductReviews({ reviews: shopifyReviews, productHandle }: Props
           <h3 className="text-sm font-semibold text-forest mb-4">Partagez votre expérience</h3>
           <ReviewForm
             productHandle={productHandle}
-            onSuccess={() => { setShowForm(false); refetch(); }}
+            onSuccess={() => {
+              setShowForm(false);
+              refetch();
+            }}
           />
         </div>
       )}
@@ -194,7 +230,9 @@ export function ProductReviews({ reviews: shopifyReviews, productHandle }: Props
           <div className="grid md:grid-cols-[220px_1fr] gap-8 mb-8 p-5 rounded-2xl bg-secondary/30 border border-border/40">
             <div className="text-center md:text-left">
               <p className="font-display text-5xl text-forest">{computedRating!.toFixed(1)}</p>
-              <div className="mt-2 inline-flex"><Stars value={computedRating!} size={18} /></div>
+              <div className="mt-2 inline-flex">
+                <Stars value={computedRating!} size={18} />
+              </div>
               <p className="text-sm text-muted-foreground mt-1">{count} avis</p>
             </div>
             <div className="space-y-1.5 self-center">

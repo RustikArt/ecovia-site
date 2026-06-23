@@ -14,11 +14,14 @@ export const siteConfig = {
     heroSubtitle:
       "Créez un intérieur végétal et sophistiqué avec des plantes artificielles réalistes, livrées prêtes à poser.",
     // Ajoute ici le chemin vers ton logo (ex: "/images/logo.svg")
-    logoSrc: new URL("../assets/ChatGPT_Image_21_juin_2026__11_30_32-removebg-preview.png", import.meta.url).href,
+    logoSrc: new URL(
+      "../assets/ChatGPT_Image_21_juin_2026__11_30_32-removebg-preview.png",
+      import.meta.url,
+    ).href,
     logoAlt: "Ecovia — Plantes artificielles premium",
     // Couleurs principales de la marque
-    primaryColor: "#3d6b4f",   // vert forêt
-    accentColor: "#a8c5a0",    // vert sauge doux
+    primaryColor: "#3d6b4f", // vert forêt
+    accentColor: "#a8c5a0", // vert sauge doux
     backgroundColor: "#f9f6f1", // blanc cassé naturel
   },
   featuredCollectionHandle: "coup-de-coeur",
@@ -42,14 +45,13 @@ export const siteConfig = {
     zones: ["France métropolitaine"],
     packagingNote:
       "Chaque plante est emballée à la main dans des matériaux recyclés, sans plastique.",
-    trackingNote:
-      "Un numéro de suivi vous est envoyé par email dès l'expédition.",
+    trackingNote: "Un numéro de suivi vous est envoyé par email dès l'expédition.",
   },
 
   social: {
-    instagram: "",   // ex: "https://instagram.com/ecovia.plantes"
-    tiktok: "",      // ex: "https://tiktok.com/@ecovia.plantes"
-    pinterest: "",   // ex: "https://pinterest.fr/ecoviaplantes"
+    instagram: "", // ex: "https://instagram.com/ecovia.plantes"
+    tiktok: "", // ex: "https://tiktok.com/@ecovia.plantes"
+    pinterest: "", // ex: "https://pinterest.fr/ecoviaplantes"
   },
 
   seo: {
@@ -64,7 +66,7 @@ export const siteConfig = {
       "boutique plantes en ligne",
       "décoration végétale",
     ],
-    ogImage: "/images/og-cover.jpg",
+    ogImage: "/images/og-cover.svg",
     locale: "fr_FR",
     siteUrl: "https://ecovia.fr", // à adapter selon ton domaine réel
   },
@@ -111,7 +113,7 @@ export const siteConfig = {
     legalForm: "micro-entreprise",
     siret: "485 923 714 01059",
     tva: "20% (inclus dans le prix de l'article)",
-    rcs: "",          // ex: "RCS Paris B 123 456 789" (si applicable)
+    rcs: "", // ex: "RCS Paris B 123 456 789" (si applicable)
     responsable: "Ecovia®️ est responsable",
     host: {
       name: "Shopify Inc.",
@@ -120,8 +122,7 @@ export const siteConfig = {
     cgv: {
       intro:
         "Les présentes conditions régissent les ventes effectuées sur la boutique Ecovia. Toute commande implique l'acceptation de ces conditions.",
-      prix:
-        "Les prix sont indiqués en euros TTC. TVA 20% incluse dans le prix de l'article. La livraison est offerte en France métropolitaine, sans minimum d'achat.",
+      prix: "Les prix sont indiqués en euros TTC. TVA 20% incluse dans le prix de l'article. La livraison est offerte en France métropolitaine, sans minimum d'achat.",
       paiement:
         "Le paiement est sécurisé via Shopify Checkout. Nous ne stockons aucune donnée de carte bancaire.",
       livraison:

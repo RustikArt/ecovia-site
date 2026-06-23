@@ -38,15 +38,19 @@ export function BundleSelector({ bundles, unitPrice, currency, selectedIndex, on
                 </span>
               )}
               {/* Radio dot */}
-              <div className={`size-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
-                isSelected ? "border-forest bg-forest" : "border-border"
-              }`}>
+              <div
+                className={`size-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${
+                  isSelected ? "border-forest bg-forest" : "border-border"
+                }`}
+              >
                 {isSelected && <Check className="size-3 text-white" strokeWidth={3} />}
               </div>
 
               {/* Label + per-unit price */}
               <div className="flex-1 min-w-0">
-                <p className={`font-semibold text-sm ${isSelected ? "text-forest" : "text-foreground"}`}>
+                <p
+                  className={`font-semibold text-sm ${isSelected ? "text-forest" : "text-foreground"}`}
+                >
                   {b.title}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
@@ -59,7 +63,9 @@ export function BundleSelector({ bundles, unitPrice, currency, selectedIndex, on
 
               {/* Total price */}
               <div className="text-right flex-shrink-0">
-                <p className={`font-display text-xl leading-none ${isSelected ? "text-forest" : "text-foreground"}`}>
+                <p
+                  className={`font-display text-xl leading-none ${isSelected ? "text-forest" : "text-foreground"}`}
+                >
                   {formatPrice(totalDiscounted, currency)}
                 </p>
                 {b.discountPercent > 0 && (

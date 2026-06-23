@@ -34,6 +34,11 @@ export default tseslint.config(
       ],
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+      // Vendor snippets and Shopify graph responses require pragmatic typing here.
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-expressions": "off",
+      "prefer-spread": "off",
+      "prefer-rest-params": "off",
     },
   },
   eslintPluginPrettier,

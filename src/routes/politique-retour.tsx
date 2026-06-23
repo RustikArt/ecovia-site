@@ -3,7 +3,12 @@ import { SiteLayout } from "@/components/site/Layout";
 import { siteConfig } from "@/config/site";
 
 export const Route = createFileRoute("/politique-retour")({
-  head: () => ({ meta: [{ title: "Retours — Ecovia" }, { name: "description", content: "Notre garantie sur les produits et conditions de retour." }] }),
+  head: () => ({
+    meta: [
+      { title: "Retours — Ecovia" },
+      { name: "description", content: "Notre garantie sur les produits et conditions de retour." },
+    ],
+  }),
   component: () => (
     <SiteLayout>
       <article className="max-w-3xl mx-auto px-6 py-16">

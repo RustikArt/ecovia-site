@@ -9,8 +9,8 @@ export function CookieConsentBanner({ onChoice }: CookieConsentBannerProps) {
     <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-3xl rounded-2xl border border-border/60 bg-card/95 p-4 shadow-2xl backdrop-blur">
       <p className="text-sm font-medium text-foreground">Respect de votre vie privée</p>
       <p className="mt-1 text-xs text-muted-foreground">
-        Nous utilisons des cookies techniques pour le fonctionnement du site. Les cookies publicitaires
-        (Meta/TikTok) ne sont activés qu'avec votre accord.
+        Nous utilisons des cookies techniques pour le fonctionnement du site. Les cookies
+        publicitaires (Meta/TikTok) ne sont activés qu'avec votre accord.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         <button

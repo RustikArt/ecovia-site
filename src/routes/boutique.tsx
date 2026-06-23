@@ -23,9 +23,17 @@ export const Route = createFileRoute("/boutique")({
   head: () => ({
     meta: [
       { title: "Boutique — Plantes artificielles premium | Ecovia" },
-      { name: "description", content: "Toute la collection de plantes artificielles Ecovia : grandes plantes, petites plantes, suspensions et pots décoratifs. Livraison offerte en France." },
+      {
+        name: "description",
+        content:
+          "Toute la collection de plantes artificielles Ecovia : grandes plantes, petites plantes, suspensions et pots décoratifs. Livraison offerte en France.",
+      },
       { property: "og:title", content: "Boutique — Ecovia" },
-      { property: "og:description", content: "Découvrez la collection Ecovia de plantes artificielles premium avec livraison rapide en France." },
+      {
+        property: "og:description",
+        content:
+          "Découvrez la collection Ecovia de plantes artificielles premium avec livraison rapide en France.",
+      },
     ],
   }),
   loader: ({ context }) => {
@@ -63,7 +71,7 @@ function Boutique() {
     staleTime: 60_000,
   });
 
-  const baseProducts = activeCollection ? collectionQuery.data?.products ?? [] : allProducts;
+  const baseProducts = activeCollection ? (collectionQuery.data?.products ?? []) : allProducts;
 
   const priceCeiling = useMemo(() => {
     const max = baseProducts.reduce((m, p) => Math.max(m, getProductPrice(p)), 0);
@@ -97,7 +105,8 @@ function Boutique() {
           <p className="text-xs uppercase tracking-[0.24em] text-sage">Catalogue</p>
           <h1 className="font-display text-4xl md:text-5xl mt-2 text-forest">Boutique</h1>
           <p className="mt-3 text-muted-foreground max-w-xl text-sm">
-            {filtered.length} {filtered.length > 1 ? "produits disponibles" : "produit disponible"} — livraison offerte en France métropolitaine.
+            {filtered.length} {filtered.length > 1 ? "produits disponibles" : "produit disponible"}{" "}
+            — livraison offerte en France métropolitaine.
           </p>
         </header>
 
@@ -138,7 +147,9 @@ function Boutique() {
               </div>
 
               <div>
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">Prix maximum</p>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                  Prix maximum
+                </p>
                 <input
                   type="range"
                   min={0}
@@ -147,18 +158,24 @@ function Boutique() {
                   onChange={(e) => setMaxPrice(parseInt(e.target.value, 10))}
                   className="w-full accent-forest"
                 />
-                <p className="mt-2 text-sm text-forest">Jusqu’à {formatPrice(effectiveMax, "EUR")}</p>
+                <p className="mt-2 text-sm text-forest">
+                  Jusqu’à {formatPrice(effectiveMax, "EUR")}
+                </p>
               </div>
 
               <div className="mt-6">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">Tri</p>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                  Tri
+                </p>
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortId)}
                   className="w-full rounded-full border border-border bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
                 >
                   {SORTS.map((s) => (
-                    <option key={s.id} value={s.id}>{s.label}</option>
+                    <option key={s.id} value={s.id}>
+                      {s.label}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -176,8 +193,15 @@ function Boutique() {
             </div>
             <div className="rounded-3xl bg-forest text-primary-foreground p-5 text-sm space-y-2">
               <p className="font-display text-lg">Besoin d’aide ?</p>
-              <p className="text-primary-foreground/80 text-xs">Nos conseillers vous répondent sous 24h ouvrées.</p>
-              <Link to="/contact" className="inline-flex items-center text-xs underline hover:opacity-80">Nous contacter →</Link>
+              <p className="text-primary-foreground/80 text-xs">
+                Nos conseillers vous répondent sous 24h ouvrées.
+              </p>
+              <Link
+                to="/contact"
+                className="inline-flex items-center text-xs underline hover:opacity-80"
+              >
+                Nous contacter →
+              </Link>
             </div>
           </aside>
 
@@ -231,11 +255,7 @@ function BoutiqueCard({ product }: { product: ShopifyProduct }) {
   }
 
   return (
-    <Link
-      to="/product/$handle"
-      params={{ handle: node.handle }}
-      className="group flex flex-col"
-    >
+    <Link to="/product/$handle" params={{ handle: node.handle }} className="group flex flex-col">
       <div className="relative aspect-square overflow-hidden rounded-3xl bg-secondary/60">
         {img ? (
           <img
@@ -245,7 +265,9 @@ function BoutiqueCard({ product }: { product: ShopifyProduct }) {
             className="size-full object-cover transition duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="size-full grid place-items-center text-muted-foreground text-xs">Pas d'image</div>
+          <div className="size-full grid place-items-center text-muted-foreground text-xs">
+            Pas d'image
+          </div>
         )}
         {hasPromo && (
           <span className="absolute top-3 left-3 rounded-full bg-forest text-primary-foreground px-3 py-1 text-[11px] font-medium">
@@ -265,15 +287,17 @@ function BoutiqueCard({ product }: { product: ShopifyProduct }) {
       <div className="mt-4 flex items-start justify-between gap-3">
         <h2 className="font-display text-sm leading-tight line-clamp-2">{node.title}</h2>
         <div className="text-right whitespace-nowrap">
-          <span className="font-display text-sm">{formatPrice(price.amount, price.currencyCode)}</span>
+          <span className="font-display text-sm">
+            {formatPrice(price.amount, price.currencyCode)}
+          </span>
           {hasPromo && compareAt && (
-            <span className="block text-[11px] text-muted-foreground line-through">{formatPrice(compareAt.amount, compareAt.currencyCode)}</span>
+            <span className="block text-[11px] text-muted-foreground line-through">
+              {formatPrice(compareAt.amount, compareAt.currencyCode)}
+            </span>
           )}
         </div>
       </div>
-      {node.productType && (
-        <p className="mt-1 text-xs text-muted-foreground">{node.productType}</p>
-      )}
+      {node.productType && <p className="mt-1 text-xs text-muted-foreground">{node.productType}</p>}
     </Link>
   );
 }

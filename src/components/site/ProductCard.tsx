@@ -22,12 +22,16 @@ export function ProductCard({ product }: { product: ShopifyProduct }) {
               className="size-full object-cover transition duration-700 group-hover:scale-105"
             />
           ) : (
-            <div className="size-full grid place-items-center text-muted-foreground text-xs">Pas d'image</div>
+            <div className="size-full grid place-items-center text-muted-foreground text-xs">
+              Pas d'image
+            </div>
           )}
         </div>
         <div className="mt-4 flex items-start justify-between gap-4">
           <h3 className="font-display text-lg leading-tight">{node.title}</h3>
-          <span className="font-display text-lg whitespace-nowrap">{formatPrice(price.amount, price.currencyCode)}</span>
+          <span className="font-display text-lg whitespace-nowrap">
+            {formatPrice(price.amount, price.currencyCode)}
+          </span>
         </div>
         {node.description && (
           <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{node.description}</p>

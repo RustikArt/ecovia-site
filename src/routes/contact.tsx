@@ -13,7 +13,10 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Ecovia" },
-      { name: "description", content: "Une question ? L'équipe Ecovia vous répond sous 24h ouvrées." },
+      {
+        name: "description",
+        content: "Une question ? L'équipe Ecovia vous répond sous 24h ouvrées.",
+      },
       { property: "og:title", content: "Contact — Ecovia" },
       { property: "og:description", content: "Écrivez-nous, on répond sous 24h ouvrées." },
     ],
@@ -79,7 +82,8 @@ function Contact() {
           <p className="text-xs uppercase tracking-[0.2em] text-sage">Nous écrire</p>
           <h1 className="font-display text-4xl md:text-5xl mt-2 text-forest">Contact</h1>
           <p className="mt-4 text-muted-foreground max-w-md mx-auto text-sm">
-            Une question sur une plante, votre commande, ou un partenariat ? Nous répondons sous 24h ouvrées.
+            Une question sur une plante, votre commande, ou un partenariat ? Nous répondons sous 24h
+            ouvrées.
           </p>
         </header>
 
@@ -91,7 +95,12 @@ function Contact() {
               </span>
               <div>
                 <p className="text-sm font-medium">Email</p>
-                <a href={`mailto:${siteConfig.contact.email}`} className="text-sm text-muted-foreground hover:text-forest">{siteConfig.contact.email}</a>
+                <a
+                  href={`mailto:${siteConfig.contact.email}`}
+                  className="text-sm text-muted-foreground hover:text-forest"
+                >
+                  {siteConfig.contact.email}
+                </a>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -114,7 +123,10 @@ function Contact() {
             </div>
           </aside>
 
-          <form onSubmit={onSubmit} className="rounded-3xl border border-border/60 bg-card p-6 md:p-8 space-y-5">
+          <form
+            onSubmit={onSubmit}
+            className="rounded-3xl border border-border/60 bg-card p-6 md:p-8 space-y-5"
+          >
             <input
               type="text"
               name="website"
@@ -130,13 +142,28 @@ function Contact() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" required maxLength={120} placeholder="vous@exemple.com" />
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={120}
+                  placeholder="vous@exemple.com"
+                />
               </div>
             </div>
             <input type="hidden" name="subject" value={siteConfig.contact.defaultSubject} />
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
-              <Textarea id="message" name="message" required minLength={10} maxLength={2000} rows={6} placeholder="Comment pouvons-nous vous aider ?" />
+              <Textarea
+                id="message"
+                name="message"
+                required
+                minLength={10}
+                maxLength={2000}
+                rows={6}
+                placeholder="Comment pouvons-nous vous aider ?"
+              />
             </div>
             <Button type="submit" disabled={sending} className="w-full sm:w-auto">
               <Send className="size-4 mr-2" />

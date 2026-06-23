@@ -45,11 +45,11 @@
   --radius: 1rem;
 
   /* Sage & Crème palette */
-  --cream: oklch(0.965 0.012 85);          /* #f5f0e8 */
-  --sage-soft: oklch(0.91 0.022 130);      /* #dce5d4 */
-  --sage: oklch(0.78 0.045 130);           /* #a8c0a0 */
-  --forest: oklch(0.42 0.045 145);         /* deep green text */
-  --clay: oklch(0.62 0.085 55);            /* warm terracotta accent */
+  --cream: oklch(0.965 0.012 85); /* #f5f0e8 */
+  --sage-soft: oklch(0.91 0.022 130); /* #dce5d4 */
+  --sage: oklch(0.78 0.045 130); /* #a8c0a0 */
+  --forest: oklch(0.42 0.045 145); /* deep green text */
+  --clay: oklch(0.62 0.085 55); /* warm terracotta accent */
 
   --background: var(--cream);
   --foreground: var(--forest);
@@ -76,12 +76,16 @@
   * {
     border-color: var(--color-border);
   }
-  html, body {
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
   }

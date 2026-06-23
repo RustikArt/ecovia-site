@@ -1,7 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Droplets, ThumbsUp, Clock, ShieldCheck, Truck, RefreshCw, Headphones, Star, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  Sparkles,
+  Droplets,
+  ThumbsUp,
+  Clock,
+  ShieldCheck,
+  Truck,
+  RefreshCw,
+  Headphones,
+  Star,
+  ChevronRight,
+} from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { fetchCollectionProducts } from "@/lib/shopify/api";
@@ -13,21 +25,60 @@ type HomepageReview = {
 };
 
 const HOMEPAGE_REVIEW_POOL: HomepageReview[] = [
-  { name: "Camille D.", text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zéro entretien à gérer !" },
-  { name: "Antoine R.", text: "Livraison rapide et soignée. La qualité est largement au niveau du prix." },
+  {
+    name: "Camille D.",
+    text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zéro entretien à gérer !",
+  },
+  {
+    name: "Antoine R.",
+    text: "Livraison rapide et soignée. La qualité est largement au niveau du prix.",
+  },
   { name: "Sophie B.", text: "Une vraie touche déco. J'ai recommandé Ecovia à toute ma famille." },
-  { name: "Nora P.", text: "Je voulais un salon plus chaleureux sans contrainte. Mission accomplie dès le premier colis." },
-  { name: "Mehdi L.", text: "Top pour mon bureau, effet naturel immédiat. Produit conforme aux photos." },
-  { name: "Laura M.", text: "Emballage propre, livraison dans les délais, et surtout superbe finition." },
-  { name: "Thomas G.", text: "J'étais sceptique sur l'aspect artificiel, mais de loin comme de près c'est très réussi." },
-  { name: "Inès V.", text: "Super expérience client, réponse rapide et plante très élégante dans mon entrée." },
-  { name: "Rayan C.", text: "Rapport qualité-prix solide. Le panier et le paiement Shopify sont fluides." },
-  { name: "Julie A.", text: "J'ai pris deux modèles différents et le rendu est harmonieux. Très contente." },
-  { name: "Baptiste N.", text: "Parfait pour louer un appart meublé sans entretien. Effet décoratif garanti." },
-  { name: "Léa T.", text: "Belle surprise à l'ouverture, matériaux de qualité et couleur très naturelle." },
-  { name: "Kenza F.", text: "Service client sérieux, produit bien protégé et installation en 2 minutes." },
+  {
+    name: "Nora P.",
+    text: "Je voulais un salon plus chaleureux sans contrainte. Mission accomplie dès le premier colis.",
+  },
+  {
+    name: "Mehdi L.",
+    text: "Top pour mon bureau, effet naturel immédiat. Produit conforme aux photos.",
+  },
+  {
+    name: "Laura M.",
+    text: "Emballage propre, livraison dans les délais, et surtout superbe finition.",
+  },
+  {
+    name: "Thomas G.",
+    text: "J'étais sceptique sur l'aspect artificiel, mais de loin comme de près c'est très réussi.",
+  },
+  {
+    name: "Inès V.",
+    text: "Super expérience client, réponse rapide et plante très élégante dans mon entrée.",
+  },
+  {
+    name: "Rayan C.",
+    text: "Rapport qualité-prix solide. Le panier et le paiement Shopify sont fluides.",
+  },
+  {
+    name: "Julie A.",
+    text: "J'ai pris deux modèles différents et le rendu est harmonieux. Très contente.",
+  },
+  {
+    name: "Baptiste N.",
+    text: "Parfait pour louer un appart meublé sans entretien. Effet décoratif garanti.",
+  },
+  {
+    name: "Léa T.",
+    text: "Belle surprise à l'ouverture, matériaux de qualité et couleur très naturelle.",
+  },
+  {
+    name: "Kenza F.",
+    text: "Service client sérieux, produit bien protégé et installation en 2 minutes.",
+  },
   { name: "Hugo S.", text: "Commande simple, livraison suivie, rendu premium. Rien à redire." },
-  { name: "Élise W.", text: "J'ai transformé mon coin lecture avec une seule plante. Le style est immédiat." },
+  {
+    name: "Élise W.",
+    text: "J'ai transformé mon coin lecture avec une seule plante. Le style est immédiat.",
+  },
 ];
 
 function pickRandomReviews(pool: HomepageReview[], count: number): HomepageReview[] {
@@ -49,12 +100,18 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Ecovia — Plantes d'intérieur éco-responsables" },
-      { name: "description", content: "Sélection de plantes artificielles premium livrées en France métropolitaine, sans entretien et sans minimum d'achat." },
+      {
+        name: "description",
+        content:
+          "Sélection de plantes artificielles premium livrées en France métropolitaine, sans entretien et sans minimum d'achat.",
+      },
       { property: "og:title", content: "Ecovia — Plantes d'intérieur éco-responsables" },
       { property: "og:description", content: "Plantes artificielles premium, emballage recyclé." },
     ],
   }),
-  loader: ({ context }) => { context.queryClient.ensureQueryData(collectionQO); },
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(collectionQO);
+  },
   component: Index,
 });
 
@@ -85,16 +142,26 @@ function Index() {
               {siteConfig.brand.heroSubtitle}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link to="/boutique" className="inline-flex items-center gap-2 rounded-full bg-forest px-7 py-3 text-sm font-medium text-primary-foreground shadow-xl shadow-forest/10 hover:bg-forest/90 transition">
+              <Link
+                to="/boutique"
+                className="inline-flex items-center gap-2 rounded-full bg-forest px-7 py-3 text-sm font-medium text-primary-foreground shadow-xl shadow-forest/10 hover:bg-forest/90 transition"
+              >
                 Découvrir la collection <ArrowRight className="size-4" />
               </Link>
-              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium text-forest hover:bg-secondary transition">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium text-forest hover:bg-secondary transition"
+              >
                 Nous contacter
               </Link>
             </div>
           </div>
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_40px_120px_rgba(61,107,79,0.12)]">
-            <img src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
+            <img
+              src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg"
+              alt="Salon moderne avec plantes artificielles"
+              className="h-full w-full object-cover"
+            />
           </div>
         </div>
       </section>
@@ -102,12 +169,23 @@ function Index() {
       <section className="bg-secondary/40">
         <div className="mx-auto max-w-6xl px-6 py-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: ShieldCheck, title: "Paiement sécurisé", desc: "Transactions protégées par Shopify." },
+            {
+              icon: ShieldCheck,
+              title: "Paiement sécurisé",
+              desc: "Transactions protégées par Shopify.",
+            },
             { icon: Truck, title: "Livraison suivie", desc: "Suivi colis 2-4 jours ouvrés." },
             { icon: RefreshCw, title: "Retours simples", desc: "Retour ou échange en 14 jours." },
-            { icon: Headphones, title: "Service client réactif", desc: "Réponse sous 24h ouvrées." },
+            {
+              icon: Headphones,
+              title: "Service client réactif",
+              desc: "Réponse sous 24h ouvrées.",
+            },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-start gap-4 rounded-3xl border border-border/70 bg-white/80 p-6 shadow-sm">
+            <div
+              key={title}
+              className="flex items-start gap-4 rounded-3xl border border-border/70 bg-white/80 p-6 shadow-sm"
+            >
               <span className="size-12 rounded-3xl bg-sage/20 grid place-items-center text-forest">
                 <Icon className="size-5" />
               </span>
@@ -127,18 +205,25 @@ function Index() {
             <p className="text-xs uppercase tracking-[0.2em] text-sage">Sélection</p>
             <h2 className="font-display text-3xl md:text-4xl mt-2">{data.title}</h2>
           </div>
-          <Link to="/boutique" className="text-sm text-forest hover:underline whitespace-nowrap inline-flex items-center gap-1">
+          <Link
+            to="/boutique"
+            className="text-sm text-forest hover:underline whitespace-nowrap inline-flex items-center gap-1"
+          >
             Voir toute la boutique <ArrowRight className="size-4" />
           </Link>
         </div>
         {products.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-border p-12 text-center text-muted-foreground">
             <p className="text-sm">Aucun produit disponible dans cette collection.</p>
-            <p className="text-xs mt-2">Veuillez vérifier votre sélection Shopify ou le handle de la collection.</p>
+            <p className="text-xs mt-2">
+              Veuillez vérifier votre sélection Shopify ou le handle de la collection.
+            </p>
           </div>
         ) : (
           <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-            {products.slice(0, 6).map((p) => <ProductCard key={p.node.id} product={p} />)}
+            {products.slice(0, 6).map((p) => (
+              <ProductCard key={p.node.id} product={p} />
+            ))}
           </div>
         )}
       </section>
@@ -148,12 +233,18 @@ function Index() {
           <div className="grid gap-6 md:grid-cols-[1fr_1.2fr] items-center">
             <div className="space-y-3">
               <p className="text-xs uppercase tracking-[0.24em] text-sage">Créez votre espace</p>
-              <h2 className="font-display text-3xl text-forest">Votre intérieur prend vie sans entretien</h2>
+              <h2 className="font-display text-3xl text-forest">
+                Votre intérieur prend vie sans entretien
+              </h2>
               <p className="text-sm text-muted-foreground max-w-xl">
-                Profitez d’un style naturel et chaleureux avec des plantes artificielles haut de gamme, apportant immédiatement du caractère à votre salon, bureau ou entrée.
+                Profitez d’un style naturel et chaleureux avec des plantes artificielles haut de
+                gamme, apportant immédiatement du caractère à votre salon, bureau ou entrée.
               </p>
             </div>
-            <Link to="/auth" className="inline-flex items-center justify-center rounded-full bg-forest px-8 py-3 text-sm font-medium text-primary-foreground hover:bg-forest/90 transition">
+            <Link
+              to="/auth"
+              className="inline-flex items-center justify-center rounded-full bg-forest px-8 py-3 text-sm font-medium text-primary-foreground hover:bg-forest/90 transition"
+            >
               Créer un compte <ArrowRight className="size-4 ml-2" />
             </Link>
           </div>
@@ -164,17 +255,41 @@ function Index() {
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-xs uppercase tracking-[0.24em] text-sage">Nos engagements</p>
-          <h2 className="font-display text-3xl md:text-4xl text-forest mt-3">Pourquoi choisir nos plantes ?</h2>
-          <p className="mt-4 text-sm text-muted-foreground">Sélectionnées pour leur réalisme et leur durabilité, nos plantes artificielles transforment votre intérieur sans contrainte.</p>
+          <h2 className="font-display text-3xl md:text-4xl text-forest mt-3">
+            Pourquoi choisir nos plantes ?
+          </h2>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Sélectionnées pour leur réalisme et leur durabilité, nos plantes artificielles
+            transforment votre intérieur sans contrainte.
+          </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Droplets, title: "Aucun entretien", desc: "Ni eau, ni lumière, ni taille requise." },
-            { icon: Sparkles, title: "Aspect ultra réaliste", desc: "Matériaux premium pour un rendu naturel." },
-            { icon: Clock, title: "Longue durée de vie", desc: "Conçues pour durer plusieurs années." },
-            { icon: ThumbsUp, title: "Décoration immédiate", desc: "Prêtes à poser dès la livraison." },
+            {
+              icon: Droplets,
+              title: "Aucun entretien",
+              desc: "Ni eau, ni lumière, ni taille requise.",
+            },
+            {
+              icon: Sparkles,
+              title: "Aspect ultra réaliste",
+              desc: "Matériaux premium pour un rendu naturel.",
+            },
+            {
+              icon: Clock,
+              title: "Longue durée de vie",
+              desc: "Conçues pour durer plusieurs années.",
+            },
+            {
+              icon: ThumbsUp,
+              title: "Décoration immédiate",
+              desc: "Prêtes à poser dès la livraison.",
+            },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="rounded-3xl border border-border/60 bg-white/80 p-6 text-center shadow-sm">
+            <div
+              key={title}
+              className="rounded-3xl border border-border/60 bg-white/80 p-6 text-center shadow-sm"
+            >
               <span className="mx-auto size-12 rounded-3xl bg-sage/20 grid place-items-center text-forest mb-4">
                 <Icon className="size-5" />
               </span>
@@ -198,12 +313,17 @@ function Index() {
                 ))}
               </div>
               <span className="text-sm font-medium">4.9/5</span>
-              <span className="text-sm text-muted-foreground">basé sur les retours de nos clients</span>
+              <span className="text-sm text-muted-foreground">
+                basé sur les retours de nos clients
+              </span>
             </div>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {reviewsToShow.map((r) => (
-              <article key={r.name} className="rounded-3xl bg-white border border-border/60 p-6 shadow-sm">
+              <article
+                key={r.name}
+                className="rounded-3xl bg-white border border-border/60 p-6 shadow-sm"
+              >
                 <div className="flex items-center gap-0.5 mb-3">
                   {[0, 1, 2, 3, 4].map((i) => (
                     <Star key={i} className="size-4 fill-amber-400 text-amber-400" />
@@ -221,11 +341,16 @@ function Index() {
       <section className="mx-auto max-w-4xl px-6 py-20">
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.24em] text-sage">Questions fréquentes</p>
-          <h2 className="font-display text-3xl md:text-4xl text-forest mt-3">Tout ce que vous devez savoir</h2>
+          <h2 className="font-display text-3xl md:text-4xl text-forest mt-3">
+            Tout ce que vous devez savoir
+          </h2>
         </div>
         <div className="space-y-3">
           {siteConfig.faq.slice(0, 4).map((item) => (
-            <details key={item.q} className="group rounded-2xl border border-border/60 bg-white px-6 py-4 shadow-sm">
+            <details
+              key={item.q}
+              className="group rounded-2xl border border-border/60 bg-white px-6 py-4 shadow-sm"
+            >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-sm font-medium text-forest">
                 {item.q}
                 <ChevronRight className="size-4 transition-transform group-open:rotate-90" />
@@ -235,7 +360,10 @@ function Index() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link to="/faq" className="text-sm text-forest hover:underline inline-flex items-center gap-1">
+          <Link
+            to="/faq"
+            className="text-sm text-forest hover:underline inline-flex items-center gap-1"
+          >
             Voir toutes les questions <ArrowRight className="size-4" />
           </Link>
         </div>

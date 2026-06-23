@@ -27,7 +27,10 @@ function ComptePage() {
       <section className="max-w-2xl mx-auto px-6 py-16">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <h1 className="font-display text-3xl text-forest">Mon compte</h1>
-          <button onClick={signOut} className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
+          <button
+            onClick={signOut}
+            className="rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary"
+          >
             Se déconnecter
           </button>
         </div>
@@ -43,7 +46,8 @@ function ComptePage() {
         <div className="mt-6 rounded-2xl border border-dashed border-border p-6 text-sm text-muted-foreground">
           <p className="font-medium text-foreground">Vos commandes</p>
           <p className="mt-2">
-            Vos commandes sont gérées par Shopify. Vous recevez les emails de confirmation et de suivi directement dans votre boîte mail.
+            Vos commandes sont gérées par Shopify. Vous recevez les emails de confirmation et de
+            suivi directement dans votre boîte mail.
           </p>
         </div>
       </section>

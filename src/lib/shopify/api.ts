@@ -5,7 +5,13 @@ import {
   COLLECTION_BY_HANDLE_QUERY,
   COLLECTIONS_QUERY,
 } from "./queries";
-import type { ShopifyProduct, ShopifyProductNode, BundleOffer, ReviewData, ShopifyCollection } from "./types";
+import type {
+  ShopifyProduct,
+  ShopifyProductNode,
+  BundleOffer,
+  ReviewData,
+  ShopifyCollection,
+} from "./types";
 
 export async function fetchProducts(first = 24, query?: string): Promise<ShopifyProduct[]> {
   const res = await storefrontApiRequest<{ products: { edges: ShopifyProduct[] } }>(
@@ -23,13 +29,13 @@ export async function fetchProductByHandle(handle: string): Promise<ShopifyProdu
   return res?.data?.product ?? null;
 }
 
-export async function fetchCollectionProducts(handle: string, first = 6): Promise<{ title: string; products: ShopifyProduct[] }> {
+export async function fetchCollectionProducts(
+  handle: string,
+  first = 6,
+): Promise<{ title: string; products: ShopifyProduct[] }> {
   const res = await storefrontApiRequest<{
     collectionByHandle: { title: string; products: { edges: ShopifyProduct[] } } | null;
-  }>(
-    COLLECTION_BY_HANDLE_QUERY,
-    { handle, first },
-  );
+  }>(COLLECTION_BY_HANDLE_QUERY, { handle, first });
 
   const collection = res?.data?.collectionByHandle;
   return {
@@ -45,7 +51,11 @@ export async function fetchCollections(first = 12): Promise<ShopifyCollection[]>
   return res?.data?.collections?.edges.map((e) => e.node) ?? [];
 }
 
-function getMetafield(metafields: ShopifyProductNode["metafields"], namespace: string, key: string) {
+function getMetafield(
+  metafields: ShopifyProductNode["metafields"],
+  namespace: string,
+  key: string,
+) {
   return metafields?.find((m) => m && m.namespace === namespace && m.key === key) ?? null;
 }
 

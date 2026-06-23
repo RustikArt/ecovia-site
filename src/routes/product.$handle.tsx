@@ -7,22 +7,33 @@ import { BundleSelector } from "@/components/product/BundleSelector";
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { ProductInfoSection } from "@/components/product/ProductInfoSection";
 import { Button } from "@/components/ui/button";
-import { Loader2, ShoppingBag, Truck, ShieldCheck, RefreshCw, Star, ChevronRight, Package, Leaf } from "lucide-react";
+import {
+  Loader2,
+  ShoppingBag,
+  Truck,
+  ShieldCheck,
+  RefreshCw,
+  Star,
+  ChevronRight,
+  Package,
+  Leaf,
+} from "lucide-react";
 import { fetchProductByHandle, parseBundles, parseReviews } from "@/lib/shopify/api";
 import { useCartStore, formatPrice } from "@/stores/cartStore";
 import { trackViewContent } from "@/lib/tracking";
 import { siteConfig } from "@/config/site";
 import type { BundleOffer } from "@/lib/shopify/types";
 
-const productQO = (handle: string) => queryOptions({
-  queryKey: ["shopify", "product", handle],
-  queryFn: async () => {
-    const p = await fetchProductByHandle(handle);
-    if (!p) throw notFound();
-    return p;
-  },
-  staleTime: 60_000,
-});
+const productQO = (handle: string) =>
+  queryOptions({
+    queryKey: ["shopify", "product", handle],
+    queryFn: async () => {
+      const p = await fetchProductByHandle(handle);
+      if (!p) throw notFound();
+      return p;
+    },
+    staleTime: 60_000,
+  });
 
 export const Route = createFileRoute("/product/$handle")({
   head: ({ params }) => {
@@ -30,7 +41,10 @@ export const Route = createFileRoute("/product/$handle")({
     return {
       meta: [
         { title: `${name} — Ecovia` },
-        { name: "description", content: `Découvrez ${name} : plante artificielle premium Ecovia. Livraison offerte, garantie 14 jours.` },
+        {
+          name: "description",
+          content: `Découvrez ${name} : plante artificielle premium Ecovia. Livraison offerte, garantie 14 jours.`,
+        },
         { property: "og:title", content: `${name} — Ecovia` },
         { property: "og:description", content: "Plante artificielle premium prête à poser." },
       ],
@@ -43,7 +57,9 @@ export const Route = createFileRoute("/product/$handle")({
     <SiteLayout>
       <div className="max-w-md mx-auto py-24 text-center">
         <h1 className="font-display text-2xl text-forest">Produit introuvable</h1>
-        <p className="text-sm text-muted-foreground mt-2">Ce produit n'existe pas ou a été retiré.</p>
+        <p className="text-sm text-muted-foreground mt-2">
+          Ce produit n'existe pas ou a été retiré.
+        </p>
       </div>
     </SiteLayout>
   ),
@@ -57,7 +73,13 @@ function ProductErrorComponent({ reset }: { reset: () => void }) {
     <SiteLayout>
       <div className="max-w-md mx-auto py-24 text-center">
         <h1 className="font-display text-2xl text-forest">Erreur de chargement</h1>
-        <Button className="mt-4" onClick={() => { router.invalidate(); reset(); }}>
+        <Button
+          className="mt-4"
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
+        >
           Réessayer
         </Button>
       </div>
@@ -75,7 +97,9 @@ function ProductPage() {
   const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id);
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0];
 
-  const [selectedBundle, setSelectedBundle] = useState<BundleOffer | null>(bundles[1] ?? bundles[0] ?? null);
+  const [selectedBundle, setSelectedBundle] = useState<BundleOffer | null>(
+    bundles[1] ?? bundles[0] ?? null,
+  );
   const [manualQty, setManualQty] = useState(1);
   const [addedFeedback, setAddedFeedback] = useState(false);
 
@@ -94,7 +118,11 @@ function ProductPage() {
   }, [product.id, product.title, selectedVariant]);
 
   if (!selectedVariant) {
-    return <SiteLayout><div className="py-24 text-center text-muted-foreground">Aucune variante disponible.</div></SiteLayout>;
+    return (
+      <SiteLayout>
+        <div className="py-24 text-center text-muted-foreground">Aucune variante disponible.</div>
+      </SiteLayout>
+    );
   }
 
   const unitPrice = parseFloat(selectedVariant.price.amount);
@@ -105,9 +133,19 @@ function ProductPage() {
   const totalDiscounted = totalNormal * (1 - discountPct / 100);
   const savings = totalNormal - totalDiscounted;
 
-  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
+  const hasOptions =
+    product.options.length > 0 &&
+    !(
+      product.options.length === 1 &&
+      product.options[0].values.length === 1 &&
+      product.options[0].values[0] === "Default Title"
+    );
 
-  const reviewRating = reviews.rating ?? (reviews.list.length > 0 ? reviews.list.reduce((s, r) => s + r.rating, 0) / reviews.list.length : null);
+  const reviewRating =
+    reviews.rating ??
+    (reviews.list.length > 0
+      ? reviews.list.reduce((s, r) => s + r.rating, 0) / reviews.list.length
+      : null);
 
   async function handleAdd() {
     if (!selectedVariant) return;
@@ -130,10 +168,22 @@ function ProductPage() {
       {/* Breadcrumb */}
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-0">
         <ol className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <li><Link to="/" className="hover:text-forest transition-colors">Accueil</Link></li>
-          <li><ChevronRight className="size-3" /></li>
-          <li><Link to="/boutique" className="hover:text-forest transition-colors">Boutique</Link></li>
-          <li><ChevronRight className="size-3" /></li>
+          <li>
+            <Link to="/" className="hover:text-forest transition-colors">
+              Accueil
+            </Link>
+          </li>
+          <li>
+            <ChevronRight className="size-3" />
+          </li>
+          <li>
+            <Link to="/boutique" className="hover:text-forest transition-colors">
+              Boutique
+            </Link>
+          </li>
+          <li>
+            <ChevronRight className="size-3" />
+          </li>
           <li className="text-forest font-medium truncate max-w-[200px]">{product.title}</li>
         </ol>
       </nav>
@@ -141,7 +191,6 @@ function ProductPage() {
       <article className="mx-auto max-w-7xl px-4 sm:px-6 py-6 lg:py-10">
         {/* Hero: gallery + purchase panel */}
         <div className="grid lg:grid-cols-[1fr_440px] xl:grid-cols-[1fr_480px] gap-8 lg:gap-12 items-start">
-
           {/* Gallery */}
           <div className="lg:sticky lg:top-24">
             <ProductGallery
@@ -166,11 +215,13 @@ function ProductPage() {
               {reviewRating !== null && reviews.list.length > 0 && (
                 <button
                   type="button"
-                  onClick={() => reviewsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  onClick={() =>
+                    reviewsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
                   className="mt-2 flex items-center gap-1.5 hover:opacity-75 transition-opacity"
                 >
                   <div className="flex items-center gap-0.5">
-                    {[0,1,2,3,4].map((i) => (
+                    {[0, 1, 2, 3, 4].map((i) => (
                       <Star
                         key={i}
                         className={`size-3.5 ${i < Math.round(reviewRating) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`}
@@ -261,7 +312,9 @@ function ProductPage() {
                   >
                     −
                   </button>
-                  <span className="w-10 text-center font-semibold text-forest text-sm">{manualQty}</span>
+                  <span className="w-10 text-center font-semibold text-forest text-sm">
+                    {manualQty}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setManualQty(manualQty + 1)}
@@ -289,15 +342,24 @@ function ProductPage() {
               ) : !selectedVariant.availableForSale ? (
                 "Indisponible"
               ) : addedFeedback ? (
-                <><span className="text-lg mr-2">✓</span> Ajouté au panier</>
+                <>
+                  <span className="text-lg mr-2">✓</span> Ajouté au panier
+                </>
               ) : (
-                <><ShoppingBag className="size-5 mr-2" /> Ajouter au panier — {formatPrice(totalDiscounted, currency)}</>
+                <>
+                  <ShoppingBag className="size-5 mr-2" /> Ajouter au panier —{" "}
+                  {formatPrice(totalDiscounted, currency)}
+                </>
               )}
             </Button>
 
             {/* Stock indicator */}
-            <p className={`text-xs text-center font-medium ${selectedVariant.availableForSale ? "text-sage" : "text-destructive"}`}>
-              {selectedVariant.availableForSale ? "● En stock — expédition sous 48h" : "● Rupture de stock temporaire"}
+            <p
+              className={`text-xs text-center font-medium ${selectedVariant.availableForSale ? "text-sage" : "text-destructive"}`}
+            >
+              {selectedVariant.availableForSale
+                ? "● En stock — expédition sous 48h"
+                : "● Rupture de stock temporaire"}
             </p>
 
             {/* Trust badges */}
@@ -307,7 +369,10 @@ function ProductPage() {
                 { icon: Truck, label: "Livraison suivie", sub: siteConfig.shipping.estimatedDelay },
                 { icon: RefreshCw, label: "Retours 14j", sub: "Sans justificatif" },
               ].map(({ icon: Icon, label, sub }) => (
-                <div key={label} className="flex flex-col items-center text-center gap-1.5 p-3 rounded-2xl bg-secondary/50 border border-border/50">
+                <div
+                  key={label}
+                  className="flex flex-col items-center text-center gap-1.5 p-3 rounded-2xl bg-secondary/50 border border-border/50"
+                >
                   <Icon className="size-4 text-forest" />
                   <p className="text-[11px] font-semibold text-forest leading-tight">{label}</p>
                   <p className="text-[10px] text-muted-foreground leading-tight">{sub}</p>
@@ -317,7 +382,9 @@ function ProductPage() {
 
             {/* What's included */}
             <div className="rounded-2xl border border-border/60 bg-secondary/30 p-4 space-y-2.5">
-              <p className="text-xs font-semibold uppercase tracking-widest text-sage">Contenu de la boîte</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-sage">
+                Contenu de la boîte
+              </p>
               <ul className="space-y-1.5">
                 {[
                   { icon: Leaf, text: "Plante artificielle premium" },

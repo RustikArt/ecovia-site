@@ -21,7 +21,10 @@ function NotFoundComponent() {
           Cette page a peut-être été déplacée ou n'existe plus.
         </p>
         <div className="mt-6">
-          <Link to="/" className="inline-flex items-center justify-center rounded-full bg-forest px-5 py-2.5 text-sm text-primary-foreground hover:opacity-90 transition">
+          <Link
+            to="/"
+            className="inline-flex items-center justify-center rounded-full bg-forest px-5 py-2.5 text-sm text-primary-foreground hover:opacity-90 transition"
+          >
             Retour à l'accueil
           </Link>
         </div>
@@ -41,12 +44,18 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <p className="mt-2 text-sm text-muted-foreground">Cette page n'a pas pu se charger.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="rounded-full bg-forest px-5 py-2.5 text-sm text-primary-foreground hover:opacity-90 transition"
           >
             Réessayer
           </button>
-          <a href="/" className="rounded-full border border-input bg-background px-5 py-2.5 text-sm hover:bg-secondary transition">
+          <a
+            href="/"
+            className="rounded-full border border-input bg-background px-5 py-2.5 text-sm hover:bg-secondary transition"
+          >
             Accueil
           </a>
         </div>
@@ -81,7 +90,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

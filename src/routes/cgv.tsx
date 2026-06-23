@@ -3,7 +3,12 @@ import { SiteLayout } from "@/components/site/Layout";
 import { siteConfig } from "@/config/site";
 
 export const Route = createFileRoute("/cgv")({
-  head: () => ({ meta: [{ title: "CGV — Ecovia" }, { name: "description", content: "Conditions générales de vente d'Ecovia." }] }),
+  head: () => ({
+    meta: [
+      { title: "CGV — Ecovia" },
+      { name: "description", content: "Conditions générales de vente d'Ecovia." },
+    ],
+  }),
   component: () => (
     <SiteLayout>
       <article className="max-w-3xl mx-auto px-6 py-16 space-y-6 text-muted-foreground">
@@ -23,13 +28,25 @@ export const Route = createFileRoute("/cgv")({
         <section className="space-y-3">
           <h2 className="font-display text-2xl text-forest">Livraison</h2>
           <p>{siteConfig.legal.cgv.livraison}</p>
-          <p>Consultez notre <a className="text-forest underline" href="/politique-livraison">politique de livraison</a> pour les détails de délais et de suivi.</p>
+          <p>
+            Consultez notre{" "}
+            <a className="text-forest underline" href="/politique-livraison">
+              politique de livraison
+            </a>{" "}
+            pour les détails de délais et de suivi.
+          </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="font-display text-2xl text-forest">Retours</h2>
           <p>{siteConfig.legal.cgv.retours}</p>
-          <p>En savoir plus sur la procédure dans notre <a className="text-forest underline" href="/politique-retour">politique de retour</a>.</p>
+          <p>
+            En savoir plus sur la procédure dans notre{" "}
+            <a className="text-forest underline" href="/politique-retour">
+              politique de retour
+            </a>
+            .
+          </p>
         </section>
 
         <section className="space-y-3">

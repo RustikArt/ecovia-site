@@ -9,8 +9,5 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1000,
   },
-  plugins: [
-    viteReact(),
-    tailwindcss(),
-  ],
+  plugins: [viteReact(), tailwindcss()],
 });
