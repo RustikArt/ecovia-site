@@ -2,7 +2,6 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
-import { sendContactEmail } from "@/lib/contact.server";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -38,58 +37,9 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-async function handleContactRequest(request: Request): Promise<Response> {
-  if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Méthode non autorisée." }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-
-  try {
-    const body = await request.json();
-    const name = String(body.name || "").trim();
-    const email = String(body.email || "").trim();
-    const subject = String(body.subject || "").trim();
-    const message = String(body.message || "").trim();
-
-    if (!name || !email || !message) {
-      return new Response(JSON.stringify({ error: "Tous les champs obligatoires doivent être remplis." }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      return new Response(JSON.stringify({ error: "Adresse email invalide." }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    await sendContactEmail({ name, email, subject, message }, env as Record<string, string>);
-
-    return new Response(JSON.stringify({ success: true }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ error: "Impossible d'envoyer le message. Réessayez plus tard." }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-}
-
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
-      const url = new URL(request.url);
-      if (url.pathname === "/api/contact") {
-        return await handleContactRequest(request, env as Record<string, string>);
-      }
-
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

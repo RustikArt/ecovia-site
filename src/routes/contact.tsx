@@ -23,6 +23,7 @@ export const Route = createFileRoute("/contact")({
 
 function Contact() {
   const [sending, setSending] = useState(false);
+  const formSubmitUrl = "https://formsubmit.co/ajax/ecovia-off@proton.me";
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,18 +31,15 @@ function Contact() {
 
     const form = e.currentTarget;
     const data = new FormData(form);
-    const payload = {
-      name: String(data.get("name") || "").trim(),
-      email: String(data.get("email") || "").trim(),
-      subject: String(data.get("subject") || siteConfig.contact.defaultSubject).trim(),
-      message: String(data.get("message") || "").trim(),
-    };
+    data.set("_subject", siteConfig.contact.defaultSubject);
+    data.set("_captcha", "false");
+    data.set("_template", "table");
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(formSubmitUrl, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: { Accept: "application/json" },
+        body: data,
       });
 
       const raw = await response.text();
@@ -117,6 +115,7 @@ function Contact() {
                 <Input id="email" name="email" type="email" required maxLength={120} placeholder="vous@exemple.com" />
               </div>
             </div>
+            <input type="hidden" name="subject" value={siteConfig.contact.defaultSubject} />
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" name="message" required minLength={10} maxLength={2000} rows={6} placeholder="Comment pouvons-nous vous aider ?" />
