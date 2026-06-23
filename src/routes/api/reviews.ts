@@ -1,13 +1,16 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { DEFAULT_SUPABASE_PUBLISHABLE_KEY, DEFAULT_SUPABASE_URL } from "@/integrations/supabase/constants";
 
 function getSupabase() {
   const url =
     process.env.SUPABASE_URL ||
-    (import.meta.env.VITE_SUPABASE_URL as string | undefined);
+    (import.meta.env.VITE_SUPABASE_URL as string | undefined) ||
+    DEFAULT_SUPABASE_URL;
   const key =
     process.env.SUPABASE_PUBLISHABLE_KEY ||
-    (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined);
+    (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ||
+    DEFAULT_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) throw new Error("Supabase env vars manquantes");
   return createClient<Database>(url, key);
 }
