@@ -50,9 +50,31 @@ export function ProductGallery({ media, images, title }: { media?: ShopifyMedia[
   }
 
   return (
-    <div className="space-y-3">
-      <div className="relative">
-        <div className="overflow-hidden rounded-3xl bg-secondary/40" ref={emblaRef}>
+    <div className="flex flex-col-reverse sm:flex-row gap-3">
+      {/* Thumbnails: horizontal on mobile, vertical on desktop */}
+      {slides.length > 1 && (
+        <div className="sm:w-[72px] overflow-hidden" ref={thumbRef}>
+          <div className="flex sm:flex-col gap-2">
+            {slides.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => onThumb(i)}
+                className={`flex-[0_0_64px] sm:flex-none sm:w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                  selected === i
+                    ? "border-forest shadow-sm opacity-100"
+                    : "border-transparent opacity-50 hover:opacity-80"
+                }`}
+              >
+                <img src={s.url} alt="" className="size-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Main image */}
+      <div className="relative flex-1 min-w-0">
+        <div className="overflow-hidden rounded-2xl bg-secondary/40" ref={emblaRef}>
           <div className="flex">
             {slides.map((s, i) => (
               <div key={i} className="flex-[0_0_100%] aspect-square relative">
@@ -69,36 +91,40 @@ export function ProductGallery({ media, images, title }: { media?: ShopifyMedia[
             ))}
           </div>
         </div>
+
         {slides.length > 1 && (
           <>
-            <button onClick={() => embla?.scrollPrev()} className="absolute left-3 top-1/2 -translate-y-1/2 size-10 rounded-full bg-background/80 backdrop-blur grid place-items-center hover:bg-background shadow" aria-label="Précédent">
+            <button
+              onClick={() => embla?.scrollPrev()}
+              className="absolute left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white/90 backdrop-blur shadow-sm flex items-center justify-center hover:bg-white transition-colors"
+              aria-label="Précédent"
+            >
               <ChevronLeft className="size-4" />
             </button>
-            <button onClick={() => embla?.scrollNext()} className="absolute right-3 top-1/2 -translate-y-1/2 size-10 rounded-full bg-background/80 backdrop-blur grid place-items-center hover:bg-background shadow" aria-label="Suivant">
+            <button
+              onClick={() => embla?.scrollNext()}
+              className="absolute right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white/90 backdrop-blur shadow-sm flex items-center justify-center hover:bg-white transition-colors"
+              aria-label="Suivant"
+            >
               <ChevronRight className="size-4" />
             </button>
-            <div className="absolute bottom-3 right-3 size-9 rounded-full bg-background/80 backdrop-blur grid place-items-center text-muted-foreground">
-              <ZoomIn className="size-4" />
-            </div>
           </>
         )}
-      </div>
+        <button
+          onClick={() => setZoomIdx(selected)}
+          className="absolute bottom-3 right-3 size-8 rounded-full bg-white/90 backdrop-blur shadow-sm flex items-center justify-center text-muted-foreground hover:text-forest transition-colors"
+          aria-label="Agrandir"
+        >
+          <ZoomIn className="size-3.5" />
+        </button>
 
-      {slides.length > 1 && (
-        <div className="overflow-hidden" ref={thumbRef}>
-          <div className="flex gap-2">
-            {slides.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => onThumb(i)}
-                className={`flex-[0_0_64px] aspect-square rounded-xl overflow-hidden border-2 transition ${selected === i ? "border-forest" : "border-transparent opacity-60"}`}
-              >
-                <img src={s.url} alt="" className="size-full object-cover" />
-              </button>
-            ))}
+        {/* Slide counter */}
+        {slides.length > 1 && (
+          <div className="absolute bottom-3 left-3 rounded-full bg-black/40 backdrop-blur text-white text-[11px] font-medium px-2.5 py-0.5">
+            {selected + 1} / {slides.length}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <Dialog open={zoomIdx !== null} onOpenChange={(open) => !open && setZoomIdx(null)}>
         <DialogContent className="max-w-4xl p-0 bg-transparent border-0">

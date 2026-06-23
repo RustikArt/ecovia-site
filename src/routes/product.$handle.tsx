@@ -1,13 +1,12 @@
-import { createFileRoute, notFound, useRouter } from "@tanstack/react-router";
+import { createFileRoute, notFound, useRouter, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { TrustBadges } from "@/components/product/TrustBadges";
 import { BundleSelector } from "@/components/product/BundleSelector";
 import { ProductReviews } from "@/components/product/ProductReviews";
 import { Button } from "@/components/ui/button";
-import { Loader2, ShoppingBag, Check, Truck, ShieldCheck, RefreshCw } from "lucide-react";
+import { Loader2, ShoppingBag, Truck, ShieldCheck, RefreshCw, Star, ChevronRight, Package, Leaf } from "lucide-react";
 import { fetchProductByHandle, parseBundles, parseReviews } from "@/lib/shopify/api";
 import { useCartStore, formatPrice } from "@/stores/cartStore";
 import { trackViewContent } from "@/lib/tracking";
@@ -73,9 +72,11 @@ function ProductPage() {
 
   const [selectedBundle, setSelectedBundle] = useState<BundleOffer | null>(bundles[1] ?? bundles[0] ?? null);
   const [manualQty, setManualQty] = useState(1);
+  const [addedFeedback, setAddedFeedback] = useState(false);
 
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
+  const reviewsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedVariant) {
@@ -97,22 +98,15 @@ function ProductPage() {
   const totalNormal = unitPrice * quantity;
   const discountPct = selectedBundle?.discountPercent ?? 0;
   const totalDiscounted = totalNormal * (1 - discountPct / 100);
-
-  const productInfoImages = useMemo(() => {
-    if (!product.descriptionHtml) return [];
-    const regex = /<img[^>]*src=["']([^"']+)["'][^>]*>/g;
-    const images = [] as Array<{ src: string; alt: string }>;
-    let match;
-    while ((match = regex.exec(product.descriptionHtml)) !== null) {
-      images.push({ src: match[1], alt: "" });
-    }
-    return images;
-  }, [product.descriptionHtml]);
+  const savings = totalNormal - totalDiscounted;
 
   const productInfoHtml = useMemo(() => {
     if (!product.descriptionHtml) return product.description;
-    return product.descriptionHtml.replace(/<img[^>]*>/g, "");
+    return product.descriptionHtml;
   }, [product.descriptionHtml, product.description]);
+
+  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
+  const reviewRating = reviews.rating ?? (reviews.list.length > 0 ? reviews.list.reduce((s, r) => s + r.rating, 0) / reviews.list.length : null);
 
   async function handleAdd() {
     if (!selectedVariant) return;
@@ -126,64 +120,118 @@ function ProductPage() {
       quantity,
       selectedOptions: selectedVariant.selectedOptions,
     });
+    setAddedFeedback(true);
+    setTimeout(() => setAddedFeedback(false), 2000);
   }
-
-  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
 
   return (
     <SiteLayout>
-      <article className="mx-auto max-w-6xl px-6 py-10">
-        <div className="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-          <aside className="space-y-6">
-            <div className="rounded-3xl border border-border/60 bg-white/90 p-4 shadow-sm">
-              <h2 className="text-sm font-semibold text-forest mb-4">Product Image</h2>
-              <ProductGallery
-                media={product.media?.edges.map((e) => e.node)}
-                images={product.images.edges.map((e) => e.node)}
-                title={product.title}
-              />
+      {/* Breadcrumb */}
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 pt-4 pb-0">
+        <ol className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <li><Link to="/" className="hover:text-forest transition-colors">Accueil</Link></li>
+          <li><ChevronRight className="size-3" /></li>
+          <li><Link to="/boutique" className="hover:text-forest transition-colors">Boutique</Link></li>
+          <li><ChevronRight className="size-3" /></li>
+          <li className="text-forest font-medium truncate max-w-[200px]">{product.title}</li>
+        </ol>
+      </nav>
+
+      <article className="mx-auto max-w-7xl px-4 sm:px-6 py-6 lg:py-10">
+        {/* Hero: gallery + purchase panel */}
+        <div className="grid lg:grid-cols-[1fr_440px] xl:grid-cols-[1fr_480px] gap-8 lg:gap-12 items-start">
+
+          {/* Gallery */}
+          <div className="lg:sticky lg:top-24">
+            <ProductGallery
+              media={product.media?.edges.map((e) => e.node)}
+              images={product.images.edges.map((e) => e.node)}
+              title={product.title}
+            />
+          </div>
+
+          {/* Purchase panel */}
+          <div className="space-y-5">
+            {/* Category + title */}
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-sage">
+                {product.productType || product.vendor || "Ecovia"}
+              </p>
+              <h1 className="font-display text-3xl lg:text-4xl text-forest mt-1.5 leading-tight">
+                {product.title}
+              </h1>
+
+              {/* Rating row */}
+              {reviewRating !== null && reviews.list.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => reviewsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                  className="mt-2 flex items-center gap-1.5 hover:opacity-75 transition-opacity"
+                >
+                  <div className="flex items-center gap-0.5">
+                    {[0,1,2,3,4].map((i) => (
+                      <Star
+                        key={i}
+                        className={`size-3.5 ${i < Math.round(reviewRating) ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-muted-foreground underline underline-offset-2">
+                    {reviewRating.toFixed(1)} ({reviews.count} avis)
+                  </span>
+                </button>
+              )}
             </div>
-          </aside>
 
-          <div className="space-y-8">
-            <section className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.2em] text-sage">{product.productType || product.vendor || "Ecovia"}</p>
-              <h1 className="font-display text-3xl md:text-4xl text-forest mt-3">{product.title}</h1>
-              <div className="mt-5 flex flex-wrap items-center gap-4">
-                <div className="flex items-baseline gap-3">
-                  <span className="font-display text-4xl text-forest">{formatPrice(totalDiscounted, currency)}</span>
-                  {discountPct > 0 && (
-                    <span className="text-base text-muted-foreground line-through">{formatPrice(totalNormal, currency)}</span>
-                  )}
-                </div>
-                <span className="rounded-full bg-sage/20 px-3 py-1 text-xs uppercase tracking-[0.25em] text-forest">Livraison 2-4j</span>
-              </div>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-sage">Vendu par</p>
-                  <p className="mt-2 text-sm font-medium text-forest">{product.vendor}</p>
-                </div>
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-4">
-                  <p className="text-xs uppercase tracking-[0.18em] text-sage">Catégorie</p>
-                  <p className="mt-2 text-sm font-medium text-forest">{product.productType || "Décoration intérieure"}</p>
-                </div>
-              </div>
-            </section>
+            {/* Price block */}
+            <div className="flex flex-wrap items-end gap-3 py-4 border-y border-border/60">
+              <span className="font-display text-4xl text-forest leading-none">
+                {formatPrice(totalDiscounted, currency)}
+              </span>
+              {discountPct > 0 && (
+                <>
+                  <span className="text-lg text-muted-foreground line-through leading-none">
+                    {formatPrice(totalNormal, currency)}
+                  </span>
+                  <span className="rounded-full bg-forest text-primary-foreground text-xs font-semibold px-2.5 py-1">
+                    −{discountPct}%
+                  </span>
+                </>
+              )}
+              {savings > 0.5 && (
+                <span className="text-xs text-sage font-medium">
+                  Économie de {formatPrice(savings, currency)}
+                </span>
+              )}
+            </div>
 
+            {/* Free shipping banner */}
+            <div className="flex items-center gap-2 rounded-xl bg-sage/15 border border-sage/30 px-3 py-2.5">
+              <Truck className="size-4 text-forest flex-shrink-0" />
+              <p className="text-xs font-medium text-forest">{siteConfig.shipping.bannerText}</p>
+            </div>
+
+            {/* Variant selector */}
             {hasOptions && variants.length > 1 && (
-              <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-                <p className="text-xs uppercase tracking-[0.15em] text-sage">Choisissez votre variante</p>
+              <div className="space-y-2.5">
+                <p className="text-sm font-medium text-forest">
+                  {product.options[0]?.name ?? "Variante"} :{" "}
+                  <span className="font-normal text-muted-foreground">
+                    {variants.find((v) => v.id === selectedVariantId)?.title}
+                  </span>
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {variants.map((v) => (
                     <button
                       key={v.id}
+                      type="button"
                       onClick={() => setSelectedVariantId(v.id)}
                       disabled={!v.availableForSale}
-                      className={`px-4 py-2 rounded-full text-sm border transition ${
+                      className={`px-4 py-2 rounded-full text-sm border-2 font-medium transition-all ${
                         v.id === selectedVariantId
                           ? "bg-forest text-primary-foreground border-forest"
-                          : "border-border hover:bg-secondary"
-                      } disabled:opacity-40`}
+                          : "border-border hover:border-forest/50 bg-white"
+                      } disabled:opacity-35 disabled:cursor-not-allowed`}
                     >
                       {v.title}
                     </button>
@@ -192,6 +240,7 @@ function ProductPage() {
               </div>
             )}
 
+            {/* Bundle / Qty */}
             {bundles.length > 0 ? (
               <BundleSelector
                 bundles={bundles}
@@ -201,103 +250,101 @@ function ProductPage() {
                 onSelect={setSelectedBundle}
               />
             ) : (
-              <div className="grid gap-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.15em] text-sage">Quantité</p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <button onClick={() => setManualQty(Math.max(1, manualQty - 1))} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">−</button>
-                    <span className="w-14 text-center font-medium text-forest">{manualQty}</span>
-                    <button onClick={() => setManualQty(manualQty + 1)} className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary">+</button>
-                  </div>
+              <div className="flex items-center gap-4">
+                <p className="text-sm font-medium text-forest">Quantité</p>
+                <div className="flex items-center border border-border rounded-full overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setManualQty(Math.max(1, manualQty - 1))}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-secondary transition-colors text-lg"
+                  >
+                    −
+                  </button>
+                  <span className="w-10 text-center font-semibold text-forest text-sm">{manualQty}</span>
+                  <button
+                    type="button"
+                    onClick={() => setManualQty(manualQty + 1)}
+                    className="w-10 h-10 flex items-center justify-center hover:bg-secondary transition-colors text-lg"
+                  >
+                    +
+                  </button>
                 </div>
               </div>
             )}
 
+            {/* CTA */}
             <Button
               onClick={handleAdd}
-              disabled={isLoading || !selectedVariant.availableForSale}
+              disabled={isLoading || !selectedVariant.availableForSale || addedFeedback}
               size="lg"
-              className="w-full bg-forest hover:bg-forest/90 text-primary-foreground rounded-full"
+              className={`w-full rounded-full text-base font-semibold h-14 transition-all ${
+                addedFeedback
+                  ? "bg-sage text-forest"
+                  : "bg-forest hover:bg-forest/90 text-primary-foreground"
+              }`}
             >
               {isLoading ? (
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-5 animate-spin" />
               ) : !selectedVariant.availableForSale ? (
                 "Indisponible"
+              ) : addedFeedback ? (
+                <><span className="text-lg mr-2">✓</span> Ajouté au panier</>
               ) : (
-                <><ShoppingBag className="size-4 mr-2" /> Ajouter au panier</>
+                <><ShoppingBag className="size-5 mr-2" /> Ajouter au panier — {formatPrice(totalDiscounted, currency)}</>
               )}
             </Button>
 
-            <div className="grid gap-3 sm:grid-cols-3">
+            {/* Stock indicator */}
+            <p className={`text-xs text-center font-medium ${selectedVariant.availableForSale ? "text-sage" : "text-destructive"}`}>
+              {selectedVariant.availableForSale ? "● En stock — expédition sous 48h" : "● Rupture de stock temporaire"}
+            </p>
+
+            {/* Trust badges */}
+            <div className="grid grid-cols-3 gap-2 pt-1">
               {[
-                { icon: ShieldCheck, title: "Paiement sécurisé" },
-                { icon: Truck, title: "Livraison suivie" },
-                { icon: RefreshCw, title: "Retours simplifiés" },
-              ].map(({ icon: Icon, title }) => (
-                <div key={title} className="flex items-center gap-3 rounded-3xl border border-border/60 bg-secondary/40 p-4">
-                  <Icon className="size-5 text-forest" />
-                  <p className="text-sm font-medium text-forest">{title}</p>
+                { icon: ShieldCheck, label: "Paiement sécurisé", sub: "SSL Shopify" },
+                { icon: Truck, label: "Livraison suivie", sub: siteConfig.shipping.estimatedDelay },
+                { icon: RefreshCw, label: "Retours 14j", sub: "Sans justificatif" },
+              ].map(({ icon: Icon, label, sub }) => (
+                <div key={label} className="flex flex-col items-center text-center gap-1.5 p-3 rounded-2xl bg-secondary/50 border border-border/50">
+                  <Icon className="size-4 text-forest" />
+                  <p className="text-[11px] font-semibold text-forest leading-tight">{label}</p>
+                  <p className="text-[10px] text-muted-foreground leading-tight">{sub}</p>
                 </div>
               ))}
             </div>
 
-            <div className="space-y-3 rounded-3xl border border-border/60 bg-white/90 p-5 shadow-sm">
-              <h3 className="text-xs uppercase tracking-[0.24em] text-sage">Détails</h3>
-              <p className="mt-3 text-sm text-muted-foreground">
-                {product.productType || product.vendor || "Produit Ecovia"}
-              </p>
-              <div className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-                  <p className="font-medium text-forest">Livraison</p>
-                  <p>{siteConfig.shipping.estimatedDelay} après préparation</p>
-                </div>
-                <div className="rounded-2xl border border-border/60 bg-secondary/40 p-3">
-                  <p className="font-medium text-forest">Stock</p>
-                  <p>{selectedVariant.availableForSale ? "En stock" : "Rupture de stock"}</p>
-                </div>
-              </div>
+            {/* What's included */}
+            <div className="rounded-2xl border border-border/60 bg-secondary/30 p-4 space-y-2.5">
+              <p className="text-xs font-semibold uppercase tracking-widest text-sage">Contenu de la boîte</p>
+              <ul className="space-y-1.5">
+                {[
+                  { icon: Leaf, text: "Plante artificielle premium" },
+                  { icon: Package, text: "Emballage protecteur recyclé" },
+                ].map(({ icon: Icon, text }) => (
+                  <li key={text} className="flex items-center gap-2 text-sm text-forest">
+                    <Icon className="size-3.5 text-sage flex-shrink-0" />
+                    {text}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <section className="grid gap-4 lg:grid-cols-2">
-              <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
-                <h2 className="text-sm font-semibold text-forest">Product information</h2>
-                <div className="mt-4 space-y-4 text-sm text-muted-foreground">
-                  {productInfoImages.length > 0 && (
-                    <div className="overflow-x-auto pb-2">
-                      <div className="flex gap-3 snap-x snap-mandatory">
-                        {productInfoImages.map((image, idx) => (
-                          <div key={idx} className="snap-center flex-shrink-0 rounded-3xl overflow-hidden border border-border/60 bg-secondary/40">
-                            <img
-                              src={image.src}
-                              alt={image.alt || `${product.title} info ${idx + 1}`}
-                              className="h-28 w-28 object-cover"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {productInfoHtml ? (
-                    <div className="prose prose-sm max-w-none text-muted-foreground" dangerouslySetInnerHTML={{ __html: productInfoHtml }} />
-                  ) : (
-                    <p>{product.description}</p>
-                  )}
-                </div>
-              </div>
-              <div className="rounded-3xl border border-border/60 bg-white/90 p-6 shadow-sm">
-                <h2 className="text-sm font-semibold text-forest">Packing list</h2>
-                <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Plante artificielle premium</li>
-                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Pot décoratif inclus</li>
-                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Guide de pose et entretien</li>
-                  <li className="rounded-2xl border border-border/60 bg-secondary/40 p-3">Emballage recyclé</li>
-                </ul>
-              </div>
-            </section>
           </div>
         </div>
 
-        <div className="mx-auto max-w-6xl px-6 pb-8">
+        {/* Description section */}
+        {productInfoHtml && (
+          <section className="mt-16 pt-10 border-t border-border/60">
+            <h2 className="font-display text-2xl text-forest mb-6">Description</h2>
+            <div
+              className="prose prose-sm sm:prose max-w-none text-muted-foreground prose-headings:text-forest prose-headings:font-display prose-img:rounded-2xl prose-img:shadow-sm"
+              dangerouslySetInnerHTML={{ __html: productInfoHtml }}
+            />
+          </section>
+        )}
+
+        {/* Reviews */}
+        <div ref={reviewsRef} className="mt-4">
           <ProductReviews reviews={reviews} />
         </div>
       </article>
