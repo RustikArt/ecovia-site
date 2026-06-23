@@ -58,7 +58,7 @@ function ProductErrorComponent({ reset }: { reset: () => void }) {
       <div className="max-w-md mx-auto py-24 text-center">
         <h1 className="font-display text-2xl text-forest">Erreur de chargement</h1>
         <Button className="mt-4" onClick={() => { router.invalidate(); reset(); }}>
-          Reessayer
+          Réessayer
         </Button>
       </div>
     </SiteLayout>

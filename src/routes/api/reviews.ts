@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const ip = getRequestIp(request);
 
     if (!checkAndTrackRateLimit(ip)) {
-      return json({ error: "Trop de tentatives. Reessayez plus tard." }, 429);
+      return json({ error: "Trop de tentatives. Réessayez plus tard." }, 429);
     }
 
     const handle = String(body.product_handle || "").trim();

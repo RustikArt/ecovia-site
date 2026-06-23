@@ -36,7 +36,7 @@ function Contact() {
     const honeypot = String(data.get("website") || "").trim();
     const elapsedMs = Date.now() - startedAtRef.current;
     if (honeypot || elapsedMs < 2500) {
-      toast.error("Envoi bloqué. Veuillez reessayer.");
+      toast.error("Envoi bloqué. Veuillez réessayer.");
       setSending(false);
       return;
     }

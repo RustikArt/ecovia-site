@@ -13,21 +13,21 @@ type HomepageReview = {
 };
 
 const HOMEPAGE_REVIEW_POOL: HomepageReview[] = [
-  { name: "Camille D.", text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zero entretien a gerer !" },
-  { name: "Antoine R.", text: "Livraison rapide et soignee. La qualite est largement au niveau du prix." },
-  { name: "Sophie B.", text: "Une vraie touche deco. J'ai recommande Ecovia a toute ma famille." },
-  { name: "Nora P.", text: "Je voulais un salon plus chaleureux sans contrainte. Mission accomplie des le premier colis." },
-  { name: "Mehdi L.", text: "Top pour mon bureau, effet naturel immediat. Produit conforme aux photos." },
-  { name: "Laura M.", text: "Emballage propre, livraison dans les delais, et surtout superbe finition." },
-  { name: "Thomas G.", text: "J'etais sceptique sur l'aspect artificiel, mais de loin comme de pres c'est tres reussi." },
-  { name: "Ines V.", text: "Super experience client, reponse rapide et plante tres elegante dans mon entree." },
-  { name: "Rayan C.", text: "Rapport qualite-prix solide. Le panier et le paiement Shopify sont fluides." },
-  { name: "Julie A.", text: "J'ai pris deux modeles differents et le rendu est harmonieux. Tres contente." },
-  { name: "Baptiste N.", text: "Parfait pour louer un appart meuble sans entretien. Effet decoratif garanti." },
-  { name: "Lea T.", text: "Belle surprise a l'ouverture, materiaux de qualite et couleur tres naturelle." },
-  { name: "Kenza F.", text: "Service client serieux, produit bien protege et installation en 2 minutes." },
-  { name: "Hugo S.", text: "Commande simple, livraison suivie, rendu premium. Rien a redire." },
-  { name: "Elise W.", text: "J'ai transforme mon coin lecture avec une seule plante. Le style est immediat." },
+  { name: "Camille D.", text: "Le rendu est bluffant. Tout le monde croit que mes plantes sont vraies, et zéro entretien à gérer !" },
+  { name: "Antoine R.", text: "Livraison rapide et soignée. La qualité est largement au niveau du prix." },
+  { name: "Sophie B.", text: "Une vraie touche déco. J'ai recommandé Ecovia à toute ma famille." },
+  { name: "Nora P.", text: "Je voulais un salon plus chaleureux sans contrainte. Mission accomplie dès le premier colis." },
+  { name: "Mehdi L.", text: "Top pour mon bureau, effet naturel immédiat. Produit conforme aux photos." },
+  { name: "Laura M.", text: "Emballage propre, livraison dans les délais, et surtout superbe finition." },
+  { name: "Thomas G.", text: "J'étais sceptique sur l'aspect artificiel, mais de loin comme de près c'est très réussi." },
+  { name: "Inès V.", text: "Super expérience client, réponse rapide et plante très élégante dans mon entrée." },
+  { name: "Rayan C.", text: "Rapport qualité-prix solide. Le panier et le paiement Shopify sont fluides." },
+  { name: "Julie A.", text: "J'ai pris deux modèles différents et le rendu est harmonieux. Très contente." },
+  { name: "Baptiste N.", text: "Parfait pour louer un appart meublé sans entretien. Effet décoratif garanti." },
+  { name: "Léa T.", text: "Belle surprise à l'ouverture, matériaux de qualité et couleur très naturelle." },
+  { name: "Kenza F.", text: "Service client sérieux, produit bien protégé et installation en 2 minutes." },
+  { name: "Hugo S.", text: "Commande simple, livraison suivie, rendu premium. Rien à redire." },
+  { name: "Élise W.", text: "J'ai transformé mon coin lecture avec une seule plante. Le style est immédiat." },
 ];
 
 function pickRandomReviews(pool: HomepageReview[], count: number): HomepageReview[] {
@@ -51,7 +51,7 @@ export const Route = createFileRoute("/")({
       { title: "Ecovia — Plantes d'intérieur éco-responsables" },
       { name: "description", content: "Sélection de plantes artificielles premium livrées en France métropolitaine, sans entretien et sans minimum d'achat." },
       { property: "og:title", content: "Ecovia — Plantes d'intérieur éco-responsables" },
-      { property: "og:description", content: "Plantes artificielles premium, emballage recycle." },
+      { property: "og:description", content: "Plantes artificielles premium, emballage recyclé." },
     ],
   }),
   loader: ({ context }) => { context.queryClient.ensureQueryData(collectionQO); },
@@ -94,7 +94,7 @@ function Index() {
             </div>
           </div>
           <div className="relative rounded-[2.5rem] overflow-hidden shadow-[0_40px_120px_rgba(61,107,79,0.12)]">
-            <img src="/hero-lifestyle.svg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
+            <img src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg" alt="Salon moderne avec plantes artificielles" className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
