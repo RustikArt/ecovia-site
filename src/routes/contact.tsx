@@ -44,7 +44,13 @@ function Contact() {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      const raw = await response.text();
+      let result: { error?: string; success?: boolean } = {};
+      try {
+        result = raw ? JSON.parse(raw) : {};
+      } catch {
+        result = {};
+      }
       if (!response.ok) {
         throw new Error(result.error || "Échec de l'envoi.");
       }
