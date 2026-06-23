@@ -22,29 +22,6 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [sending, setSending] = useState(false);
-  // Handles OAuth PKCE callback: Supabase redirects back to /auth?code=xxx
-  const [exchanging, setExchanging] = useState(false);
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get("code");
-    if (!code) return;
-
-    // Exchange the PKCE authorization code for a session
-    setExchanging(true);
-    supabase.auth.exchangeCodeForSession(window.location.search).then(({ error }) => {
-      if (error) {
-        toast.error("Échec de la connexion. Veuillez réessayer.");
-        setExchanging(false);
-        // Clean up URL
-        window.history.replaceState({}, "", "/auth");
-      } else {
-        navigate({ to: "/compte", replace: true });
-      }
-    });
-  }, [navigate]);
-
-  async function onMagicLink() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSending(true);
@@ -84,44 +61,6 @@ function AuthPage() {
     } finally {
       setSending(false);
     }
-  }
-  }
-
-  // OAuth code exchange in progress
-  if (exchanging) {
-    return (
-      <SiteLayout>
-        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4 text-muted-foreground">
-          <Loader2 className="size-8 animate-spin text-forest" />
-          <p className="text-sm">Connexion en cours…</p>
-        </div>
-      </SiteLayout>
-    );
-  }
-
-  // Email confirmation sent
-  if (mode === "confirm") {
-  // Email confirmation sent
-  if (mode === "confirm") {
-    return (
-      <SiteLayout>
-        <section className="mx-auto max-w-md px-6 py-16 text-center">
-          <div className="text-4xl mb-4">📬</div>
-          <h1 className="font-display text-2xl text-forest">Vérifiez votre email</h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Un lien de connexion a été envoyé à <strong>{email}</strong>.<br />
-            Cliquez dessus pour accéder à votre compte.
-          </p>
-          <button
-            type="button"
-            onClick={() => setMode("form")}
-            className="mt-8 text-sm text-forest underline underline-offset-4"
-          >
-            Utiliser une autre adresse email
-          </button>
-        </section>
-      </SiteLayout>
-    );
   }
 
   return (
