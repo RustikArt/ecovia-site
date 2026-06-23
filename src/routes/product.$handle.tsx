@@ -5,6 +5,7 @@ import { SiteLayout } from "@/components/site/Layout";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { BundleSelector } from "@/components/product/BundleSelector";
 import { ProductReviews } from "@/components/product/ProductReviews";
+import { ProductInfoSection } from "@/components/product/ProductInfoSection";
 import { Button } from "@/components/ui/button";
 import { Loader2, ShoppingBag, Truck, ShieldCheck, RefreshCw, Star, ChevronRight, Package, Leaf } from "lucide-react";
 import { fetchProductByHandle, parseBundles, parseReviews } from "@/lib/shopify/api";
@@ -100,12 +101,6 @@ function ProductPage() {
   const totalDiscounted = totalNormal * (1 - discountPct / 100);
   const savings = totalNormal - totalDiscounted;
 
-  const productInfoHtml = useMemo(() => {
-    if (!product.descriptionHtml) return product.description;
-    return product.descriptionHtml;
-  }, [product.descriptionHtml, product.description]);
-
-  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
   const reviewRating = reviews.rating ?? (reviews.list.length > 0 ? reviews.list.reduce((s, r) => s + r.rating, 0) / reviews.list.length : null);
 
   async function handleAdd() {
@@ -332,16 +327,13 @@ function ProductPage() {
           </div>
         </div>
 
-        {/* Description section */}
-        {productInfoHtml && (
-          <section className="mt-16 pt-10 border-t border-border/60">
-            <h2 className="font-display text-2xl text-forest mb-6">Description</h2>
-            <div
-              className="prose prose-sm sm:prose max-w-none text-muted-foreground prose-headings:text-forest prose-headings:font-display prose-img:rounded-2xl prose-img:shadow-sm"
-              dangerouslySetInnerHTML={{ __html: productInfoHtml }}
-            />
-          </section>
-        )}
+        {/* Product info section — description + tags + embedded images */}
+        <ProductInfoSection
+          descriptionHtml={product.descriptionHtml}
+          description={product.description}
+          tags={product.tags}
+          title={product.title}
+        />
 
         {/* Reviews */}
         <div ref={reviewsRef} className="mt-4">
