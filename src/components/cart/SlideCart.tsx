@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { ShoppingBag, Minus, Plus, Trash2, ExternalLink, Loader2, Truck } from "lucide-react";
 import { useCartStore, formatPrice } from "@/stores/cartStore";
 import { fetchProducts } from "@/lib/shopify/api";
 import type { ShopifyProduct } from "@/lib/shopify/types";
 import { trackInitiateCheckout } from "@/lib/tracking";
-
-const FREE_SHIPPING_THRESHOLD = 60;
+import { siteConfig } from "@/config/site";
 
 export function SlideCart() {
   const items = useCartStore((s) => s.items);
@@ -28,8 +26,7 @@ export function SlideCart() {
     () => items.reduce((sum, i) => sum + parseFloat(i.price.amount) * i.quantity, 0),
     [items],
   );
-  const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
-  const progress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+
 
   useEffect(() => { if (isOpen) syncCart(); }, [isOpen, syncCart]);
 
@@ -74,17 +71,12 @@ export function SlideCart() {
           <SheetTitle className="font-display text-xl text-forest">Votre panier</SheetTitle>
         </SheetHeader>
 
-        {/* Free shipping bar */}
+        {/* Free shipping banner */}
         <div className="px-5 py-3 border-b border-border/60 bg-sage/10">
           <div className="flex items-center gap-2 text-xs text-forest">
-            <Truck className="size-3.5" />
-            {remaining > 0 ? (
-              <span>Plus que <strong>{formatPrice(remaining, currency)}</strong> pour la livraison offerte !</span>
-            ) : (
-              <span>🎉 Livraison gratuite débloquée !</span>
-            )}
+            <Truck className="size-3.5 flex-shrink-0" />
+            <span>{siteConfig.shipping.bannerText}</span>
           </div>
-          <Progress value={progress} className="mt-2 h-1.5" />
         </div>
 
         {/* Items */}

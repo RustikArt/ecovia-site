@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      product_reviews: {
+        Row: {
+          id: string
+          product_handle: string
+          author_name: string
+          rating: number
+          comment: string
+          status: "pending" | "approved" | "rejected"
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_handle: string
+          author_name: string
+          rating: number
+          comment: string
+          status?: "pending" | "approved" | "rejected"
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_handle?: string
+          author_name?: string
+          rating?: number
+          comment?: string
+          status?: "pending" | "approved" | "rejected"
+          created_at?: string
+        }
+        Relationships: []
+      }
       addresses: {
         Row: {
           city: string

@@ -339,7 +339,7 @@ function ProductPage() {
 
         {/* Reviews */}
         <div ref={reviewsRef} className="mt-4">
-          <ProductReviews reviews={reviews} />
+          <ProductReviews reviews={reviews} productHandle={product.handle} />
         </div>
       </article>
     </SiteLayout>
