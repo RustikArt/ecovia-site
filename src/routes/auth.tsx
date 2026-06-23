@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { SiteLayout } from "@/components/site/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -37,8 +37,12 @@ function AuthPage() {
         });
         if (error) throw error;
         if (!data.session) {
-          toast.error("La création du compte nécessite une confirmation email côté Supabase. Désactivez-la pour un accès immédiat.");
-          return;
+          // Some Supabase projects may return no session after signUp even with email confirmation disabled.
+          const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) {
+            toast.error("Compte créé, mais connexion automatique impossible. Vérifiez la configuration Email dans Supabase.");
+            return;
+          }
         }
         toast.success("Compte créé !");
         navigate({ to: "/compte", replace: true });
@@ -55,6 +59,8 @@ function AuthPage() {
       } else if (msg.includes("User already registered")) {
         toast.error("Un compte existe déjà avec cet email.");
         setMode("signin");
+      } else if (msg.includes("Email not confirmed")) {
+        toast.error("Confirmation email encore active sur ce projet Supabase. Désactivez Confirm email dans Auth > Signups.");
       } else {
         toast.error(msg);
       }
