@@ -6,6 +6,9 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+  },
   plugins: [
     viteReact(),
     tailwindcss(),

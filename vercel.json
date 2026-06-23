@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/((?!assets/|api/|favicon.ico|robots.txt|sitemap.xml).*)", "destination": "/" }
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/:path*", "destination": "/" }
   ]
 }

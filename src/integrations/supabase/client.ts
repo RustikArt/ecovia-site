@@ -16,6 +16,11 @@ function createSupabaseClient() {
     throw new Error(message);
   }
 
+  if (typeof window !== "undefined") {
+    // Helps verify the deployed app is connected to the expected Supabase project.
+    console.info("[Supabase] URL:", SUPABASE_URL);
+  }
+
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
       storage: typeof window !== "undefined" ? localStorage : undefined,
