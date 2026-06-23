@@ -101,6 +101,8 @@ function ProductPage() {
   const totalDiscounted = totalNormal * (1 - discountPct / 100);
   const savings = totalNormal - totalDiscounted;
 
+  const hasOptions = product.options.length > 0 && !(product.options.length === 1 && product.options[0].values.length === 1 && product.options[0].values[0] === "Default Title");
+
   const reviewRating = reviews.rating ?? (reviews.list.length > 0 ? reviews.list.reduce((s, r) => s + r.rating, 0) / reviews.list.length : null);
 
   async function handleAdd() {
