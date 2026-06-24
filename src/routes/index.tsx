@@ -136,7 +136,13 @@ function Index() {
               {siteConfig.brand.heroBadge}
             </span>
             <h1 className="mt-6 font-display text-5xl md:text-6xl leading-[1.02] text-forest">
-              {siteConfig.brand.tagline}
+              <>              
+                {siteConfig.brand.tagline.split("sans entretien")[0]}
+                <span className="underline decoration-forest/40 decoration-[1px] underline-offset-4">
+                  sans entretien
+                </span>
+                {siteConfig.brand.tagline.split("sans entretien")[1]}
+              </>
             </h1>
             <p className="mt-6 max-w-xl text-base md:text-lg text-muted-foreground leading-8">
               {siteConfig.brand.heroSubtitle}

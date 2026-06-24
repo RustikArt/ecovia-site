@@ -7,7 +7,7 @@
 export const siteConfig = {
   brand: {
     name: "Ecovia",
-    tagline: "Plantes artificielles premium pour intérieurs sans entretien.",
+    tagline: "Toute la beauté des plantes, sans entretien.",
     description:
       "Plantes artificielles haut de gamme pensées pour décorer votre intérieur immédiatement, sans entretien.",
     heroBadge: "Décoration premium, zéro entretien",
