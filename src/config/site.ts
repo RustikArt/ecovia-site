@@ -160,12 +160,12 @@ export const siteConfig = {
     },
     mentionsLegales: {
       editeur: "Ecovia",
-      directeurPublication: "Ecovia®️ est responsable",
+      directeurPublication: "Ecovia",
       hebergeur: "Shopify Inc., 151 O'Connor Street, Ottawa, Ontario, Canada",
       contact: "ecovia-off@proton.me",
       societaire: "Ecovia — micro-entreprise",
       siret: "485 923 714 01059",
-      tva: "20% (inclus dans le prix de l'article)",
+      tva: "20% (déjà inclus dans le prix des articles)",
     },
   },
 } as const;
