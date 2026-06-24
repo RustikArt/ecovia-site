@@ -1,10 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Check, Loader2, Shield, UserRound, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { hasRole } from "@/lib/supabase/admin";
 
 interface ReviewRow {
   id: string;
@@ -38,6 +39,15 @@ export const Route = createFileRoute("/admin-5d4f7e9c2b")({
     ],
   }),
   ssr: false,
+  beforeLoad: async () => {
+    if (typeof window === "undefined") return;
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/auth" });
+    const user = data.session.user;
+    const allowed = await hasRole(user.id, "admin");
+    if (!allowed) throw redirect({ to: "/compte" });
+    return { user };
+  },
   component: AdminPage,
 });
 
