@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Leaf, ShoppingBag, Search } from "lucide-react";
+import { Menu, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { siteConfig } from "@/config/site";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const linkCls = "text-sm text-forest/80 hover:text-forest transition-colors";
 const activeCls = "text-forest font-medium";
@@ -9,6 +11,15 @@ const activeCls = "text-forest font-medium";
 export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
   const count = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
   const setOpen = useCartStore((s) => s.setOpen);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navLinks = [
+    { to: "/", label: "Accueil", exact: true },
+    { to: "/boutique", label: "Boutique" },
+    { to: "/faq", label: "FAQ" },
+    { to: "/contact", label: "Contact" },
+  ] as const;
+
   return (
     <header
       className="fixed left-0 right-0 z-40 backdrop-blur bg-background/80 border-b border-border/60 transition-[top] duration-300 ease-in-out"
@@ -32,33 +43,48 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          <Link
-            to="/"
-            className={linkCls}
-            activeProps={{ className: activeCls }}
-            activeOptions={{ exact: true }}
-          >
-            Accueil
-          </Link>
-          <Link to="/boutique" className={linkCls} activeProps={{ className: activeCls }}>
-            Boutique
-          </Link>
-          <Link to="/faq" className={linkCls} activeProps={{ className: activeCls }}>
-            FAQ
-          </Link>
-          <Link to="/contact" className={linkCls} activeProps={{ className: activeCls }}>
-            Contact
-          </Link>
+          {navLinks.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={linkCls}
+              activeProps={{ className: activeCls }}
+              activeOptions={item.exact ? { exact: true } : undefined}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link
-            to="/boutique"
-            className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"
-            aria-label="Recherche"
-          >
-            <Search className="size-4" />
-          </Link>
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="md:hidden size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"
+                aria-label="Ouvrir le menu"
+              >
+                <Menu className="size-4" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] p-6">
+              <SheetTitle className="font-display text-xl text-forest">Menu</SheetTitle>
+              <nav className="mt-6 space-y-2">
+                {navLinks.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className="block rounded-xl border border-border/70 px-4 py-3 text-sm font-medium text-forest hover:bg-secondary transition-colors"
+                    activeProps={{ className: "block rounded-xl border border-forest/30 bg-sage/15 px-4 py-3 text-sm font-medium text-forest" }}
+                    activeOptions={item.exact ? { exact: true } : undefined}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+            </SheetContent>
+          </Sheet>
           <Link
             to="/compte"
             className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"

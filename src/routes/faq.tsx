@@ -24,7 +24,9 @@ export const Route = createFileRoute("/faq")({
         ))}
         <p className="mt-10">
           <Link to="/contact" className="text-forest underline">
-            Nous contacter
+            <span className="inline-flex items-center rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-primary-foreground no-underline transition hover:bg-forest/90">
+              Nous contacter
+            </span>
           </Link>
         </p>
       </article>

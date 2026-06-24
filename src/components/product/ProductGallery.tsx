@@ -128,7 +128,7 @@ export function ProductGallery({
         )}
         <button
           onClick={() => setZoomIdx(selected)}
-          className="absolute bottom-3 right-3 size-8 rounded-full bg-white/90 backdrop-blur shadow-sm flex items-center justify-center text-muted-foreground hover:text-forest transition-colors"
+          className="absolute bottom-5 right-3 size-8 rounded-full bg-white/90 backdrop-blur shadow-sm flex items-center justify-center text-muted-foreground hover:text-forest transition-colors"
           aria-label="Agrandir"
         >
           <ZoomIn className="size-3.5" />
@@ -136,7 +136,7 @@ export function ProductGallery({
 
         {/* Slide counter */}
         {slides.length > 1 && (
-          <div className="absolute bottom-3 left-3 rounded-full bg-black/40 backdrop-blur text-white text-[11px] font-medium px-2.5 py-0.5">
+          <div className="absolute bottom-5 left-3 rounded-full bg-black/40 backdrop-blur text-white text-[11px] font-medium px-2.5 py-0.5">
             {selected + 1} / {slides.length}
           </div>
         )}

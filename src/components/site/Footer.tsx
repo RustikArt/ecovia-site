@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border/60 bg-secondary/40">
+    <footer className="mt-14 md:mt-16 border-t border-border/60 bg-secondary/40">
       <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-[1.8fr_1fr_1fr_1fr]">
         <div>
           <div className="flex items-center gap-3">

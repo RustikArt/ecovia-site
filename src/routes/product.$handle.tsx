@@ -240,6 +240,11 @@ function ProductPage() {
               <span className="font-display text-4xl text-forest leading-none">
                 {formatPrice(totalDiscounted, currency)}
               </span>
+              {selectedVariant.availableForSale && (
+                <span className="ml-auto rounded-full border border-sage/30 bg-sage/10 px-2.5 py-1 text-[11px] font-medium text-forest leading-none">
+                  En stock
+                </span>
+              )}
               {discountPct > 0 && (
                 <>
                   <span className="text-lg text-muted-foreground line-through leading-none">
@@ -352,15 +357,6 @@ function ProductPage() {
                 </>
               )}
             </Button>
-
-            {/* Stock indicator */}
-            <p
-              className={`text-xs text-center font-medium ${selectedVariant.availableForSale ? "text-sage" : "text-destructive"}`}
-            >
-              {selectedVariant.availableForSale
-                ? "● En stock — expédition sous 48h"
-                : "● Rupture de stock temporaire"}
-            </p>
 
             {/* Trust badges */}
             <div className="grid grid-cols-3 gap-2 pt-1">

@@ -344,7 +344,7 @@ function Index() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
+      <section className="mx-auto max-w-4xl px-6 pt-16 pb-8 md:pt-18 md:pb-10">
         <div className="text-center mb-10">
           <p className="text-xs uppercase tracking-[0.24em] text-sage">Questions fréquentes</p>
           <h2 className="font-display text-3xl md:text-4xl text-forest mt-3">

@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Tag } from "lucide-react";
 
 interface Props {
   descriptionHtml: string;
@@ -184,10 +183,7 @@ export function ProductInfoSection({ descriptionHtml, description, tags, title }
 
           {/* Plain badges */}
           {displayTags.some((t) => t.label === null) && (
-            <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-widest text-sage flex items-center gap-1.5">
-                <Tag className="size-3" /> Points clés
-              </p>
+            <div>
               <div className="flex flex-wrap gap-2">
                 {displayTags
                   .filter((t) => t.label === null)
