@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
-import { Check, Loader2, Shield, UserRound, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Check, Loader2, Shield, Star, UserRound, X } from "lucide-react";
+import { toast } from "sonner";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -27,6 +28,22 @@ interface AccountRow {
   created_at: string;
 }
 
+function formatProductTitle(handle: string) {
+  return handle
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+    .slice(0, 60);
+}
+
+function renderStars(rating: number) {
+  return Array.from({ length: 5 }, (_, index) => (
+    <Star
+      key={index}
+      className={index < rating ? "size-4 text-amber-400" : "size-4 text-border/80"}
+    />
+  ));
+}
+
 export const Route = createFileRoute("/admin-5d4f7e9c2b")({
   head: () => ({
     meta: [
@@ -44,6 +61,13 @@ export const Route = createFileRoute("/admin-5d4f7e9c2b")({
 function AdminPage() {
   const queryClient = useQueryClient();
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [sessionUserId, setSessionUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setSessionUserId(data.session?.user?.id ?? null);
+    });
+  }, []);
 
   const reviewsQuery = useQuery({
     queryKey: ["admin_reviews"],
@@ -91,6 +115,10 @@ function AdminPage() {
       const { error } = await supabase.from("accounts").update({ status }).eq("id", id);
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["admin_accounts"] });
+      toast.success(`Compte ${status === "suspended" ? "suspendu" : "activé"}`);
+    } catch (error) {
+      toast.error("Impossible de mettre à jour le compte.");
+      console.error(error);
     } finally {
       setSavingId(null);
     }
@@ -102,9 +130,9 @@ function AdminPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-sage">Dashboard admin</p>
-            <h1 className="mt-2 font-display text-4xl text-forest">Moderation et comptes</h1>
+            <h1 className="mt-2 font-display text-4xl text-forest">Modération et comptes</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Avis en attente: {pendingCount} • Comptes synchronises via Supabase.
+              {pendingCount} avis en attente • {accountsQuery.data?.length ?? 0} comptes chargés
             </p>
           </div>
           <Button asChild variant="outline" className="rounded-full">
@@ -132,15 +160,26 @@ function AdminPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-medium text-sm text-foreground">{review.author_name}</p>
-                        <p className="text-xs text-muted-foreground">{review.product_handle}</p>
+                        <div className="flex items-center gap-2">
+                          <Link
+                            to={`/product/${review.product_handle}`}
+                            className="text-sm font-medium text-forest hover:underline"
+                          >
+                            {formatProductTitle(review.product_handle)}
+                          </Link>
+                          <span className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                            Voir
+                          </span>
+                        </div>
                       </div>
                       <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] uppercase tracking-wide text-muted-foreground">
                         {review.status}
                       </span>
                     </div>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
+                    <div className="mt-3 flex items-center gap-1">{renderStars(review.rating)}</div>
+                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">Note: {review.rating}/5</p>
+                      <p className="text-xs text-muted-foreground">{review.rating} étoiles</p>
                       <div className="flex items-center gap-2">
                         <Button
                           type="button"
@@ -192,8 +231,14 @@ function AdminPage() {
                         <p className="font-medium text-sm text-foreground">{account.full_name || account.email}</p>
                         <p className="text-xs text-muted-foreground">{account.email}</p>
                       </div>
-                      <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] uppercase tracking-wide text-muted-foreground">
-                        {account.role} • {account.status}
+                      <span className={
+                        `rounded-full px-2.5 py-1 text-[11px] uppercase tracking-wide ${
+                          account.status === "active"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-rose-100 text-rose-700"
+                        }`
+                      }>
+                        {account.status}
                       </span>
                     </div>
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
@@ -203,7 +248,11 @@ function AdminPage() {
                           type="button"
                           size="sm"
                           className="rounded-full bg-forest hover:bg-forest/90"
-                          disabled={savingId === account.id || account.status === "active"}
+                          disabled={
+                            savingId === account.id ||
+                            account.status === "active" ||
+                            !sessionUserId
+                          }
                           onClick={() => updateAccountStatus(account.id, "active")}
                         >
                           Activer
@@ -213,13 +262,20 @@ function AdminPage() {
                           size="sm"
                           variant="outline"
                           className="rounded-full"
-                          disabled={savingId === account.id || account.status === "suspended"}
+                          disabled={
+                            savingId === account.id ||
+                            account.status === "suspended" ||
+                            !sessionUserId
+                          }
                           onClick={() => updateAccountStatus(account.id, "suspended")}
                         >
                           Suspendre
                         </Button>
                       </div>
                     </div>
+                    {!sessionUserId ? (
+                      <p className="mt-3 text-xs text-rose-600">Connecte-toi pour activer la gestion des comptes.</p>
+                    ) : null}
                   </article>
                 ))
               )}
