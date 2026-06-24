@@ -103,7 +103,9 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
             >
               <Shield className="size-4" />
             </Link>
-          ) : null}
+          ) : (
+            <div className="size-10" aria-hidden="true" />
+          )}
           <Link
             to="/compte"
             className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"
