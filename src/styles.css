@@ -76,6 +76,24 @@
   * {
     border-color: var(--color-border);
   }
+  html {
+    scrollbar-color: color-mix(in oklch, var(--forest) 38%, white) color-mix(in oklch, var(--sage-soft) 65%, white);
+    scrollbar-width: thin;
+  }
+  html::-webkit-scrollbar {
+    width: 12px;
+  }
+  html::-webkit-scrollbar-track {
+    background: color-mix(in oklch, var(--sage-soft) 65%, white);
+  }
+  html::-webkit-scrollbar-thumb {
+    background: color-mix(in oklch, var(--forest) 38%, white);
+    border-radius: 9999px;
+    border: 3px solid color-mix(in oklch, var(--sage-soft) 65%, white);
+  }
+  html::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklch, var(--forest) 48%, white);
+  }
   html,
   body {
     background-color: var(--color-background);

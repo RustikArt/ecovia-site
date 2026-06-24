@@ -241,7 +241,7 @@ function ProductPage() {
                 {formatPrice(totalDiscounted, currency)}
               </span>
               {selectedVariant.availableForSale && (
-                <span className="ml-auto rounded-full border border-sage/30 bg-sage/10 px-2.5 py-1 text-[11px] font-medium text-forest leading-none">
+                <span className="rounded-full border border-sage/30 bg-sage/10 px-2.5 py-1 text-[11px] font-medium text-forest leading-none">
                   En stock
                 </span>
               )}
