@@ -89,14 +89,14 @@ const MentionsLegalesRoute = MentionsLegalesRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+  id: '/admin-5d4f7e9c2b',
+  path: '/admin-5d4f7e9c2b',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin-5d4f7e9c2b': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/boutique': typeof BoutiqueRoute
   '/cgv': typeof CgvRoute
@@ -111,7 +111,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRoute
+  '/admin-5d4f7e9c2b': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/boutique': typeof BoutiqueRoute
   '/cgv': typeof CgvRoute
@@ -128,7 +128,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/admin': typeof AdminRoute
+  '/admin-5d4f7e9c2b': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/boutique': typeof BoutiqueRoute
   '/cgv': typeof CgvRoute
@@ -144,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-5d4f7e9c2b'
     | '/auth'
     | '/boutique'
     | '/cgv'
@@ -152,7 +153,6 @@ export interface FileRouteTypes {
     | '/faq'
     | '/politique-livraison'
     | '/politique-retour'
-    | '/admin'
     | '/compte'
     | '/product/$handle'
   fileRoutesByTo: FileRoutesByTo
@@ -167,7 +167,7 @@ export interface FileRouteTypes {
     | '/politique-livraison'
     | '/politique-retour'
     | '/mentions-legales'
-    | '/admin'
+    | '/admin-5d4f7e9c2b'
     | '/compte'
     | '/product/$handle'
   id:
@@ -267,10 +267,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
+    '/admin-5d4f7e9c2b': {
+      id: '/admin-5d4f7e9c2b'
+      path: '/admin-5d4f7e9c2b'
+      fullPath: '/admin-5d4f7e9c2b'
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }

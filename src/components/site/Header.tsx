@@ -18,7 +18,6 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
     { to: "/boutique", label: "Boutique" },
     { to: "/faq", label: "FAQ" },
     { to: "/contact", label: "Contact" },
-    { to: "/admin", label: "Admin" },
   ] as const;
 
   return (

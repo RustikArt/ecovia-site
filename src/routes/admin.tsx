@@ -28,7 +28,9 @@ interface AccountRow {
   created_at: string;
 }
 
-export const Route = createFileRoute("/admin")({
+const secretAdminPath = "/admin-5d4f7e9c2b";
+
+export const Route = createFileRoute(secretAdminPath)({
   head: () => ({
     meta: [
       { title: "Dashboard admin — Ecovia" },
