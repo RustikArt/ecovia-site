@@ -1,10 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Check, Loader2, Shield, Star, UserRound, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { hasRole } from "@/lib/supabase/admin";
 
 interface ReviewRow {
   id: string;
@@ -35,12 +36,19 @@ function formatProductTitle(handle: string) {
 }
 
 function renderStars(rating: number) {
-  return Array.from({ length: 5 }, (_, index) => (
-    <Star
-      key={index}
-      className={index < rating ? "size-4 text-amber-400" : "size-4 text-border/80"}
-    />
-  ));
+  return Array.from({ length: 5 }, (_, index) => {
+    const filled = index < rating;
+    return (
+      <span
+        key={index}
+        className={
+          `text-lg leading-none ${filled ? "text-amber-400" : "text-border/80"}`
+        }
+      >
+        {filled ? "★" : "☆"}
+      </span>
+    );
+  });
 }
 
 export const Route = createFileRoute("/admin-5d4f7e9c2b")({
@@ -54,6 +62,14 @@ export const Route = createFileRoute("/admin-5d4f7e9c2b")({
     ],
   }),
   ssr: false,
+  beforeLoad: async () => {
+    if (typeof window === "undefined") return;
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) throw redirect({ to: "/auth" });
+    const allowed = await hasRole(data.session.user.id, "admin");
+    if (!allowed) throw redirect({ to: "/compte" });
+    return { user: data.session.user };
+  },
   component: AdminPage,
 });
 
