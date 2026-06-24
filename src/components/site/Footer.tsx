@@ -54,7 +54,7 @@ export function SiteFooter() {
             </li>
             <li>
               <Link to="/admin-5d4f7e9c2b" className="hover:text-forest font-semibold text-forest">
-                Dashboard admin
+                Dashboard
               </Link>
             </li>
           </ul>
