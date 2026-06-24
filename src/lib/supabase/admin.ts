@@ -13,5 +13,21 @@ export async function hasRole(userId: string, role: "admin" | "customer") {
     return false;
   }
 
-  return Boolean(data?.role);
+  if (data?.role === role) {
+    return true;
+  }
+
+  // Fallback if the role is stored only in accounts.role
+  const { data: accountData, error: accountError } = await supabase
+    .from("accounts")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (accountError) {
+    console.error("[admin] account role lookup error:", accountError.message);
+    return false;
+  }
+
+  return accountData?.role === role;
 }
