@@ -22,7 +22,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductHandleRouteImport } from './routes/product.$handle'
 import { Route as AuthenticatedCompteRouteImport } from './routes/_authenticated/compte'
 import { Route as MentionsLegalesRouteImport } from './routes/mentions-legales'
-import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdminRouteImport } from './routes/admin-5d4f7e9c2b'
 
 const PolitiqueRetourRoute = PolitiqueRetourRouteImport.update({
   id: '/politique-retour',

@@ -1,15 +1,17 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export async function hasRole(userId: string, role: "admin" | "customer") {
-  const { data, error } = await supabase.rpc("has_role", {
-    _user_id: userId,
-    _role: role,
-  });
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", role)
+    .maybeSingle();
 
   if (error) {
-    console.error("[admin] has_role RPC error:", error.message);
+    console.error("[admin] role lookup error:", error.message);
     return false;
   }
 
-  return Boolean(data);
+  return Boolean(data?.role);
 }

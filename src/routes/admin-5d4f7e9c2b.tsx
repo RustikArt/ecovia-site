@@ -1,11 +1,10 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Check, Loader2, Shield, UserRound, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { hasRole } from "@/lib/supabase/admin";
 
 interface ReviewRow {
   id: string;
@@ -28,28 +27,17 @@ interface AccountRow {
   created_at: string;
 }
 
-const secretAdminPath = "/admin-5d4f7e9c2b";
-
-export const Route = createFileRoute(secretAdminPath)({
+export const Route = createFileRoute("/admin-5d4f7e9c2b")({
   head: () => ({
     meta: [
-      { title: "Dashboard admin — Ecovia" },
+      { title: "Dashboard admin - Ecovia" },
       {
         name: "description",
-        content: "Modération des avis et gestion simple des comptes clients Ecovia.",
+        content: "Moderation des avis et gestion simple des comptes clients Ecovia.",
       },
     ],
   }),
   ssr: false,
-  beforeLoad: async () => {
-    if (typeof window === "undefined") return;
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/auth" });
-    const user = data.session.user;
-    const allowed = await hasRole(user.id, "admin");
-    if (!allowed) throw redirect({ to: "/compte" });
-    return { user };
-  },
   component: AdminPage,
 });
 
@@ -114,9 +102,9 @@ function AdminPage() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-sage">Dashboard admin</p>
-            <h1 className="mt-2 font-display text-4xl text-forest">Modération et comptes</h1>
+            <h1 className="mt-2 font-display text-4xl text-forest">Moderation et comptes</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Avis en attente: {pendingCount} • Comptes synchronisés via Supabase.
+              Avis en attente: {pendingCount} • Comptes synchronises via Supabase.
             </p>
           </div>
           <Button asChild variant="outline" className="rounded-full">
@@ -173,7 +161,7 @@ function AdminPage() {
                           onClick={() => updateReviewStatus(review.id, "rejected")}
                         >
                           <X className="size-4" />
-                          Décliner
+                          Decliner
                         </Button>
                       </div>
                     </div>
@@ -195,7 +183,7 @@ function AdminPage() {
                   Chargement des comptes...
                 </p>
               ) : (accountsQuery.data ?? []).length === 0 ? (
-                <p className="text-sm text-muted-foreground">Aucun compte trouvé.</p>
+                <p className="text-sm text-muted-foreground">Aucun compte trouve.</p>
               ) : (
                 accountsQuery.data?.map((account) => (
                   <article key={account.id} className="rounded-2xl border border-border/60 p-4">
@@ -209,9 +197,7 @@ function AdminPage() {
                       </span>
                     </div>
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">
-                        Téléphone: {account.phone || "—"}
-                      </p>
+                      <p className="text-xs text-muted-foreground">Telephone: {account.phone || "-"}</p>
                       <div className="flex items-center gap-2">
                         <Button
                           type="button"
