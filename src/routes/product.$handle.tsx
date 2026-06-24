@@ -236,7 +236,7 @@ function ProductPage() {
             </div>
 
             {/* Price block */}
-            <div className="flex flex-wrap items-end gap-3 py-4 border-y border-border/60">
+            <div className="flex flex-wrap items-center gap-3 py-4 border-y border-border/60">
               <span className="font-display text-4xl text-forest leading-none">
                 {formatPrice(totalDiscounted, currency)}
               </span>
