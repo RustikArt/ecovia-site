@@ -18,11 +18,35 @@ CREATE INDEX IF NOT EXISTS product_reviews_handle_status_idx
 ALTER TABLE public.product_reviews ENABLE ROW LEVEL SECURITY;
 
 -- Tout le monde peut soumettre un avis (en statut 'pending' uniquement)
+DROP POLICY IF EXISTS "Public can insert pending reviews" ON public.product_reviews;
 CREATE POLICY "Public can insert pending reviews"
   ON public.product_reviews FOR INSERT
   WITH CHECK (status = 'pending');
 
 -- Tout le monde peut lire les avis approuvés
+DROP POLICY IF EXISTS "Public can read approved reviews" ON public.product_reviews;
 CREATE POLICY "Public can read approved reviews"
   ON public.product_reviews FOR SELECT
   USING (status = 'approved');
+
+-- Les admins peuvent lire et modifier tous les avis
+DROP POLICY IF EXISTS "Admins can manage reviews" ON public.product_reviews;
+CREATE POLICY "Admins can manage reviews"
+  ON public.product_reviews FOR ALL
+  TO authenticated
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM public.user_roles ur
+      WHERE ur.user_id = auth.uid()
+        AND ur.role = 'admin'::public.app_role
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1
+      FROM public.user_roles ur
+      WHERE ur.user_id = auth.uid()
+        AND ur.role = 'admin'::public.app_role
+    )
+  );

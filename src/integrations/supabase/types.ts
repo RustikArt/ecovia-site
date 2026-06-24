@@ -8,6 +8,42 @@ export type Database = {
   };
   public: {
     Tables: {
+      accounts: {
+        Row: {
+          created_at: string;
+          email: string;
+          full_name: string | null;
+          id: string;
+          last_sign_in_at: string | null;
+          phone: string | null;
+          role: Database["public"]["Enums"]["app_role"];
+          status: "active" | "suspended";
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          full_name?: string | null;
+          id: string;
+          last_sign_in_at?: string | null;
+          phone?: string | null;
+          role?: Database["public"]["Enums"]["app_role"];
+          status?: "active" | "suspended";
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          full_name?: string | null;
+          id?: string;
+          last_sign_in_at?: string | null;
+          phone?: string | null;
+          role?: Database["public"]["Enums"]["app_role"];
+          status?: "active" | "suspended";
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       product_reviews: {
         Row: {
           id: string;
