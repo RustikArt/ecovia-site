@@ -1,6 +1,6 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Check, Loader2, Shield, UserRound, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
@@ -39,21 +39,48 @@ export const Route = createFileRoute("/admin-5d4f7e9c2b")({
     ],
   }),
   ssr: false,
-  beforeLoad: async () => {
-    if (typeof window === "undefined") return;
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) throw redirect({ to: "/auth" });
-    const user = data.session.user;
-    const allowed = await hasRole(user.id, "admin");
-    if (!allowed) throw redirect({ to: "/compte" });
-    return { user };
-  },
   component: AdminPage,
 });
 
 function AdminPage() {
+  const navigate = useNavigate();
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const queryClient = useQueryClient();
   const [savingId, setSavingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkAccess() {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        navigate({ to: "/auth", replace: true });
+        return;
+      }
+
+      const user = data.session.user;
+      const allowed = await hasRole(user.id, "admin");
+      if (!allowed) {
+        navigate({ to: "/compte", replace: true });
+        return;
+      }
+
+      setIsAuthorized(true);
+    }
+
+    checkAccess();
+  }, [navigate]);
+
+  if (isAuthorized === null) {
+    return (
+      <SiteLayout>
+        <section className="mx-auto max-w-6xl px-6 py-10">
+          <div className="rounded-3xl border border-border/60 bg-card p-10 text-center text-foreground">
+            <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin" />
+            <p>Vérification des droits administrateur…</p>
+          </div>
+        </section>
+      </SiteLayout>
+    );
+  }
 
   const reviewsQuery = useQuery({
     queryKey: ["admin_reviews"],
