@@ -12,12 +12,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {isBannerOpen ? <div aria-hidden className="h-10 shrink-0" /> : null}
       <AnnouncementBar visible={bannerVisible} onClose={() => setIsBannerOpen(false)} />
       <SiteHeader bannerVisible={bannerVisible} />
-      <main
-        className="flex-1 transition-all duration-300 ease-in-out"
-        style={{ paddingTop: bannerVisible ? 104 : 64 }}
-      >
+      <main className="flex-1 pt-16">
         {children}
       </main>
       <SiteFooter />

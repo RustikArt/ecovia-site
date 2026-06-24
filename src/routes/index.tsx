@@ -244,7 +244,7 @@ function Index() {
               </h2>
               <p className="text-sm text-muted-foreground max-w-xl">
                 Profitez d’un style naturel et chaleureux avec des plantes artificielles haut de
-                gamme, apportant immédiatement du caractère à votre salon, bureau ou entrée.
+                gamme, apportant immédiatement du caractère à votre pièce, sans aucun entretien.
               </p>
             </div>
             <Link
