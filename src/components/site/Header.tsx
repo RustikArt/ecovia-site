@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, ShoppingBag } from "lucide-react";
+import { Menu, ShoppingBag, Shield } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { siteConfig } from "@/config/site";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { supabase } from "@/integrations/supabase/client";
+import { hasRole } from "@/lib/supabase/admin";
 
 const linkCls = "text-sm text-forest/80 hover:text-forest transition-colors";
 const activeCls = "text-forest font-medium";
@@ -12,6 +14,14 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
   const count = useCartStore((s) => s.items.reduce((n, i) => n + i.quantity, 0));
   const setOpen = useCartStore((s) => s.setOpen);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) return;
+      hasRole(data.session.user.id, "admin").then(setIsAdmin).catch(() => setIsAdmin(false));
+    });
+  }, []);
 
   const navLinks = [
     { to: "/", label: "Accueil", exact: true },
@@ -85,6 +95,15 @@ export function SiteHeader({ bannerVisible }: { bannerVisible: boolean }) {
               </nav>
             </SheetContent>
           </Sheet>
+          {isAdmin ? (
+            <Link
+              to="/admin-5d4f7e9c2b"
+              className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"
+              aria-label="Dashboard admin"
+            >
+              <Shield className="size-4" />
+            </Link>
+          ) : null}
           <Link
             to="/compte"
             className="size-10 rounded-full border border-border grid place-items-center hover:bg-secondary transition-colors"
