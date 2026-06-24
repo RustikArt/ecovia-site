@@ -1,15 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, Link, createRootRouteWithContext, useRouter } from "@tanstack/react-router";
-import { type ReactNode, useEffect, useState } from "react";
+import { Suspense, lazy, type ReactNode } from "react";
 
 import { siteConfig } from "@/config/site";
-import { Toaster } from "sonner";
-import { SlideCart } from "@/components/cart/SlideCart";
-import { Pixels } from "@/components/tracking/Pixels";
-import { CookieConsentBanner } from "@/components/site/CookieConsentBanner";
-import { useCartSync } from "@/hooks/useCartSync";
-
-const COOKIE_CONSENT_KEY = "ecovia-cookie-consent-v1";
+const LazyAppOverlays = lazy(() => import("@/components/app/AppOverlays"));
 
 function NotFoundComponent() {
   return (
@@ -72,7 +66,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: siteConfig.seo.defaultTitle },
-      { name: "description", content: siteConfig.seo.defaultDescription },
       { property: "og:site_name", content: siteConfig.brand.name },
       { property: "og:type", content: "website" },
       { property: "og:title", content: siteConfig.seo.defaultTitle },
@@ -87,14 +80,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: ogImage },
       { name: "twitter:image", content: ogImage },
     ],
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Figtree:wght@400;500;600&display=swap",
-      },
-    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -108,31 +93,12 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const [cookieConsent, setCookieConsent] = useState<"accepted" | "rejected" | null>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const saved = window.localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (saved === "accepted" || saved === "rejected") {
-      setCookieConsent(saved);
-    }
-  }, []);
-
-  function handleCookieChoice(choice: "accepted" | "rejected") {
-    if (typeof window !== "undefined") {
-      window.localStorage.setItem(COOKIE_CONSENT_KEY, choice);
-    }
-    setCookieConsent(choice);
-  }
-
-  useCartSync();
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
-      <SlideCart />
-      <Pixels enabled={cookieConsent === "accepted"} />
-      {cookieConsent === null ? <CookieConsentBanner onChoice={handleCookieChoice} /> : null}
-      <Toaster richColors position="top-center" />
+      <Suspense fallback={null}>
+        <LazyAppOverlays />
+      </Suspense>
     </QueryClientProvider>
   );
 }

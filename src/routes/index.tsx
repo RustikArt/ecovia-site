@@ -166,6 +166,8 @@ function Index() {
             <img
               src="https://pipcke.fr/idees-deco/wp-content/uploads/2024/08/plantes-artificielles-dinterieur-sur-un-table-en-bois-scaled.jpg"
               alt="Salon moderne avec plantes artificielles"
+              fetchPriority="high"
+              decoding="async"
               className="h-full w-full object-cover"
             />
           </div>

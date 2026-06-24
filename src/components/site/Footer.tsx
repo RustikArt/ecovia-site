@@ -1,20 +1,8 @@
 import { Leaf } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
-import { supabase } from "@/integrations/supabase/client";
-import { hasRole } from "@/lib/supabase/admin";
 
 export function SiteFooter() {
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (!data.session) return;
-      hasRole(data.session.user.id, "admin").then(setIsAdmin).catch(() => setIsAdmin(false));
-    });
-  }, []);
-
   return (
     <footer className="mt-14 md:mt-16 border-t border-border/60 bg-secondary/40">
       <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-[1.8fr_1fr_1fr_1fr]">
@@ -64,13 +52,6 @@ export function SiteFooter() {
                 Panier
               </Link>
             </li>
-            {isAdmin ? (
-              <li>
-                <Link to="/admin-5d4f7e9c2b" className="hover:text-forest font-semibold text-forest">
-                  Dashboard
-                </Link>
-              </li>
-            ) : null}
           </ul>
         </div>
         <div>
