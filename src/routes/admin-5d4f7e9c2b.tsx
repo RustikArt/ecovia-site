@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Check, Loader2, Shield, Star, UserRound, X } from "lucide-react";
-import { toast } from "sonner";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -61,13 +60,7 @@ export const Route = createFileRoute("/admin-5d4f7e9c2b")({
 function AdminPage() {
   const queryClient = useQueryClient();
   const [savingId, setSavingId] = useState<string | null>(null);
-  const [sessionUserId, setSessionUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSessionUserId(data.session?.user?.id ?? null);
-    });
-  }, []);
+  const [accountSearch, setAccountSearch] = useState("");
 
   const reviewsQuery = useQuery({
     queryKey: ["admin_reviews"],
@@ -93,6 +86,20 @@ function AdminPage() {
     },
   });
 
+  const filteredAccounts = useMemo(() => {
+    const accounts = accountsQuery.data ?? [];
+    const search = accountSearch.trim().toLowerCase();
+    if (!search) return accounts;
+
+    return accounts.filter((account) => {
+      const fullName = account.full_name ?? "";
+      return (
+        account.email.toLowerCase().includes(search) ||
+        fullName.toLowerCase().includes(search)
+      );
+    });
+  }, [accountsQuery.data, accountSearch]);
+
   const pendingCount = useMemo(
     () => reviewsQuery.data?.filter((review) => review.status === "pending").length ?? 0,
     [reviewsQuery.data],
@@ -104,21 +111,6 @@ function AdminPage() {
       const { error } = await supabase.from("product_reviews").update({ status }).eq("id", id);
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["admin_reviews"] });
-    } finally {
-      setSavingId(null);
-    }
-  }
-
-  async function updateAccountStatus(id: string, status: AccountRow["status"]) {
-    setSavingId(id);
-    try {
-      const { error } = await supabase.from("accounts").update({ status }).eq("id", id);
-      if (error) throw error;
-      await queryClient.invalidateQueries({ queryKey: ["admin_accounts"] });
-      toast.success(`Compte ${status === "suspended" ? "suspendu" : "activé"}`);
-    } catch (error) {
-      toast.error("Impossible de mettre à jour le compte.");
-      console.error(error);
     } finally {
       setSavingId(null);
     }
@@ -159,7 +151,7 @@ function AdminPage() {
                   <article key={review.id} className="rounded-2xl border border-border/60 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-medium text-sm text-foreground">{review.author_name}</p>
+                        <p className="font-semibold text-sm text-foreground">{review.author_name}</p>
                         <div className="flex items-center gap-2">
                           <Link
                             to={`/product/${review.product_handle}`}
@@ -167,9 +159,6 @@ function AdminPage() {
                           >
                             {formatProductTitle(review.product_handle)}
                           </Link>
-                          <span className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-                            Voir
-                          </span>
                         </div>
                       </div>
                       <span className="rounded-full bg-secondary px-2.5 py-1 text-[11px] uppercase tracking-wide text-muted-foreground">
@@ -178,31 +167,28 @@ function AdminPage() {
                     </div>
                     <div className="mt-3 flex items-center gap-1">{renderStars(review.rating)}</div>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
-                    <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">{review.rating} étoiles</p>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="rounded-full bg-forest hover:bg-forest/90"
-                          disabled={savingId === review.id}
-                          onClick={() => updateReviewStatus(review.id, "approved")}
-                        >
-                          <Check className="size-4" />
-                          Valider
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="rounded-full"
-                          disabled={savingId === review.id}
-                          onClick={() => updateReviewStatus(review.id, "rejected")}
-                        >
-                          <X className="size-4" />
-                          Decliner
-                        </Button>
-                      </div>
+                    <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="rounded-full bg-forest hover:bg-forest/90"
+                        disabled={savingId === review.id}
+                        onClick={() => updateReviewStatus(review.id, "approved")}
+                      >
+                        <Check className="size-4" />
+                        Valider
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full"
+                        disabled={savingId === review.id}
+                        onClick={() => updateReviewStatus(review.id, "rejected")}
+                      >
+                        <X className="size-4" />
+                        Decliner
+                      </Button>
                     </div>
                   </article>
                 ))
@@ -211,9 +197,18 @@ function AdminPage() {
           </section>
 
           <section className="rounded-3xl border border-border/60 bg-card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <UserRound className="size-4 text-forest" />
-              <h2 className="font-semibold text-forest">Comptes clients</h2>
+            <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2">
+                <UserRound className="size-4 text-forest" />
+                <h2 className="font-semibold text-forest">Comptes clients</h2>
+              </div>
+              <input
+                type="search"
+                value={accountSearch}
+                onChange={(event) => setAccountSearch(event.target.value)}
+                placeholder="Rechercher par email ou nom"
+                className="w-full max-w-sm rounded-full border border-border/80 bg-background px-4 py-2 text-sm outline-none focus:border-forest focus:ring-2 focus:ring-forest/20"
+              />
             </div>
             <div className="space-y-3 max-h-[620px] overflow-auto pr-1">
               {accountsQuery.isLoading ? (
@@ -221,10 +216,10 @@ function AdminPage() {
                   <Loader2 className="size-4 animate-spin" />
                   Chargement des comptes...
                 </p>
-              ) : (accountsQuery.data ?? []).length === 0 ? (
-                <p className="text-sm text-muted-foreground">Aucun compte trouve.</p>
+              ) : filteredAccounts.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Aucun compte trouvé.</p>
               ) : (
-                accountsQuery.data?.map((account) => (
+                filteredAccounts.map((account) => (
                   <article key={account.id} className="rounded-2xl border border-border/60 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -243,39 +238,8 @@ function AdminPage() {
                     </div>
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
                       <p className="text-xs text-muted-foreground">Telephone: {account.phone || "-"}</p>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="rounded-full bg-forest hover:bg-forest/90"
-                          disabled={
-                            savingId === account.id ||
-                            account.status === "active" ||
-                            !sessionUserId
-                          }
-                          onClick={() => updateAccountStatus(account.id, "active")}
-                        >
-                          Activer
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="rounded-full"
-                          disabled={
-                            savingId === account.id ||
-                            account.status === "suspended" ||
-                            !sessionUserId
-                          }
-                          onClick={() => updateAccountStatus(account.id, "suspended")}
-                        >
-                          Suspendre
-                        </Button>
-                      </div>
+                      <span className="text-xs text-muted-foreground">{account.role}</span>
                     </div>
-                    {!sessionUserId ? (
-                      <p className="mt-3 text-xs text-rose-600">Connecte-toi pour activer la gestion des comptes.</p>
-                    ) : null}
                   </article>
                 ))
               )}
