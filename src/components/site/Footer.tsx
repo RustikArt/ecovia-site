@@ -52,6 +52,11 @@ export function SiteFooter() {
                 Panier
               </Link>
             </li>
+            <li>
+              <Link to="/admin-5d4f7e9c2b" className="hover:text-forest font-semibold text-forest">
+                Dashboard admin
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
