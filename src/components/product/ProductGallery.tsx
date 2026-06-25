@@ -101,7 +101,13 @@ export function ProductGallery({
 
   useEffect(() => {
     const target = thumbButtonsRef.current[selected];
-    target?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    if (!target) return;
+    try {
+      target.scrollIntoView({ block: "nearest", inline: "nearest" });
+    } catch {
+      // Older mobile Safari only supports boolean argument.
+      target.scrollIntoView(false);
+    }
   }, [selected]);
 
   useEffect(() => {
