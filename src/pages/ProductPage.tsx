@@ -50,7 +50,12 @@ export default function ProductPage({ handle }: { handle: string }) {
   const bundles = useMemo(() => parseBundles(product), [product]);
   const reviews = useMemo(() => parseReviews(product), [product]);
 
-  const variants = product.variants.edges.map((e) => e.node);
+  const variants = product.variants.edges
+    .map((e) => e?.node)
+    .filter(
+      (v): v is NonNullable<(typeof product.variants.edges)[number]["node"]> =>
+        Boolean(v && v.id && v.price),
+    );
   const defaultVariant = variants[0];
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
   const selectedVariant = variants.find((v) => v.id === selectedVariantId);
@@ -208,7 +213,7 @@ export default function ProductPage({ handle }: { handle: string }) {
               <span className="font-display text-4xl text-forest leading-none">
                 {formatPrice(totalDiscounted, currency)}
               </span>
-              {selectedVariant.availableForSale && (
+              {displayVariant.availableForSale && (
                 <span className="rounded-full border border-sage/30 bg-sage/10 px-2.5 py-1 text-[11px] font-medium text-forest leading-none">
                   En stock
                 </span>
