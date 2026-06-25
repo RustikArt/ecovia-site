@@ -144,7 +144,7 @@ export default function AdminPage() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-6xl px-6 py-10 space-y-8">
+      <section className="mx-auto max-w-6xl px-6 pt-10 pb-2">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-sage">Dashboard admin</p>
@@ -158,7 +158,7 @@ export default function AdminPage() {
           </Button>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-border/60 bg-card p-5">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
