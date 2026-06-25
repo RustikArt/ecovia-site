@@ -159,7 +159,7 @@ export default function AdminPage() {
         </div>
 
         <div className="mt-8 grid items-start gap-6 lg:grid-cols-2">
-          <section className="rounded-3xl border border-border/60 bg-card p-5">
+          <section className="h-fit rounded-3xl border border-border/60 bg-card p-5">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <Shield className="size-4 text-forest" />
@@ -187,9 +187,11 @@ export default function AdminPage() {
               </div>
             </div>
             <div
-              className={`space-y-3 pr-1 ${
-                visibleReviews.length > 0 ? "max-h-[620px] overflow-y-auto" : ""
-              }`}
+              className="space-y-3 pr-1"
+              style={{
+                maxHeight: visibleReviews.length > 0 ? "620px" : undefined,
+                overflowY: visibleReviews.length > 0 ? "auto" : "visible",
+              }}
             >
               {reviewsQuery.isLoading ? (
                 <p className="text-sm text-muted-foreground flex items-center gap-2">
@@ -269,7 +271,7 @@ export default function AdminPage() {
             </div>
           </section>
 
-          <section className="rounded-3xl border border-border/60 bg-card p-5">
+          <section className="h-fit rounded-3xl border border-border/60 bg-card p-5">
             <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
                 <UserRound className="size-4 text-forest" />
@@ -284,9 +286,11 @@ export default function AdminPage() {
               />
             </div>
             <div
-              className={`space-y-3 pr-1 ${
-                filteredAccounts.length > 0 ? "max-h-[620px] overflow-y-auto" : ""
-              }`}
+              className="space-y-3 pr-1"
+              style={{
+                maxHeight: filteredAccounts.length > 0 ? "620px" : undefined,
+                overflowY: filteredAccounts.length > 0 ? "auto" : "visible",
+              }}
             >
               {accountsQuery.isLoading ? (
                 <p className="text-sm text-muted-foreground flex items-center gap-2">
