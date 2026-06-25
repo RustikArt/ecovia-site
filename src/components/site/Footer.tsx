@@ -2,7 +2,11 @@ import { Leaf } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { siteConfig } from "@/config/site";
 
-export function SiteFooter() {
+type SiteFooterProps = {
+  showBottomBar?: boolean;
+};
+
+export function SiteFooter({ showBottomBar = true }: SiteFooterProps) {
   return (
     <footer className="mt-14 md:mt-16 border-t border-border/60 bg-secondary/40">
       <div className="mx-auto max-w-6xl px-6 py-14 grid gap-10 md:grid-cols-[1.8fr_1fr_1fr_1fr]">
@@ -67,9 +71,11 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {siteConfig.footer.copyright}
-      </div>
+      {showBottomBar ? (
+        <div className="border-t border-border/60 py-4 text-center text-xs text-muted-foreground">
+          © {new Date().getFullYear()} {siteConfig.footer.copyright}
+        </div>
+      ) : null}
     </footer>
   );
 }

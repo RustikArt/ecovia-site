@@ -143,7 +143,7 @@ export default function AdminPage() {
   }
 
   return (
-    <SiteLayout>
+    <SiteLayout showFooterBottomBar={false}>
       <section className="mx-auto max-w-6xl px-6 py-10 space-y-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
