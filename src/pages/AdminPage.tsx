@@ -52,6 +52,7 @@ export default function AdminPage() {
   const queryClient = useQueryClient();
   const [savingId, setSavingId] = useState<string | null>(null);
   const [accountSearch, setAccountSearch] = useState("");
+  const [reviewFilter, setReviewFilter] = useState<"new" | "all">("new");
 
   const reviewsQuery = useQuery({
     queryKey: ["admin_reviews"],
@@ -93,12 +94,29 @@ export default function AdminPage() {
     [reviewsQuery.data],
   );
 
+  const visibleReviews = useMemo(() => {
+    const reviews = reviewsQuery.data ?? [];
+    if (reviewFilter === "new") {
+      return reviews.filter((review) => review.status === "pending");
+    }
+    return reviews;
+  }, [reviewsQuery.data, reviewFilter]);
+
   async function updateReviewStatus(id: string, status: ReviewRow["status"]) {
+    const previousReviews = queryClient.getQueryData<ReviewRow[]>(["admin_reviews"]);
+
     setSavingId(id);
+    queryClient.setQueryData<ReviewRow[]>(["admin_reviews"], (current) =>
+      (current ?? []).map((review) => (review.id === id ? { ...review, status } : review)),
+    );
+
     try {
       const { error } = await supabase.from("product_reviews").update({ status }).eq("id", id);
       if (error) throw error;
       await queryClient.invalidateQueries({ queryKey: ["admin_reviews"] });
+    } catch (error) {
+      queryClient.setQueryData(["admin_reviews"], previousReviews);
+      throw error;
     } finally {
       setSavingId(null);
     }
@@ -122,9 +140,31 @@ export default function AdminPage() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-border/60 bg-card p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="size-4 text-forest" />
-              <h2 className="font-semibold text-forest">Avis clients</h2>
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Shield className="size-4 text-forest" />
+                <h2 className="font-semibold text-forest">Avis clients</h2>
+              </div>
+              <div className="inline-flex rounded-full border border-border/70 bg-background p-1">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={reviewFilter === "new" ? "default" : "ghost"}
+                  className="rounded-full px-3"
+                  onClick={() => setReviewFilter("new")}
+                >
+                  Nouveaux
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant={reviewFilter === "all" ? "default" : "ghost"}
+                  className="rounded-full px-3"
+                  onClick={() => setReviewFilter("all")}
+                >
+                  Tous les avis
+                </Button>
+              </div>
             </div>
             <div className="space-y-3 max-h-[620px] overflow-auto pr-1">
               {reviewsQuery.isLoading ? (
@@ -132,10 +172,14 @@ export default function AdminPage() {
                   <Loader2 className="size-4 animate-spin" />
                   Chargement des avis...
                 </p>
-              ) : (reviewsQuery.data ?? []).length === 0 ? (
-                <p className="text-sm text-muted-foreground">Aucun avis pour le moment.</p>
+              ) : visibleReviews.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  {reviewFilter === "new"
+                    ? "Aucun nouvel avis en attente."
+                    : "Aucun avis pour le moment."}
+                </p>
               ) : (
-                reviewsQuery.data?.map((review) => (
+                visibleReviews.map((review) => (
                   <article key={review.id} className="rounded-2xl border border-border/60 p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -155,29 +199,31 @@ export default function AdminPage() {
                     </div>
                     <div className="mt-3 flex items-center gap-1">{renderStars(review.rating)}</div>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
-                    <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
-                      <Button
-                        type="button"
-                        size="sm"
-                        className="rounded-full bg-forest hover:bg-forest/90"
-                        disabled={savingId === review.id}
-                        onClick={() => updateReviewStatus(review.id, "approved")}
-                      >
-                        <Check className="size-4" />
-                        Valider
-                      </Button>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        className="rounded-full"
-                        disabled={savingId === review.id}
-                        onClick={() => updateReviewStatus(review.id, "rejected")}
-                      >
-                        <X className="size-4" />
-                        Decliner
-                      </Button>
-                    </div>
+                    {review.status === "pending" ? (
+                      <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          className="rounded-full bg-forest hover:bg-forest/90"
+                          disabled={savingId === review.id}
+                          onClick={() => updateReviewStatus(review.id, "approved")}
+                        >
+                          <Check className="size-4" />
+                          Valider
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          className="rounded-full"
+                          disabled={savingId === review.id}
+                          onClick={() => updateReviewStatus(review.id, "rejected")}
+                        >
+                          <X className="size-4" />
+                          Decliner
+                        </Button>
+                      </div>
+                    ) : null}
                   </article>
                 ))
               )}
