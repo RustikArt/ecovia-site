@@ -143,7 +143,7 @@ export default function AdminPage() {
   }
 
   return (
-    <SiteLayout showFooterBottomBar={false}>
+    <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-10 space-y-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -186,7 +186,7 @@ export default function AdminPage() {
                 </Button>
               </div>
             </div>
-            <div className="space-y-3 max-h-[620px] overflow-auto pr-1">
+            <div className="h-[620px] space-y-3 overflow-y-auto pr-1">
               {reviewsQuery.isLoading ? (
                 <p className="text-sm text-muted-foreground flex items-center gap-2">
                   <Loader2 className="size-4 animate-spin" />

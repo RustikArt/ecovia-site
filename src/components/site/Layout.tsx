@@ -5,12 +5,7 @@ import { SiteFooter } from "./Footer";
 import { AnnouncementBar } from "./AnnouncementBar";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
 
-type SiteLayoutProps = {
-  children: ReactNode;
-  showFooterBottomBar?: boolean;
-};
-
-export function SiteLayout({ children, showFooterBottomBar = true }: SiteLayoutProps) {
+export function SiteLayout({ children }: { children: ReactNode }) {
   const isScrollVisible = useScrollDirection();
   const [isBannerOpen, setIsBannerOpen] = useState(true);
   const bannerVisible = isBannerOpen && isScrollVisible;
@@ -23,7 +18,7 @@ export function SiteLayout({ children, showFooterBottomBar = true }: SiteLayoutP
       <main className="flex-1 pt-16">
         {children}
       </main>
-      <SiteFooter showBottomBar={showFooterBottomBar} />
+      <SiteFooter />
     </div>
   );
 }
