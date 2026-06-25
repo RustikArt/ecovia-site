@@ -27,7 +27,7 @@ export const Route = createFileRoute("/contact")({
 function Contact() {
   const [sending, setSending] = useState(false);
   const startedAtRef = useRef(Date.now());
-  const formSubmitUrl = "https://formsubmit.co/ajax/390c3a42564b0e28a615296136e9aad0";
+  const contactApiUrl = "/api/contact";
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,15 +44,23 @@ function Contact() {
       return;
     }
 
-    data.set("_subject", siteConfig.contact.defaultSubject);
-    data.set("_captcha", "true");
-    data.set("_template", "table");
+    const payload = {
+      name: String(data.get("name") || "").trim(),
+      email: String(data.get("email") || "").trim(),
+      message: String(data.get("message") || "").trim(),
+      website: honeypot,
+      elapsedMs,
+      subject: siteConfig.contact.defaultSubject,
+    };
 
     try {
-      const response = await fetch(formSubmitUrl, {
+      const response = await fetch(contactApiUrl, {
         method: "POST",
-        headers: { Accept: "application/json" },
-        body: data,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
       const raw = await response.text();

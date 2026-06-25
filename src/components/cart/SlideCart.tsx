@@ -21,6 +21,13 @@ export function SlideCart() {
   const syncCart = useCartStore((s) => s.syncCart);
 
   const [upsells, setUpsells] = useState<ShopifyProduct[]>([]);
+  const forYouProducts = useMemo(
+    () =>
+      upsells
+        .filter((u) => !items.some((it) => it.productHandle === u.node.handle))
+        .slice(0, 3),
+    [upsells, items],
+  );
   const currency = items[0]?.price.currencyCode || "EUR";
   const subtotal = useMemo(
     () => items.reduce((sum, i) => sum + parseFloat(i.price.amount) * i.quantity, 0),
@@ -33,15 +40,13 @@ export function SlideCart() {
 
   useEffect(() => {
     if (!isOpen || upsells.length > 0) return;
-    fetchProducts(4, "tag:upsell")
+    fetchProducts(18)
       .then((p) => {
-        const filtered = p
-          .filter((u) => !items.some((it) => it.productHandle === u.node.handle))
-          .slice(0, 2);
-        setUpsells(filtered);
+        const shuffled = [...p].sort(() => Math.random() - 0.5);
+        setUpsells(shuffled);
       })
       .catch(() => undefined);
-  }, [isOpen, items, upsells.length]);
+  }, [isOpen, upsells.length]);
 
   function handleCheckout() {
     if (!checkoutUrl) return;
@@ -144,14 +149,14 @@ export function SlideCart() {
             </ul>
           )}
 
-          {/* Upsells */}
-          {items.length > 0 && upsells.length > 0 && (
+          {/* For you */}
+          {items.length > 0 && forYouProducts.length > 0 && (
             <div className="px-5 py-4 border-t border-border/60">
               <p className="text-xs uppercase tracking-[0.15em] text-sage mb-3">
-                Ils complètent votre panier
+                Pour vous
               </p>
               <div className="space-y-2">
-                {upsells.map((u) => {
+                {forYouProducts.map((u) => {
                   const variant = u.node.variants.edges[0]?.node;
                   if (!variant) return null;
                   return (
