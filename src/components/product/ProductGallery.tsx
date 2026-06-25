@@ -35,10 +35,12 @@ export function ProductGallery({
   media,
   images,
   title,
+  activeImageUrl,
 }: {
   media?: ShopifyMedia[];
   images: ShopifyImage[];
   title: string;
+  activeImageUrl?: string | null;
 }) {
   const slides = buildSlides(media, images);
   const [emblaRef, embla] = useEmblaCarousel({ loop: true });
@@ -64,6 +66,15 @@ export function ProductGallery({
       embla.off("select", onSelect);
     };
   }, [embla]);
+
+  useEffect(() => {
+    if (!embla || !activeImageUrl) return;
+    const idx = slides.findIndex((slide) => slide.type === "image" && slide.url === activeImageUrl);
+    if (idx >= 0 && idx !== selected) {
+      embla.scrollTo(idx);
+      setSelected(idx);
+    }
+  }, [activeImageUrl, embla, slides, selected]);
 
   useEffect(() => {
     const target = thumbButtonsRef.current[selected];

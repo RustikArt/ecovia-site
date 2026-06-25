@@ -11,7 +11,7 @@ const PRODUCT_FRAGMENT = `
     minVariantPrice { amount currencyCode }
     maxVariantPrice { amount currencyCode }
   }
-  images(first: 8) {
+  images(first: 50) {
     edges { node { url altText } }
   }
   variants(first: 50) {
@@ -88,7 +88,7 @@ export const PRODUCT_BY_HANDLE_QUERY = `
   query GetProduct($handle: String!) {
     product(handle: $handle) {
       ${PRODUCT_FRAGMENT}
-      media(first: 12) {
+      media(first: 50) {
         edges {
           node {
             id

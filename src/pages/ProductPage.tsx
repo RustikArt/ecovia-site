@@ -150,6 +150,7 @@ export default function ProductPage({ handle }: { handle: string }) {
               media={product.media?.edges.map((e) => e.node)}
               images={product.images.edges.map((e) => e.node)}
               title={product.title}
+              activeImageUrl={selectedVariant.image?.url ?? null}
             />
           </div>
 
