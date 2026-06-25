@@ -18,37 +18,145 @@ WITH target_products AS (
   -- Un handle par ligne.
   SELECT *
   FROM (VALUES
-    ('olivier-artificiel-120cm'),
-    ('ficus-lyrata-artificiel'),
-    ('monstera-artificielle-xl'),
-    ('eucalyptus-artificiel-premium'),
-    ('sansevieria-artificielle-90cm'),
-    ('pothos-retombant-artificiel')
+    ('simulation-of-green-office-desktop-trinket-artificial-plant-pot'),
+    ('palm-tree-leaf-plant-simulation-plastic-green-plant'),
+    ('compatible-with-apple-artificial-plant-eucalyptus-lysimachia-artificial-potted-plant-artificial-flower-potted-artificial-green-plant'),
+    ('artificial-plant-turtle-back-leaf-green-leaf-decoration-indoor-ceiling-artificial-flower'),
+    ('plant-hanging-spider-plant-net-bag-decoration-boho'),
+    ('artificial-green-plant-succulent-artificial-plant-home-furnishings'),
+    ('artificial-plant-bonsai-desktop-decoration'),
+    ('artificial-flower-green-plant-monstera-plant-flower-indoor'),
+    ('artificial-plant-decoration-living-room-floor-bonsai-ornaments'),
+    ('artificial-green-plant-monstera-fake-flower-supermarket-feel'),
+    ('simulation-plant-fake-green-plant-interior-decoration'),
+    ('simulated-plant-18-leaf-travelers-banana-green-plant-ornament'),
+    ('artificial-eucalyptus-potted-plant-round-desktop-decoration'),
+    ('flower-pot-net-bag-beige-cotton-rope-indoor-plant-hanger-hanging-basket-sling'),
+    ('flower-pot-net-bag-plant-greening-hanging'),
+    ('hand-woven-plant-hanging-basket-cotton-rope-sling-basket'),
+    ('handmade-woven-flower-pot-bamboo-green-plant-flower-stand-floor-ornaments-decoration')
   ) AS t(product_handle)
 ),
 
 review_templates AS (
   SELECT *
   FROM (VALUES
-    ('Camille', 'Recu rapidement, le rendu est propre et la silhouette est elegante.'),
-    ('Nora', 'Tres bonne surprise au deballage, les finitions sont soignees.'),
-    ('Julie', 'Installe en 2 minutes, ca habille la piece sans effort.'),
-    ('Sophie', 'Le volume est bien proportionne, effet deco immediat.'),
-    ('Manon', 'Conforme aux photos, ca fait vraiment premium en interieur.'),
-    ('Lina', 'Le pot est stable et l ensemble est visuellement harmonieux.'),
-    ('Chloe', 'Aucun entretien a prevoir et pourtant le rendu reste naturel.'),
-    ('Elise', 'Belle texture des feuilles, tres bon choix pour un coin bureau.'),
-    ('Sarah', 'J ai hesite avant de commander, finalement je suis ravie du resultat.'),
-    ('Anais', 'Produit soigne, ideal pour apporter du vert sans contrainte.'),
-    ('Ines', 'La qualite percue est au rendez-vous, surtout a la lumiere du jour.'),
-    ('Lea', 'Simple, efficace et chic: exactement ce que je voulais pour la deco.')
+
+    ('Camille', 'Franchement tres contente. Je cherchais quelque chose pour habiller un coin vide et le rendu est parfait.'),
+
+    ('Nora', 'J avais peur que ca fasse artificiel mais une fois en place le resultat est vraiment sympa.'),
+
+    ('Julie', 'Recu rapidement. Correspond bien aux photos du site.'),
+
+    ('Sophie', 'Achete pour mon bureau a domicile. Ca apporte un peu de vie sans avoir besoin d entretien.'),
+
+    ('Manon', 'Belle surprise au deballage. Les details sont plus reussis que ce a quoi je m attendais.'),
+
+    ('Lina', 'Tres joli dans mon salon. Plusieurs personnes m ont demande ou je l avais achete.'),
+
+    ('Chloe', 'Bonne qualite pour le prix. Je ne regrette pas mon achat.'),
+
+    ('Elise', 'Exactement ce que je cherchais pour completer ma decoration.'),
+
+    ('Sarah', 'Facile a integrer dans une piece. Le rendu reste discret mais elegant.'),
+
+    ('Anais', 'Le produit est arrive en parfait etat et bien emballe.'),
+
+    ('Ines', 'J aime beaucoup le resultat. Ca apporte une touche chaleureuse a la piece.'),
+
+    ('Lea', 'Conforme a la description. Rien a signaler.'),
+
+    ('Mathilde', 'Je l ai place dans mon entree et le rendu est tres reussi.'),
+
+    ('Clara', 'Visuellement tres agreable. Ca fait son petit effet.'),
+
+    ('Emma', 'Je recommande. Belle finition et rendu naturel.'),
+
+    ('Lucie', 'Je l ai commande sans trop savoir a quoi m attendre et finalement je suis ravie.'),
+
+    ('Louise', 'Le feuillage est bien realise. Une fois installe, le rendu est convaincant.'),
+
+    ('Margaux', 'Tres satisfaite. Je pense en recommander un autre pour une autre piece.'),
+
+    ('Jeanne', 'Joli produit decoratif. S integre facilement dans tous les styles.'),
+
+    ('Pauline', 'Le rendu est encore mieux que sur les photos.'),
+
+    ('Thomas', 'Simple mais efficace. C est exactement ce qu il me fallait.'),
+
+    ('Lucas', 'Bon achat. Apporte un peu de couleur sans prendre trop de place.'),
+
+    ('Nathan', 'J avais besoin d une solution sans entretien et c est parfait.'),
+
+    ('Hugo', 'Produit conforme et livraison rapide.'),
+
+    ('Louis', 'Ca change vraiment l ambiance de la piece.'),
+
+    ('Gabriel', 'Belle qualite generale. Rien de negatif a signaler.'),
+
+    ('Arthur', 'J aime beaucoup le rendu final. Tres decoratif.'),
+
+    ('Jules', 'Installe en quelques secondes et effet immediat.'),
+
+    ('Leo', 'Produit bien fini et agreable a regarder.'),
+
+    ('Raphael', 'Bon rapport qualite prix. Je suis satisfait.'),
+
+    ('Adam', 'Le rendu est propre et moderne.'),
+
+    ('Noah', 'Correspond tout a fait a ce que je recherchais.'),
+
+    ('Ethan', 'Belle touche decorative pour un bureau.'),
+
+    ('Mael', 'Le produit a trouve sa place des le premier jour.'),
+
+    ('Tom', 'Tres content du resultat dans mon appartement.'),
+
+    ('Alexandre', 'Discret mais apporte beaucoup a la decoration.'),
+
+    ('Baptiste', 'Joli rendu, surtout a distance.'),
+
+    ('Valentin', 'Plus qualitatif que ce que j imaginais.'),
+
+    ('Maxime', 'Fait vraiment bien dans un coin lecture.'),
+
+    ('Antoine', 'Ravi de mon achat. Je recommande sans hesitation.'),
+
+    ('Nicolas', 'Apporte une touche de verdure sans les contraintes habituelles.'),
+
+    ('Julien', 'Belle presence visuelle sans etre envahissante.'),
+
+    ('Benjamin', 'Le rendu est naturel et s accorde bien avec mes meubles.'),
+
+    ('Pierre', 'J en suis tres satisfait apres plusieurs semaines.'),
+
+    ('Martin', 'Produit soigne et conforme a mes attentes.'),
+
+    ('Theo', 'Joli objet decoratif. Rien a redire.'),
+
+    ('Samuel', 'Tres bon achat pour completer un interieur moderne.'),
+
+    ('David', 'Le rendu est sobre et elegant.'),
+
+    ('Florian', 'Bon produit. Je pourrais facilement en recommander un autre.'),
+
+    ('Cedric', 'Belle surprise. La qualite est au rendez vous.'),
+
+    ('Kevin', 'Acheté pour mon bureau, ca rend tres bien.'),
+
+    ('Yanis', 'Donne un aspect plus accueillant a la piece.'),
+
+    ('Mehdi', 'Tres satisfait du rendu global.'),
+
+    ('Romain', 'Produit simple mais vraiment efficace en decoration.')
+
   ) AS r(author_name, base_comment)
 ),
 
 existing AS (
   SELECT
     tp.product_handle,
-    COUNT(pr.id) FILTER (WHERE pr.status = 'approved')::int AS approved_count
+    COUNT(pr.id) FILTER (WHERE pr.status = 'pending')::int AS pending_count
   FROM target_products tp
   LEFT JOIN public.product_reviews pr
     ON pr.product_handle = tp.product_handle
@@ -60,7 +168,7 @@ needs AS (
     e.product_handle,
     -- Cible pseudo-aleatoire stable: 2, 3 ou 4 avis selon le handle
     (2 + (ABS(hashtext(e.product_handle)) % 3))::int AS target_count,
-    e.approved_count
+    e.pending_count
   FROM existing e
 ),
 
@@ -68,9 +176,9 @@ needs_to_add AS (
   SELECT
     n.product_handle,
     n.target_count,
-    GREATEST(0, n.target_count - n.approved_count)::int AS to_add
+    GREATEST(0, n.target_count - n.pending_count)::int AS to_add
   FROM needs n
-  WHERE n.approved_count < n.target_count
+  WHERE n.pending_count < n.target_count
 ),
 
 candidates AS (
@@ -85,21 +193,9 @@ candidates AS (
       ELSE 3
     END::smallint AS rating,
 
-    -- Commentaire cible selon le type de plante detecte dans le handle
-    (
-      rt.base_comment || ' ' ||
-      CASE
-        WHEN nta.product_handle ILIKE '%olivier%' THEN 'Les nuances du feuillage rappellent bien un olivier mediterraneen.'
-        WHEN nta.product_handle ILIKE '%ficus%' THEN 'Le port du ficus est convaincant, parfait pres d une baie vitree.'
-        WHEN nta.product_handle ILIKE '%monstera%' THEN 'Les decoupes des feuilles donnent un vrai esprit tropical au salon.'
-        WHEN nta.product_handle ILIKE '%eucalyptus%' THEN 'Le ton des feuilles est doux, ideal pour une ambiance epuree.'
-        WHEN nta.product_handle ILIKE '%sansevieria%' THEN 'La forme verticale fonctionne tres bien dans un espace etroit.'
-        WHEN nta.product_handle ILIKE '%pothos%' OR nta.product_handle ILIKE '%retomb%' THEN 'L effet retombant est reussi, surtout sur une etagere haute.'
-        ELSE 'Le style reste sobre et realiste, facile a integrer dans la deco.'
-      END
-    ) AS comment,
+    rt.base_comment AS comment,
 
-    'approved'::text AS status,
+    'pending'::text AS status,
 
     -- Dates etalees sur les 3 dernieres semaines pour un historique naturel
     (
@@ -158,7 +254,7 @@ inserted AS (
 )
 SELECT
   tp.product_handle,
-  COALESCE(e.approved_count, 0) AS approved_before,
+  COALESCE(e.pending_count, 0) AS pending_before,
   (
     SELECT COUNT(*)::int
     FROM inserted i
@@ -168,8 +264,8 @@ SELECT
     SELECT COUNT(*)::int
     FROM public.product_reviews pr2
     WHERE pr2.product_handle = tp.product_handle
-      AND pr2.status = 'approved'
-  ) AS approved_after
+      AND pr2.status = 'pending'
+  ) AS pending_after
 FROM target_products tp
 LEFT JOIN existing e ON e.product_handle = tp.product_handle
 ORDER BY tp.product_handle;
@@ -179,7 +275,7 @@ COMMIT;
 -- Verification globale (optionnelle):
 -- SELECT
 --   product_handle,
---   COUNT(*) FILTER (WHERE status = 'approved') AS approved_reviews,
+--   COUNT(*) FILTER (WHERE status = 'pending') AS pending_reviews,
 --   ROUND(AVG(rating)::numeric, 2) AS avg_rating
 -- FROM public.product_reviews
 -- GROUP BY product_handle
