@@ -60,6 +60,7 @@ export default function ProductPage({ handle }: { handle: string }) {
   const defaultVariant = variants[0];
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
   const selectedVariant = variants.find((v) => v?.id === selectedVariantId) ?? null;
+  const cartVariant = selectedVariant ?? (variants.length === 1 ? defaultVariant : null);
   const displayVariant = selectedVariant ?? defaultVariant;
   const imageVariantLinks = useMemo(
     () =>
@@ -126,16 +127,16 @@ export default function ProductPage({ handle }: { handle: string }) {
       : null);
 
   async function handleAdd() {
-    if (!selectedVariant) return;
+    if (!cartVariant) return;
     await addItem({
       productHandle: product.handle,
       productTitle: product.title,
-      productImage: selectedVariant?.image?.url ?? featuredImageUrl,
-      variantId: selectedVariant?.id,
-      variantTitle: selectedVariant?.title,
-      price: selectedVariant?.price,
+      productImage: cartVariant?.image?.url ?? featuredImageUrl,
+      variantId: cartVariant?.id,
+      variantTitle: cartVariant?.title,
+      price: cartVariant?.price,
       quantity,
-      selectedOptions: selectedVariant?.selectedOptions ?? [],
+      selectedOptions: cartVariant?.selectedOptions ?? [],
     });
     setAddedFeedback(true);
     setTimeout(() => setAddedFeedback(false), 2000);
@@ -303,21 +304,21 @@ export default function ProductPage({ handle }: { handle: string }) {
 
             <Button
               onClick={handleAdd}
-              disabled={isLoading || !selectedVariant || !selectedVariant.availableForSale || addedFeedback}
+              disabled={isLoading || !cartVariant || !cartVariant.availableForSale || addedFeedback}
               size="lg"
               className={`w-full rounded-full text-base font-semibold h-14 transition-all ${
                 addedFeedback
                   ? "bg-sage text-forest"
-                  : !selectedVariant
+                  : !cartVariant
                     ? "bg-muted text-muted-foreground cursor-not-allowed"
                     : "bg-forest hover:bg-forest/90 text-primary-foreground"
               }`}
             >
               {isLoading ? (
                 <Loader2 className="size-5 animate-spin" />
-              ) : !selectedVariant ? (
+              ) : !cartVariant ? (
                 "Vous devez choisir un style pour ajouter l'article"
-              ) : !selectedVariant.availableForSale ? (
+              ) : !cartVariant.availableForSale ? (
                 "Indisponible"
               ) : addedFeedback ? (
                 <>
