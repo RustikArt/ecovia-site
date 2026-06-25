@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
@@ -42,18 +42,43 @@ export function ProductGallery({
 }) {
   const slides = buildSlides(media, images);
   const [emblaRef, embla] = useEmblaCarousel({ loop: true });
-  const [thumbRef, thumbApi] = useEmblaCarousel({ containScroll: "keepSnaps", dragFree: true });
   const [selected, setSelected] = useState(0);
   const [zoomIdx, setZoomIdx] = useState<number | null>(null);
+  const mainFrameRef = useRef<HTMLDivElement | null>(null);
+  const thumbButtonsRef = useRef<Array<HTMLButtonElement | null>>([]);
+  const [thumbMaxHeight, setThumbMaxHeight] = useState<number | undefined>(undefined);
 
   function onThumb(i: number) {
     embla?.scrollTo(i);
   }
-  embla?.on("select", () => {
-    const i = embla.selectedScrollSnap();
-    setSelected(i);
-    thumbApi?.scrollTo(i);
-  });
+
+  useEffect(() => {
+    if (!embla) return;
+    const onSelect = () => {
+      const i = embla.selectedScrollSnap();
+      setSelected(i);
+    };
+    embla.on("select", onSelect);
+    onSelect();
+    return () => {
+      embla.off("select", onSelect);
+    };
+  }, [embla]);
+
+  useEffect(() => {
+    const target = thumbButtonsRef.current[selected];
+    target?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [selected]);
+
+  useEffect(() => {
+    if (!mainFrameRef.current || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(([entry]) => {
+      const nextHeight = Math.round(entry.contentRect.height);
+      if (nextHeight > 0) setThumbMaxHeight(nextHeight);
+    });
+    observer.observe(mainFrameRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   if (slides.length === 0) {
     return (
@@ -67,13 +92,19 @@ export function ProductGallery({
     <div className="flex flex-col-reverse sm:flex-row gap-3">
       {/* Thumbnails: horizontal on mobile, vertical on desktop */}
       {slides.length > 1 && (
-        <div className="sm:w-[72px] overflow-hidden" ref={thumbRef}>
-          <div className="flex sm:flex-col gap-2">
+        <div className="sm:w-[84px] sm:shrink-0">
+          <div
+            className="flex gap-2 overflow-x-auto pb-1 sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto sm:pb-0 sm:pr-1"
+            style={thumbMaxHeight ? { maxHeight: thumbMaxHeight } : undefined}
+          >
             {slides.map((s, i) => (
               <button
                 key={i}
+                ref={(el) => {
+                  thumbButtonsRef.current[i] = el;
+                }}
                 onClick={() => onThumb(i)}
-                className={`flex-[0_0_64px] sm:flex-none sm:w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                className={`flex-[0_0_64px] sm:flex-none sm:w-[72px] sm:h-[72px] aspect-square rounded-xl overflow-hidden border-2 transition-all ${
                   selected === i
                     ? "border-forest shadow-sm opacity-100"
                     : "border-transparent opacity-50 hover:opacity-80"
@@ -88,7 +119,8 @@ export function ProductGallery({
 
       {/* Main image */}
       <div className="relative flex-1 min-w-0">
-        <div className="overflow-hidden rounded-2xl bg-secondary/40" ref={emblaRef}>
+        <div className="overflow-hidden rounded-2xl bg-secondary/40" ref={mainFrameRef}>
+          <div ref={emblaRef}>
           <div className="flex">
             {slides.map((s, i) => (
               <div key={i} className="flex-[0_0_100%] aspect-square relative">
@@ -105,6 +137,7 @@ export function ProductGallery({
                 )}
               </div>
             ))}
+          </div>
           </div>
         </div>
 

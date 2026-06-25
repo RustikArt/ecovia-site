@@ -108,7 +108,7 @@ export default function ProductPage({ handle }: { handle: string }) {
     await addItem({
       productHandle: product.handle,
       productTitle: product.title,
-      productImage: product.images.edges[0]?.node.url ?? null,
+      productImage: selectedVariant.image?.url ?? product.images.edges[0]?.node.url ?? null,
       variantId: selectedVariant.id,
       variantTitle: selectedVariant.title,
       price: selectedVariant.price,

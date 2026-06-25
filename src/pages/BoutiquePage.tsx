@@ -1,7 +1,7 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ShoppingBag, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, ShoppingBag, SlidersHorizontal } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { fetchCollectionProducts } from "@/lib/shopify/api";
 import { formatPrice, useCartStore } from "@/stores/cartStore";
@@ -22,6 +22,8 @@ export default function BoutiquePage() {
   const [activeCollection, setActiveCollection] = useState<string | null>(null);
   const [sort, setSort] = useState<SortId>("popular");
   const [maxPrice, setMaxPrice] = useState<number>(0);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const collectionQuery = useQuery({
     queryKey: ["shopify", "collection", activeCollection],
@@ -98,12 +100,22 @@ export default function BoutiquePage() {
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           <aside className="space-y-6">
             <div className="rounded-3xl border border-border/60 bg-white/80 p-5 shadow-sm">
-              <div className="flex items-center gap-2 mb-4">
-                <SlidersHorizontal className="size-4 text-forest" />
-                <h2 className="font-display text-base text-forest">Filtres</h2>
-              </div>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((v) => !v)}
+                className="w-full flex items-center justify-between gap-2 mb-0 md:mb-4"
+              >
+                <span className="flex items-center gap-2">
+                  <SlidersHorizontal className="size-4 text-forest" />
+                  <h2 className="font-display text-base text-forest">Filtres</h2>
+                </span>
+                <ChevronDown
+                  className={`size-4 text-muted-foreground transition-transform md:hidden ${filtersOpen ? "rotate-180" : ""}`}
+                />
+              </button>
 
-              <div>
+              <div className={`mt-4 space-y-0 md:block ${filtersOpen ? "block" : "hidden"}`}>
+                <div>
                 <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">
                   Prix maximum
                 </p>
@@ -118,45 +130,57 @@ export default function BoutiquePage() {
                 <p className="mt-2 text-sm text-forest">Jusqu’à {formatPrice(effectiveMax, "EUR")}</p>
               </div>
 
-              <div className="mt-6">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">
-                  Tri
-                </p>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as SortId)}
-                  className="w-full rounded-full border border-border bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
-                >
-                  {SORTS.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                <div className="mt-6">
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground mb-3">
+                    Tri
+                  </p>
+                  <select
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value as SortId)}
+                    className="w-full rounded-full border border-border bg-background px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-forest/30"
+                  >
+                    {SORTS.map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <button
-                onClick={() => {
-                  setActiveCollection(null);
-                  setMaxPrice(0);
-                  setSort("popular");
-                }}
-                className="mt-6 w-full rounded-full border border-border bg-background px-4 py-2 text-xs hover:bg-secondary transition"
-              >
-                Réinitialiser
-              </button>
+                <button
+                  onClick={() => {
+                    setActiveCollection(null);
+                    setMaxPrice(0);
+                    setSort("popular");
+                  }}
+                  className="mt-6 w-full rounded-full border border-border bg-background px-4 py-2 text-xs hover:bg-secondary transition"
+                >
+                  Réinitialiser
+                </button>
+              </div>
             </div>
             <div className="rounded-3xl bg-forest text-primary-foreground p-5 text-sm space-y-2">
-              <p className="font-display text-lg">Besoin d’aide ?</p>
-              <p className="text-primary-foreground/80 text-xs">
-                Nos conseillers vous répondent sous 24h ouvrées.
-              </p>
-              <Link
-                to="/contact"
-                className="inline-flex items-center text-xs underline hover:opacity-80"
+              <button
+                type="button"
+                onClick={() => setHelpOpen((v) => !v)}
+                className="w-full flex items-center justify-between md:cursor-default"
               >
-                Nous contacter →
-              </Link>
+                <p className="font-display text-lg text-left">Besoin d’aide ?</p>
+                <ChevronDown
+                  className={`size-4 text-primary-foreground/80 transition-transform md:hidden ${helpOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              <div className={`pt-2 md:pt-0 md:block ${helpOpen ? "block" : "hidden"}`}>
+                <p className="text-primary-foreground/80 text-xs">
+                  Nos conseillers vous répondent sous 24h ouvrées.
+                </p>
+                <Link
+                  to="/contact"
+                  className="mt-2 inline-flex items-center text-xs underline hover:opacity-80"
+                >
+                  Nous contacter →
+                </Link>
+              </div>
             </div>
           </aside>
 
@@ -182,6 +206,7 @@ export default function BoutiquePage() {
 }
 
 function BoutiqueCard({ product }: { product: ShopifyProduct }) {
+  const navigate = useNavigate();
   const node = product.node;
   const img = node.images.edges[0]?.node;
   const price = node.priceRange.minVariantPrice;
@@ -194,11 +219,18 @@ function BoutiqueCard({ product }: { product: ShopifyProduct }) {
 
   async function quickAdd(e: React.MouseEvent) {
     e.preventDefault();
-    if (!firstVariant || hasMultipleVariants) return;
+    if (!firstVariant) {
+      await navigate({ to: "/product/$handle", params: { handle: node.handle } });
+      return;
+    }
+    if (hasMultipleVariants || !firstVariant.availableForSale) {
+      await navigate({ to: "/product/$handle", params: { handle: node.handle } });
+      return;
+    }
     await addItem({
       productHandle: node.handle,
       productTitle: node.title,
-      productImage: img?.url ?? null,
+      productImage: firstVariant.image?.url ?? img?.url ?? null,
       variantId: firstVariant.id,
       variantTitle: firstVariant.title,
       price: firstVariant.price,
@@ -230,12 +262,12 @@ function BoutiqueCard({ product }: { product: ShopifyProduct }) {
         )}
         <button
           onClick={quickAdd}
-          disabled={isLoading || hasMultipleVariants || !firstVariant?.availableForSale}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-4 py-2 text-xs font-medium text-forest shadow opacity-0 group-hover:opacity-100 transition disabled:opacity-60"
-          aria-label={hasMultipleVariants ? "Voir le produit" : "Ajouter rapidement au panier"}
+          disabled={isLoading}
+          className="absolute bottom-3 right-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-4 py-2 text-xs font-medium text-forest shadow opacity-100 md:opacity-0 md:group-hover:opacity-100 transition disabled:opacity-60"
+          aria-label="Ajouter"
         >
           <ShoppingBag className="size-3" />
-          {hasMultipleVariants ? "Voir" : "Ajouter"}
+          Ajouter
         </button>
       </div>
       <div className="mt-4 flex items-start justify-between gap-3">
