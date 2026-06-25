@@ -51,8 +51,10 @@ export default function ProductPage({ handle }: { handle: string }) {
   const reviews = useMemo(() => parseReviews(product), [product]);
 
   const variants = product.variants.edges.map((e) => e.node);
-  const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id);
-  const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0];
+  const defaultVariant = variants[0];
+  const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
+  const selectedVariant = variants.find((v) => v.id === selectedVariantId);
+  const displayVariant = selectedVariant ?? defaultVariant;
   const imageVariantLinks = useMemo(
     () =>
       variants.reduce<Record<string, { variantId: string; variantLabel: string }>>((acc, variant) => {
@@ -78,16 +80,16 @@ export default function ProductPage({ handle }: { handle: string }) {
   const reviewsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (selectedVariant) {
+    if (displayVariant) {
       trackViewContent({
         id: product.id,
         title: product.title,
-        price: selectedVariant.price,
+        price: displayVariant.price,
       });
     }
-  }, [product.id, product.title, selectedVariant]);
+  }, [product.id, product.title, displayVariant]);
 
-  if (!selectedVariant) {
+  if (!displayVariant) {
     return (
       <SiteLayout>
         <div className="py-24 text-center text-muted-foreground">Aucune variante disponible.</div>
@@ -95,8 +97,8 @@ export default function ProductPage({ handle }: { handle: string }) {
     );
   }
 
-  const unitPrice = parseFloat(selectedVariant.price.amount);
-  const currency = selectedVariant.price.currencyCode;
+  const unitPrice = parseFloat(displayVariant.price.amount);
+  const currency = displayVariant.price.currencyCode;
   const quantity = selectedBundle?.quantity ?? manualQty;
   const totalNormal = unitPrice * quantity;
   const discountPct = selectedBundle?.discountPercent ?? 0;
@@ -118,6 +120,7 @@ export default function ProductPage({ handle }: { handle: string }) {
       : null);
 
   async function handleAdd() {
+    if (!selectedVariant) return;
     await addItem({
       productHandle: product.handle,
       productTitle: product.title,
@@ -237,7 +240,8 @@ export default function ProductPage({ handle }: { handle: string }) {
                 <p className="text-sm font-medium text-forest">
                   {product.options[0]?.name ?? "Variante"} :{" "}
                   <span className="font-normal text-muted-foreground">
-                    {variants.find((v) => v.id === selectedVariantId)?.title}
+                      {variants.find((v) => v.id === selectedVariantId)?.title ??
+                        "Aucun style choisi"}
                   </span>
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -293,16 +297,20 @@ export default function ProductPage({ handle }: { handle: string }) {
 
             <Button
               onClick={handleAdd}
-              disabled={isLoading || !selectedVariant.availableForSale || addedFeedback}
+              disabled={isLoading || !selectedVariant || !selectedVariant.availableForSale || addedFeedback}
               size="lg"
               className={`w-full rounded-full text-base font-semibold h-14 transition-all ${
                 addedFeedback
                   ? "bg-sage text-forest"
-                  : "bg-forest hover:bg-forest/90 text-primary-foreground"
+                  : !selectedVariant
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-forest hover:bg-forest/90 text-primary-foreground"
               }`}
             >
               {isLoading ? (
                 <Loader2 className="size-5 animate-spin" />
+              ) : !selectedVariant ? (
+                "Vous devez choisir un style pour ajouter l'article"
               ) : !selectedVariant.availableForSale ? (
                 "Indisponible"
               ) : addedFeedback ? (
