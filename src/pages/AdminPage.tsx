@@ -234,27 +234,29 @@ export default function AdminPage() {
                         </Button>
                       ) : null}
                       {review.status === "pending" ? (
-                        <Button
-                          type="button"
-                          size="sm"
-                          className="rounded-full bg-forest hover:bg-forest/90"
-                          disabled={savingId === review.id}
-                          onClick={() => updateReviewStatus(review.id, "approved")}
-                        >
-                          <Check className="size-4" />
-                          Valider
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          className="rounded-full"
-                          disabled={savingId === review.id}
-                          onClick={() => updateReviewStatus(review.id, "rejected")}
-                        >
-                          <X className="size-4" />
-                          Decliner
-                        </Button>
+                        <>
+                          <Button
+                            type="button"
+                            size="sm"
+                            className="rounded-full bg-forest hover:bg-forest/90"
+                            disabled={savingId === review.id}
+                            onClick={() => updateReviewStatus(review.id, "approved")}
+                          >
+                            <Check className="size-4" />
+                            Valider
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            className="rounded-full"
+                            disabled={savingId === review.id}
+                            onClick={() => updateReviewStatus(review.id, "rejected")}
+                          >
+                            <X className="size-4" />
+                            Decliner
+                          </Button>
+                        </>
                       ) : null}
                     </div>
                   </article>
