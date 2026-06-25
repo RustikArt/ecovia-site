@@ -37,6 +37,7 @@ export interface ShopifyProductNode {
   tags: string[];
   vendor: string;
   productType: string;
+  featuredImage?: ShopifyImage | null;
   priceRange: {
     minVariantPrice: { amount: string; currencyCode: string };
     maxVariantPrice: { amount: string; currencyCode: string };

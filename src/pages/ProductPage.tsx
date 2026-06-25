@@ -49,6 +49,7 @@ export default function ProductPage({ handle }: { handle: string }) {
   const { data: product } = useSuspenseQuery(productQO(handle));
   const bundles = useMemo(() => parseBundles(product), [product]);
   const reviews = useMemo(() => parseReviews(product), [product]);
+  const featuredImageUrl = product.featuredImage?.url ?? product.images.edges[0]?.node?.url ?? null;
 
   const variants = product.variants.edges
     .map((e) => e?.node)
@@ -58,16 +59,16 @@ export default function ProductPage({ handle }: { handle: string }) {
     );
   const defaultVariant = variants[0];
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
-  const selectedVariant = variants.find((v) => v.id === selectedVariantId);
+  const selectedVariant = variants.find((v) => v?.id === selectedVariantId) ?? null;
   const displayVariant = selectedVariant ?? defaultVariant;
   const imageVariantLinks = useMemo(
     () =>
       variants.reduce<Record<string, { variantId: string; variantLabel: string }>>((acc, variant) => {
-        const imageUrl = variant.image?.url;
+        const imageUrl = variant?.image?.url;
         if (!imageUrl) return acc;
         acc[imageUrl] = {
-          variantId: variant.id,
-          variantLabel: variant.title,
+          variantId: variant?.id,
+          variantLabel: variant?.title,
         };
         return acc;
       }, {}),
@@ -129,12 +130,12 @@ export default function ProductPage({ handle }: { handle: string }) {
     await addItem({
       productHandle: product.handle,
       productTitle: product.title,
-      productImage: selectedVariant.image?.url ?? product.images.edges[0]?.node.url ?? null,
-      variantId: selectedVariant.id,
-      variantTitle: selectedVariant.title,
-      price: selectedVariant.price,
+      productImage: selectedVariant?.image?.url ?? featuredImageUrl,
+      variantId: selectedVariant?.id,
+      variantTitle: selectedVariant?.title,
+      price: selectedVariant?.price,
       quantity,
-      selectedOptions: selectedVariant.selectedOptions,
+      selectedOptions: selectedVariant?.selectedOptions ?? [],
     });
     setAddedFeedback(true);
     setTimeout(() => setAddedFeedback(false), 2000);
@@ -171,7 +172,7 @@ export default function ProductPage({ handle }: { handle: string }) {
               media={product.media?.edges.map((e) => e.node)}
               images={product.images.edges.map((e) => e.node)}
               title={product.title}
-              activeImageUrl={selectedVariant.image?.url ?? null}
+              activeImageUrl={selectedVariant?.image?.url ?? null}
               imageVariantLinks={imageVariantLinks}
               onImageVariantSelect={(variantId) => setSelectedVariantId(variantId)}
             />

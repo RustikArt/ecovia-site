@@ -7,6 +7,7 @@ const PRODUCT_FRAGMENT = `
   tags
   vendor
   productType
+  featuredImage { url altText }
   priceRange {
     minVariantPrice { amount currencyCode }
     maxVariantPrice { amount currencyCode }
