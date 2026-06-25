@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Minus, Plus, Trash2, ExternalLink, Loader2, Truck } from "lucide-react";
 import { useCartStore, formatPrice } from "@/stores/cartStore";
@@ -79,6 +79,9 @@ export function SlideCart() {
       <SheetContent className="w-full sm:max-w-md flex flex-col p-0">
         <SheetHeader className="px-5 py-4 border-b border-border/60">
           <SheetTitle className="font-display text-xl text-forest">Votre panier</SheetTitle>
+          <SheetDescription className="sr-only">
+            Resume des articles du panier, ajustement des quantites et acces au paiement securise.
+          </SheetDescription>
         </SheetHeader>
 
         {/* Free shipping banner */}

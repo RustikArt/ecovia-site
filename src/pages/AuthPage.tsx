@@ -5,6 +5,24 @@ import { toast } from "sonner";
 import { SiteLayout } from "@/components/site/Layout";
 import { supabase } from "@/integrations/supabase/client";
 
+function isAlreadyRegisteredError(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+
+  const maybeError = error as {
+    code?: string;
+    status?: number;
+    message?: string;
+  };
+
+  const code = maybeError.code?.toLowerCase() ?? "";
+  const message = maybeError.message?.toLowerCase() ?? "";
+
+  if (code.includes("already") || code.includes("exists")) return true;
+  if (message.includes("already") && (message.includes("register") || message.includes("exist"))) return true;
+
+  return maybeError.status === 422 && (message.includes("register") || message.includes("exist"));
+}
+
 export default function AuthPage() {
   const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
@@ -47,12 +65,15 @@ export default function AuthPage() {
         navigate({ to: "/compte", replace: true });
       }
     } catch (err) {
+      if (isAlreadyRegisteredError(err)) {
+        toast.error("Un compte existe deja avec cet email.");
+        setMode("signin");
+        return;
+      }
+
       const msg = err instanceof Error ? err.message : "Erreur";
       if (msg.includes("Invalid login credentials")) {
         toast.error("Email ou mot de passe incorrect.");
-      } else if (msg.includes("User already registered")) {
-        toast.error("Un compte existe déjà avec cet email.");
-        setMode("signin");
       } else if (msg.includes("Email not confirmed")) {
         toast.error(
           "Confirmation email encore active sur ce projet Supabase. Désactivez Confirm email dans Auth > Signups.",
