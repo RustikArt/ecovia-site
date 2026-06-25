@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Check, Loader2, Shield, UserRound, X } from "lucide-react";
+import { Check, Loader2, Shield, Trash2, UserRound, X } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -122,6 +122,26 @@ export default function AdminPage() {
     }
   }
 
+  async function deleteReview(id: string) {
+    const previousReviews = queryClient.getQueryData<ReviewRow[]>(["admin_reviews"]);
+
+    setSavingId(id);
+    queryClient.setQueryData<ReviewRow[]>(["admin_reviews"], (current) =>
+      (current ?? []).filter((review) => review.id !== id),
+    );
+
+    try {
+      const { error } = await supabase.from("product_reviews").delete().eq("id", id);
+      if (error) throw error;
+      await queryClient.invalidateQueries({ queryKey: ["admin_reviews"] });
+    } catch (error) {
+      queryClient.setQueryData(["admin_reviews"], previousReviews);
+      throw error;
+    } finally {
+      setSavingId(null);
+    }
+  }
+
   return (
     <SiteLayout>
       <section className="mx-auto max-w-6xl px-6 py-10 space-y-8">
@@ -199,8 +219,21 @@ export default function AdminPage() {
                     </div>
                     <div className="mt-3 flex items-center gap-1">{renderStars(review.rating)}</div>
                     <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{review.comment}</p>
-                    {review.status === "pending" ? (
-                      <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+                    <div className="mt-4 flex flex-wrap items-center justify-end gap-2">
+                      {reviewFilter === "all" ? (
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          className="rounded-full text-muted-foreground hover:text-destructive"
+                          disabled={savingId === review.id}
+                          onClick={() => deleteReview(review.id)}
+                        >
+                          <Trash2 className="size-4" />
+                          <span className="sr-only">Supprimer l'avis</span>
+                        </Button>
+                      ) : null}
+                      {review.status === "pending" ? (
                         <Button
                           type="button"
                           size="sm"
@@ -222,8 +255,8 @@ export default function AdminPage() {
                           <X className="size-4" />
                           Decliner
                         </Button>
-                      </div>
-                    ) : null}
+                      ) : null}
+                    </div>
                   </article>
                 ))
               )}
