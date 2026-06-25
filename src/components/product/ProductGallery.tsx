@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
@@ -51,7 +51,13 @@ export function ProductGallery({
   imageVariantLinks?: Record<string, ImageVariantLink>;
   onImageVariantSelect?: (variantId: string) => void;
 }) {
-  const slides = buildSlides(media, images);
+  const slides = useMemo(() => buildSlides(media, images), [media, images]);
+  const orderedSlides = useMemo(() => {
+    const baseImages = slides.filter((s) => s.type === "image" && !imageVariantLinks?.[s.url]);
+    const styleImages = slides.filter((s) => s.type === "image" && !!imageVariantLinks?.[s.url]);
+    const otherMedia = slides.filter((s) => s.type !== "image");
+    return [...baseImages, ...styleImages, ...otherMedia];
+  }, [slides, imageVariantLinks]);
   const [emblaRef, embla] = useEmblaCarousel({ loop: true });
   const [selected, setSelected] = useState(0);
   const [zoomIdx, setZoomIdx] = useState<number | null>(null);
@@ -61,7 +67,7 @@ export function ProductGallery({
 
   function onThumb(i: number) {
     embla?.scrollTo(i);
-    const slide = slides[i];
+    const slide = orderedSlides[i];
     if (slide?.type !== "image") return;
     const linked = imageVariantLinks?.[slide.url];
     if (linked?.variantId) {
@@ -84,12 +90,14 @@ export function ProductGallery({
 
   useEffect(() => {
     if (!embla || !activeImageUrl) return;
-    const idx = slides.findIndex((slide) => slide.type === "image" && slide.url === activeImageUrl);
+    const idx = orderedSlides.findIndex(
+      (slide) => slide.type === "image" && slide.url === activeImageUrl,
+    );
     if (idx >= 0 && idx !== embla.selectedScrollSnap()) {
       embla.scrollTo(idx);
       setSelected(idx);
     }
-  }, [activeImageUrl, embla, slides]);
+  }, [activeImageUrl, embla]);
 
   useEffect(() => {
     const target = thumbButtonsRef.current[selected];
@@ -106,7 +114,7 @@ export function ProductGallery({
     return () => observer.disconnect();
   }, []);
 
-  if (slides.length === 0) {
+  if (orderedSlides.length === 0) {
     return (
       <div className="aspect-square rounded-3xl bg-secondary/50 grid place-items-center text-muted-foreground">
         Pas d'image
@@ -117,13 +125,13 @@ export function ProductGallery({
   return (
     <div className="flex flex-col-reverse sm:flex-row gap-3">
       {/* Thumbnails: horizontal on mobile, vertical on desktop */}
-      {slides.length > 1 && (
+      {orderedSlides.length > 1 && (
         <div className="sm:w-[84px] sm:shrink-0">
           <div
             className="flex gap-2 overflow-x-auto pb-1 sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto sm:pb-0 sm:pr-1"
             style={thumbMaxHeight ? { maxHeight: thumbMaxHeight } : undefined}
           >
-            {slides.map((s, i) => {
+            {orderedSlides.map((s, i) => {
               const linked = s.type === "image" ? imageVariantLinks?.[s.url] : undefined;
               const isBasePhoto = s.type === "image" && !linked;
               return (
@@ -164,7 +172,7 @@ export function ProductGallery({
         <div className="overflow-hidden rounded-2xl bg-secondary/40" ref={mainFrameRef}>
           <div ref={emblaRef}>
           <div className="flex">
-            {slides.map((s, i) => (
+            {orderedSlides.map((s, i) => (
               <div key={i} className="flex-[0_0_100%] aspect-square relative">
                 {s.type === "image" ? (
                   <button
@@ -192,7 +200,7 @@ export function ProductGallery({
           </div>
         </div>
 
-        {slides.length > 1 && (
+        {orderedSlides.length > 1 && (
           <>
             <button
               onClick={() => embla?.scrollPrev()}
@@ -219,17 +227,17 @@ export function ProductGallery({
         </button>
 
         {/* Slide counter */}
-        {slides.length > 1 && (
+        {orderedSlides.length > 1 && (
           <div className="absolute bottom-5 left-3 rounded-full bg-black/40 backdrop-blur text-white text-[11px] font-medium px-2.5 py-0.5">
-            {selected + 1} / {slides.length}
+            {selected + 1} / {orderedSlides.length}
           </div>
         )}
       </div>
 
       <Dialog open={zoomIdx !== null} onOpenChange={(open) => !open && setZoomIdx(null)}>
         <DialogContent className="max-w-4xl p-0 bg-transparent border-0">
-          {zoomIdx !== null && slides[zoomIdx] && (
-            <img src={slides[zoomIdx].url} alt={title} className="w-full h-auto rounded-2xl" />
+          {zoomIdx !== null && orderedSlides[zoomIdx] && (
+            <img src={orderedSlides[zoomIdx].url} alt={title} className="w-full h-auto rounded-2xl" />
           )}
         </DialogContent>
       </Dialog>
