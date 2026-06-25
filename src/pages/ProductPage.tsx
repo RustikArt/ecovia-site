@@ -53,6 +53,19 @@ export default function ProductPage({ handle }: { handle: string }) {
   const variants = product.variants.edges.map((e) => e.node);
   const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id);
   const selectedVariant = variants.find((v) => v.id === selectedVariantId) ?? variants[0];
+  const imageVariantLinks = useMemo(
+    () =>
+      variants.reduce<Record<string, { variantId: string; variantLabel: string }>>((acc, variant) => {
+        const imageUrl = variant.image?.url;
+        if (!imageUrl) return acc;
+        acc[imageUrl] = {
+          variantId: variant.id,
+          variantLabel: variant.title,
+        };
+        return acc;
+      }, {}),
+    [variants],
+  );
 
   const [selectedBundle, setSelectedBundle] = useState<BundleOffer | null>(
     bundles[1] ?? bundles[0] ?? null,
@@ -151,6 +164,8 @@ export default function ProductPage({ handle }: { handle: string }) {
               images={product.images.edges.map((e) => e.node)}
               title={product.title}
               activeImageUrl={selectedVariant.image?.url ?? null}
+              imageVariantLinks={imageVariantLinks}
+              onImageVariantSelect={(variantId) => setSelectedVariantId(variantId)}
             />
           </div>
 

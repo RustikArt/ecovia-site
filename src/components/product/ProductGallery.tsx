@@ -11,6 +11,11 @@ interface Slide {
   videoSources?: Array<{ url: string; mimeType: string }>;
 }
 
+interface ImageVariantLink {
+  variantId: string;
+  variantLabel: string;
+}
+
 function buildSlides(media: ShopifyMedia[] | undefined, fallback: ShopifyImage[]): Slide[] {
   if (media && media.length > 0) {
     return media
@@ -36,11 +41,15 @@ export function ProductGallery({
   images,
   title,
   activeImageUrl,
+  imageVariantLinks,
+  onImageVariantSelect,
 }: {
   media?: ShopifyMedia[];
   images: ShopifyImage[];
   title: string;
   activeImageUrl?: string | null;
+  imageVariantLinks?: Record<string, ImageVariantLink>;
+  onImageVariantSelect?: (variantId: string) => void;
 }) {
   const slides = buildSlides(media, images);
   const [emblaRef, embla] = useEmblaCarousel({ loop: true });
@@ -52,6 +61,12 @@ export function ProductGallery({
 
   function onThumb(i: number) {
     embla?.scrollTo(i);
+    const slide = slides[i];
+    if (slide?.type !== "image") return;
+    const linked = imageVariantLinks?.[slide.url];
+    if (linked?.variantId) {
+      onImageVariantSelect?.(linked.variantId);
+    }
   }
 
   useEffect(() => {
@@ -70,11 +85,11 @@ export function ProductGallery({
   useEffect(() => {
     if (!embla || !activeImageUrl) return;
     const idx = slides.findIndex((slide) => slide.type === "image" && slide.url === activeImageUrl);
-    if (idx >= 0 && idx !== selected) {
+    if (idx >= 0 && idx !== embla.selectedScrollSnap()) {
       embla.scrollTo(idx);
       setSelected(idx);
     }
-  }, [activeImageUrl, embla, slides, selected]);
+  }, [activeImageUrl, embla, slides]);
 
   useEffect(() => {
     const target = thumbButtonsRef.current[selected];
@@ -108,22 +123,38 @@ export function ProductGallery({
             className="flex gap-2 overflow-x-auto pb-1 sm:flex-col sm:overflow-x-hidden sm:overflow-y-auto sm:pb-0 sm:pr-1"
             style={thumbMaxHeight ? { maxHeight: thumbMaxHeight } : undefined}
           >
-            {slides.map((s, i) => (
+            {slides.map((s, i) => {
+              const linked = s.type === "image" ? imageVariantLinks?.[s.url] : undefined;
+              const isBasePhoto = s.type === "image" && !linked;
+              return (
               <button
                 key={i}
                 ref={(el) => {
                   thumbButtonsRef.current[i] = el;
                 }}
                 onClick={() => onThumb(i)}
-                className={`flex-[0_0_64px] sm:flex-none sm:w-[72px] sm:h-[72px] aspect-square rounded-xl overflow-hidden border-2 transition-all ${
+                className={`relative flex-[0_0_64px] sm:flex-none sm:w-[72px] sm:h-[72px] aspect-square rounded-xl overflow-hidden border-2 transition-all ${
                   selected === i
                     ? "border-forest shadow-sm opacity-100"
                     : "border-transparent opacity-50 hover:opacity-80"
                 }`}
+                title={
+                  s.type === "image"
+                    ? linked
+                      ? `Style: ${linked.variantLabel}`
+                      : "Photo de base"
+                    : "Média"
+                }
               >
                 <img src={s.url} alt="" className="size-full object-cover" />
+                {s.type === "image" && (
+                  <span className="absolute left-1.5 top-1.5 rounded-full bg-white/90 px-1.5 py-0.5 text-[9px] font-medium text-forest">
+                    {isBasePhoto ? "Base" : "Style"}
+                  </span>
+                )}
               </button>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -136,7 +167,16 @@ export function ProductGallery({
             {slides.map((s, i) => (
               <div key={i} className="flex-[0_0_100%] aspect-square relative">
                 {s.type === "image" ? (
-                  <button onClick={() => setZoomIdx(i)} className="size-full block cursor-zoom-in">
+                  <button
+                    onClick={() => {
+                      const linked = imageVariantLinks?.[s.url];
+                      if (linked?.variantId) {
+                        onImageVariantSelect?.(linked.variantId);
+                      }
+                      setZoomIdx(i);
+                    }}
+                    className="size-full block cursor-zoom-in"
+                  >
                     <img src={s.url} alt={s.alt ?? title} className="size-full object-cover" />
                   </button>
                 ) : (
